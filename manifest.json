@@ -1,0 +1,25 @@
+{
+  "name" : "SLA Remaining",
+  "version" : "0.1",
+  "description" : "Shows SLA remaining on current ticket list.",
+  "background" : {
+    "scripts": ["background.js"]
+  },
+  "page_action" :
+  {
+    "default_icon" : "slatoolbar.png",
+    "default_title" : "Acquia SLA",
+    "default_popup": "sla.html"
+  },
+  "content_scripts" : [
+    {
+      "matches" : [
+        "https://s5.parature.com/ics/tt/ticketlist.asp?*"
+      ],
+      "js" : ["jquery-2.0.0.min.js", "moment.min.js", "jquery.timeago.js", "contentscript.js"],
+      "run_at" : "document_idle",
+      "all_frames" : true
+    }
+  ],
+  "manifest_version": 2
+}
