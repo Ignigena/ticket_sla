@@ -60,6 +60,7 @@ var SLAdefinition = {
         "Critical" : "1"
     },
 }
+SLAdefinition["Partner"] = SLAdefinition["Enterprise (Americas)"];
 SLAdefinition["Enterprise (Europe)"] = SLAdefinition["Enterprise (Americas)"];
 SLAdefinition["Enterprise (APJ)"] = SLAdefinition["Enterprise (Americas)"];
 SLAdefinition["Pro Plus (Europe)"] = SLAdefinition["Enterprise (Americas)"];
