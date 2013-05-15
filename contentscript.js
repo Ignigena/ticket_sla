@@ -35,6 +35,12 @@ $("#tableContent thead tr").prepend('<td class="winColName" nowrap style="width:
 
 // Define the SLA timeframes (in hours) based on the SLA column values
 var SLAdefinition = {
+  "Elite (Americas)" : {
+    "Low" : "24",
+    "Medium" : "2",
+    "High" : "1",
+    "Critical" : "0.5"
+  },
     "Enterprise (Americas)" : {
         "Low" : "24",
         "Medium" : "4",
