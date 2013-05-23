@@ -1,8 +1,11 @@
+* {
+  margin:0;
+  padding:0;
+}
 body {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 table.wikitable {
-    margin: 1em 0;
     background-color: #f9f9f9;
     border: 1px #aaa solid;
     border-collapse: collapse;

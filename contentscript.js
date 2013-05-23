@@ -41,30 +41,30 @@ var SLAdefinition = {
     "High" : "1",
     "Critical" : "0.5"
   },
-    "Enterprise (Americas)" : {
-        "Low" : "24",
-        "Medium" : "4",
-        "High" : "2",
-        "Critical" : "1"
-    },
-    "Pro Plus (Americas)" : {
-        "Low" : "24",
-        "Medium" : "8",
-        "High" : "4",
-        "Critical" : "1"
-    },
-    "Professional (Americas)" : {
-        "Low" : "8",
-        "Medium" : "8",
-        "High" : "8",
-        "Critical" : "8"
-    },
-    "Developer" : {
-        "Low" : "24",
-        "Medium" : "4",
-        "High" : "2",
-        "Critical" : "1"
-    },
+  "Enterprise (Americas)" : {
+    "Low" : "24",
+    "Medium" : "4",
+    "High" : "2",
+    "Critical" : "1"
+  },
+  "Pro Plus (Americas)" : {
+    "Low" : "24",
+    "Medium" : "8",
+    "High" : "4",
+    "Critical" : "1"
+  },
+  "Professional (Americas)" : {
+    "Low" : "8",
+    "Medium" : "8",
+    "High" : "8",
+    "Critical" : "8"
+  },
+  "Developer" : {
+    "Low" : "24",
+    "Medium" : "4",
+    "High" : "2",
+    "Critical" : "1"
+  },
 }
 SLAdefinition["Partner"] = SLAdefinition["Enterprise (Americas)"];
 SLAdefinition["Enterprise (Europe)"] = SLAdefinition["Enterprise (Americas)"];
@@ -76,6 +76,7 @@ SLAdefinition["Pro Plus (APJ)"] = SLAdefinition["Enterprise (Americas)"];
 for (i = 0; i < tickets.length; i++) {
   // Read the date updated stamp
   var ticket_datestamp = tickets[i]['Date Updated'];
+  ticket_datestamp = ticket_datestamp.slice(0, -3);
   ticket_datestamp = ticket_datestamp.slice(0, -3);
   // Convert to relative time
   var ticket_updated = jQuery.timeago(ticket_datestamp);
@@ -113,5 +114,3 @@ for (i = 0; i < tickets.length; i++) {
   $('#listRow'+i+' td:nth-child(12)').replaceWith('<td>'+ticket_updated+'</td>');
   $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate">'+sla+'</td>');
 }
-
-$('td.slatime').timeago();
