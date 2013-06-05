@@ -90,27 +90,37 @@ for (i = 0; i < tickets.length; i++) {
 
   // Only if all three are set do we parse.
   if (created != null && customer && urgency) {
-    // Based on the customer and urgency, grab the SLA timeframe
-    var timeline = SLAdefinition[customer][urgency];
-    // Add the SLA timeframe to the date the ticket was created
-    var sla = created.add('hours', timeline);
+    if (SLAdefinition[customer]) {
+      // Based on the customer and urgency, grab the SLA timeframe
+      var timeline = SLAdefinition[customer][urgency];
+      // Add the SLA timeframe to the date the ticket was created
+      var sla = created.add('hours', timeline);
+    }
   }
 
-  // Colour the cell based on whether or not SLA was missed
-  if (sla.diff(moment()) >= 1) {
-    var color = 'green';
+  var color = 'grey';
+
+  if (sla != null) {
+    // Colour the cell based on whether or not SLA was missed
+    if (sla.diff(moment()) >= 1) {
+      color = 'green';
+    } else {
+      color = 'red';
+    }
+
+    // todo: fetch the ticket with AJAX and parse it to see if a response has been posted
+    // no need to display the "time till SLA" if it's already been ack'd
+    // bonus: maybe this changes to a "SLA met" or "SLA missed" state depending on the parsed timestamp of the first response?
+
+    // Change the SLA column to be a relative timestamp
+    sla = jQuery.timeago(moment(sla).format());
   } else {
-    var color = 'red';
+    sla = 'UNKNOWN';
   }
-
-  // todo: fetch the ticket with AJAX and parse it to see if a response has been posted
-  // no need to display the "time till SLA" if it's already been ack'd
-  // bonus: maybe this changes to a "SLA met" or "SLA missed" state depending on the parsed timestamp of the first response?
-
-  // Change the SLA column to be a relative timestamp
-  sla = jQuery.timeago(moment(sla).format());
 
   // Style the SLA cell and print it out!
   $('#listRow'+i+' td:nth-child(12)').replaceWith('<td>'+ticket_updated+'</td>');
   $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate">'+sla+'</td>');
+
+  sla = null;
 }
