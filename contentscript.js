@@ -2,6 +2,7 @@
  * Albert Martin
  */
 var regex = /Ticket/;
+var myregex = /My.*Ticket/;
 
 // Test the text of the body element against our regular expression.
 if (regex.test(document.body.innerText)) {
@@ -111,9 +112,16 @@ for (i = 0; i < tickets.length; i++) {
     // todo: fetch the ticket with AJAX and parse it to see if a response has been posted
     // no need to display the "time till SLA" if it's already been ack'd
     // bonus: maybe this changes to a "SLA met" or "SLA missed" state depending on the parsed timestamp of the first response?
-
-    // Change the SLA column to be a relative timestamp
-    sla = jQuery.timeago(moment(sla).format());
+    if (myregex.test(document.body.innerText)) {
+      if (color=='green') {
+        sla = 'HIT';
+      } else {
+        sla = 'MISSED';
+      }
+    } else {
+      // Change the SLA column to be a relative timestamp
+      sla = jQuery.timeago(moment(sla).format());
+    }
   } else {
     sla = 'UNKNOWN';
   }
