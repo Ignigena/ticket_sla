@@ -22,7 +22,15 @@ $('#tableContent thead td').each(function(index, item) {
 $('#tableContent tr.gridRow').has('td').each(function() {
     var arrayItem = {};
     $('td', $(this)).each(function(index, item) {
-        arrayItem[headers[index]] = $(item).text();
+        if (index == 1) {
+          // If this is the "Ticket #" column parse it for the Parature ticket ID URL.
+          // We will use this later to parse the actual contents at the ticket page:
+          // https://s5.parature.com/ics/tt/ticketDetail.asp?ticket_id=XXXXX
+          var ticketregex = /(\d{2,})(?=")/;
+          arrayItem[headers[index]] = ticketregex.exec($(item).html())[0];
+        } else {
+          arrayItem[headers[index]] = $(item).text();
+        }
     });
     tickets.push(arrayItem);
 });
