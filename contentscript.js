@@ -1,8 +1,8 @@
 /*
  * Albert Martin
  */
-var regex = /Ticket\ List.*\(\d+\)/;
-var myregex = /Ticket\ List.+My.+\(\d+\)/;
+var regex = /Ticket\ List.*\(.*\)/;
+var myregex = /Ticket\ List.+My.+\(.*\)/;
 
 // Test the text of the body element against our regular expression.
 if (!regex.test(document.body.innerText)) {
