@@ -37,12 +37,7 @@ if (regex.test(document.body.innerText)) {
 
         // Loop through each row of tickets
         for (i = 0; i < tickets.length; i++) {
-            var timezone = tickets[i]['Expiry Timestamp'].slice(-3);
-            if(timezone == 'EDT'){
-                timezone = '-0400';
-            }
-
-            var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+timezone, 'YYYY-MM-DD HH:mm ZZ');
+            var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
             var color = 'grey';
             var sla = '';
 
