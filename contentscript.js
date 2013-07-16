@@ -3,30 +3,8 @@
  * Matt Lucasiewicz
  */
 
-function secondsToTime(seconds){
-    var days = Math.floor(seconds/(60*60*24));
-    seconds = seconds%(60*60*24);
-    var hours = Math.floor(seconds/(60*60));
-    seconds = seconds%(60*60);
-    var minutes = Math.floor(seconds/(60));
-    seconds = seconds%(60);
-
-    var out = '';
-    if(days != 0 ){
-        out+= days+" Days "
-    }
-    if(hours != 0 ){
-        out+=hours+" Hours "
-    }
-    if(minutes != 0 ){
-        out+= minutes +" Minutes "
-    }
-    if(seconds != 0 ){
-        out+= seconds +" Seconds"
-    }
-    return out;
-}
 var regex = /Ticket\ List.*\(.*\)/;
+
 if (regex.test(document.body.innerText)) {
     chrome.extension.sendRequest({}, function(response) {});
 
@@ -72,14 +50,13 @@ if (regex.test(document.body.innerText)) {
             var diff = expire.diff(moment(), "minutes");
             if (diff >= 30) {
                 color = 'green';
-                sla = secondsToTime(expire.diff(moment(), "seconds"));
             } else if (diff <= 0){
                 color = 'red';
-                sla = secondsToTime((-1*expire.diff(moment(), "seconds")))+ " ago";
             } else {
                 color = 'yellow';
-                sla = secondsToTime(expire.diff(moment(), "seconds"));
             }
+
+            sla = jQuery.timeago(expire.format());
 
             // Style the SLA cell and print it out!
             //$('#listRow'+i+' td:nth-child(12)').replaceWith('<td>'+ticket_updated+'</td>');
