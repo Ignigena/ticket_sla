@@ -14,9 +14,7 @@
   "content_scripts" : [
     {
       "matches" : [
-        "https://s5.parature.com/ics/tt/ticketlist.asp?*&title=All+New+Tickets",
-        "https://s5.parature.com/ics/tt/ticketlist.asp?artr=1&filter_queue=3139&title=*",
-        "https://s5.parature.com/ics/tt/ticketList.asp?*"
+        "https://s5.parature.com/ics/tt/ticketlist.asp?*"
       ],
       "js" : ["jquery-2.0.0.min.js", "moment.min.js", "jquery.timeago.js", "contentscript.js"],
       "run_at" : "document_idle",
