@@ -5,12 +5,13 @@
   "background" : {
     "scripts": ["background.js"]
   },
-  "page_action" :
+  "browser_action" :
   {
     "default_icon" : "slatoolbar.png",
     "default_title" : "Acquia SLA",
     "default_popup": "sla.html"
   },
+  "permissions": ["storage"],
   "content_scripts" : [
     {
       "matches" : [
@@ -21,5 +22,6 @@
       "all_frames" : true
     }
   ],
+  "options_page": "options.html",
   "manifest_version": 2
 }
