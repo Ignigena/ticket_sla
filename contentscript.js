@@ -37,21 +37,26 @@ if (regex.test(document.body.innerText)) {
 
         // Loop through each row of tickets
         for (i = 0; i < tickets.length; i++) {
-            var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
             var color = 'grey';
-            var sla = '';
+            var sla = 'Unknown';
 
-            // Colour the cell based on whether or not SLA was missed
-            var diff = expire.diff(moment(), "minutes");
-            if (diff >= 30) {
-                color = 'green';
-            } else if (diff <= 0){
-                color = 'red';
-            } else {
-                color = 'yellow';
+            // Check to see if the Expiry Timestamp column has synced over to Parature
+            // @todo If this is empty, go back to the old method of "guesstimating"
+            if (tickets[i]['Expiry Timestamp'].length > 0) {
+                var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
+            
+                // Colour the cell based on whether or not SLA was missed
+                var diff = expire.diff(moment(), "minutes");
+                if (diff >= 30) {
+                    color = 'green';
+                } else if (diff <= 0){
+                    color = 'red';
+                } else {
+                    color = 'yellow';
+                }
+
+                sla = jQuery.timeago(expire.format());
             }
-
-            sla = jQuery.timeago(expire.format());
 
             // Style the SLA cell and print it out!
             //$('#listRow'+i+' td:nth-child(12)').replaceWith('<td>'+ticket_updated+'</td>');
