@@ -74,7 +74,7 @@ if (regex.test(document.body.innerText)) {
                 var estimatedSLA = legacySLACalculator(created, customer, urgency);
 
                 if (estimatedSLA) {
-                    sla = jQuery.timeago(estimatedSLA.format());
+                    sla = jQuery.timeago(estimatedSLA.format()) + ' (Estimated)';
                 }
             }
 
