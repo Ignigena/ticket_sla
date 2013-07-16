@@ -41,7 +41,6 @@ if (regex.test(document.body.innerText)) {
             var sla = 'Unknown';
 
             // Check to see if the Expiry Timestamp column has synced over to Parature.
-            // @todo If this is empty, go back to the old method of "guesstimating"
             if (tickets[i]['Expiry Timestamp'].length > 0) {
                 var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
             
@@ -59,6 +58,17 @@ if (regex.test(document.body.innerText)) {
 
                 // Relative time until or since the SLA is either hit or missed.
                 sla = jQuery.timeago(expire.format());
+            } else {
+                // Define the customer, urgency, and created columns
+                var customer = tickets[i]['SLA'];
+                var urgency = tickets[i]['Urgency'];
+                var created = moment(tickets[i]['Date Created'].slice(0, -3), 'M/D/YYYY h:mm A');
+
+                var estimatedSLA = legacySLACalculator(created, customer, urgency);
+
+                if (estimatedSLA) {
+                    sla = jQuery.timeago(estimatedSLA.format());
+                }
             }
 
             // Style the SLA cell and print it out!
@@ -69,3 +79,59 @@ if (regex.test(document.body.innerText)) {
     }
 }
 
+// Legacy SLA calculator for those tickets with no Expiry Timestamp populated.
+// Returns a value for SLA or NULL if Unknown.
+function legacySLACalculator(created, customer, urgency) {
+    // If any of these fields are blank no calculation can be performed.
+    if (created == null && !customer && !urgency) {
+        return;
+    }
+
+    // Define the SLA timeframes (in hours) based on the SLA column values
+    var SLAdefinition = {
+        "Elite (Americas)" : {
+            "Low" : "24",
+            "Medium" : "2",
+            "High" : "1",
+            "Critical" : "0.5"
+        },
+        "Enterprise (Americas)" : {
+            "Low" : "24",
+            "Medium" : "4",
+            "High" : "2",
+            "Critical" : "1"
+        },
+        "Pro Plus (Americas)" : {
+            "Low" : "24",
+            "Medium" : "8",
+            "High" : "4",
+            "Critical" : "1"
+        },
+        "Professional (Americas)" : {
+            "Low" : "8",
+            "Medium" : "8",
+            "High" : "8",
+            "Critical" : "8"
+        },
+        "Developer" : {
+            "Low" : "24",
+            "Medium" : "4",
+            "High" : "2",
+            "Critical" : "1"
+        },
+    }
+    SLAdefinition["Partner"] = SLAdefinition["Enterprise (Americas)"];
+    SLAdefinition["Enterprise (Europe)"] = SLAdefinition["Enterprise (Americas)"];
+    SLAdefinition["Enterprise (APJ)"] = SLAdefinition["Enterprise (Americas)"];
+    SLAdefinition["Pro Plus (Europe)"] = SLAdefinition["Enterprise (Americas)"];
+    SLAdefinition["Pro Plus (APJ)"] = SLAdefinition["Enterprise (Americas)"];
+
+    if (!SLAdefinition[customer]) {
+        return;
+    } else {
+        // Based on the customer and urgency, grab the SLA timeframe.
+        var timeline = SLAdefinition[customer][urgency];
+        // Add the SLA timeframe to the date the ticket was created and return this value.
+        return created.add('hours', timeline);
+    }
+}
