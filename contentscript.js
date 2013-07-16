@@ -31,16 +31,16 @@ if (regex.test(document.body.innerText)) {
     });
 
     if(tickets.length > 0 && 'Expiry Timestamp' in tickets[0]){
-        // Add the extra column for Time to SLA
+        // Add the extra column for Time to SLA.
         $("#lockedHeader tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
         $("#tableContent thead tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
 
-        // Loop through each row of tickets
+        // Loop through each row of tickets.
         for (i = 0; i < tickets.length; i++) {
             var color = 'grey';
             var sla = 'Unknown';
 
-            // Check to see if the Expiry Timestamp column has synced over to Parature
+            // Check to see if the Expiry Timestamp column has synced over to Parature.
             // @todo If this is empty, go back to the old method of "guesstimating"
             if (tickets[i]['Expiry Timestamp'].length > 0) {
                 var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
@@ -55,29 +55,16 @@ if (regex.test(document.body.innerText)) {
                     color = 'yellow';
                 }
 
+                // @todo Fetch the ticket and parse to see if a response has been posted.
+
+                // Relative time until or since the SLA is either hit or missed.
                 sla = jQuery.timeago(expire.format());
             }
 
             // Style the SLA cell and print it out!
-            //$('#listRow'+i+' td:nth-child(12)').replaceWith('<td>'+ticket_updated+'</td>');
+            // @todo Update the Date Created and Date Updated columns with timeago functionality.
+            // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate">'+sla+'</td>');
-
-            //$('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate">'+expire.format()+'</td>');
-            /*
-             // todo: fetch the ticket with AJAX and parse it to see if a response has been posted
-             // no need to display the "time till SLA" if it's already been ack'd
-             // bonus: maybe this changes to a "SLA met" or "SLA missed" state depending on the parsed timestamp of the first response?
-             if (myregex.test(document.body.innerText)) {
-             if (color=='green') {
-             sla = 'HIT';
-             } else {
-             sla = 'MISSED';
-             }
-             } else {
-             // Change the SLA column to be a relative timestamp
-             sla = jQuery.timeago(moment(sla).format());
-             }*/
-            sla = null;
         }
     }
 }
