@@ -86,11 +86,15 @@ if (regex.test(document.body.innerText)) {
             }
 
             // Style the SLA cell and print it out!
-            // @todo Update the Date Created and Date Updated columns with timeago functionality.
             // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).addClass(color);
             $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
-        
+
+            $('#listRow'+i+' td:gt(9):lt(3)[value]').html(function(index, oldhtml) {
+                var properDate = moment(oldhtml.slice(0, -3), 'M/D/YYYY h:mm A').format();
+                return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
+            });
+
             // Combine the Ticket Type and Subcategory columns.
             if ('Ticket Type' in tickets[0] && 'Subcategory' in tickets[0] && tickets[i]['Subcategory'].length > 0) {
                 $('#listRow'+i+' td:nth-child(14)').replaceWith('<td>'+tickets[i]['Ticket Type']+' > '+tickets[i]['Subcategory']+'</td>');
