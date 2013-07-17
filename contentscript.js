@@ -90,6 +90,11 @@ if (regex.test(document.body.innerText)) {
             // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).addClass(color);
             $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
+        
+            // Combine the Ticket Type and Subcategory columns.
+            if ('Ticket Type' in tickets[0] && 'Subcategory' in tickets[0]) {
+                $('#listRow'+i+' td:nth-child(14)').replaceWith('<td>'+tickets[i]['Ticket Type']+' > '+tickets[i]['Subcategory']+'</td>');
+            }
         }
 
         // Add buttons to allow filtering by the SLA status.
@@ -101,6 +106,8 @@ if (regex.test(document.body.innerText)) {
         $('input.toggleBySLA.SLAall').hide();
         // Bind the toggleBySLA() function to the filter buttons.
         $('input.toggleBySLA').click(toggleBySLA);
+
+        ticketListUITidy();
 
         // Update in real time!
         // @todo Make sure the color of the cell updates as thresholds are passed.
@@ -130,6 +137,25 @@ function toggleBySLA() {
         
         $('tr.gridRow.'+toggleTarget).show();
     }
+}
+
+function ticketListUITidy() {
+    // Remove the Expiry Timestamp and Subcategory columns since they're redundant.
+    $('form div > table tr td:last-child').hide();
+    $('form div > table tr td:nth-child(15)').hide();
+
+    // Remove the Ticket Origin column.
+    if ('Ticket Origin' in tickets[0]) {
+        $('form div > table tr td:nth-child(11)').hide();
+    }
+
+    // Remove the Attachments column.
+    $('form div > table tr td:nth-child(4)').hide();
+    // Shorten the RA column display.
+    $("thead td:contains('Remote Administration')").html("RA");
+
+    // Hack to get the table header to resize properly.
+    $(".lockedTableHeader").width('1px');
 }
 
 // Legacy SLA calculator for those tickets with no Expiry Timestamp populated.
