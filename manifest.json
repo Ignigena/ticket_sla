@@ -1,6 +1,6 @@
 {
   "name" : "SLA Remaining",
-  "version" : "0.2",
+  "version" : "0.3",
   "description" : "Shows SLA remaining on current ticket list.",
   "background" : {
     "scripts": ["background.js"]
