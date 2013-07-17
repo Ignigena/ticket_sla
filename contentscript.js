@@ -64,7 +64,7 @@ if (regex.test(document.body.innerText)) {
                 // @todo Fetch the ticket and parse to see if a response has been posted.
 
                 // Relative time until or since the SLA is either hit or missed.
-                sla = jQuery.timeago(expire.format());
+                sla = expire.format();
             } else {
                 // Define the customer, urgency, and created columns
                 var customer = tickets[i]['SLA'];
@@ -74,15 +74,20 @@ if (regex.test(document.body.innerText)) {
                 var estimatedSLA = legacySLACalculator(created, customer, urgency);
 
                 if (estimatedSLA) {
-                    sla = jQuery.timeago(estimatedSLA.format()) + ' (Estimated)';
+                    sla = $.timeago(estimatedSLA.format()) + ' (Estimated)';
                 }
             }
 
             // Style the SLA cell and print it out!
             // @todo Update the Date Created and Date Updated columns with timeago functionality.
             // @todo Allow click to toggle between Relative and Absolute date strings.
-            $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate">'+sla+'</td>');
+            $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
+
+        // Update in real time!
+        // @todo Make sure the color of the cell updates as thresholds are passed.
+        $.timeago.settings.allowFuture = true;
+        $('abbr.timeago').timeago();
     }
 }
 
