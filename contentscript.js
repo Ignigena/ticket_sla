@@ -92,7 +92,7 @@ if (regex.test(document.body.innerText)) {
             $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         
             // Combine the Ticket Type and Subcategory columns.
-            if ('Ticket Type' in tickets[0] && 'Subcategory' in tickets[0]) {
+            if ('Ticket Type' in tickets[0] && 'Subcategory' in tickets[0] && tickets[i]['Subcategory'].length > 0) {
                 $('#listRow'+i+' td:nth-child(14)').replaceWith('<td>'+tickets[i]['Ticket Type']+' > '+tickets[i]['Subcategory']+'</td>');
             }
         }
