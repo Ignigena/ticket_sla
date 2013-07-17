@@ -37,6 +37,10 @@ if (regex.test(document.body.innerText)) {
         tickets.push(arrayItem);
     });
 
+    var ticketsMissed = 0;
+    var ticketsWarning = 0;
+    var ticketsGood = 0;
+
     if(tickets.length > 0 && 'Expiry Timestamp' in tickets[0]){
         // Add the extra column for Time to SLA.
         $("#lockedHeader tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
@@ -55,10 +59,13 @@ if (regex.test(document.body.innerText)) {
                 var diff = expire.diff(moment(), "minutes");
                 if (diff >= 30) {
                     color = 'green';
+                    ticketsGood++;
                 } else if (diff <= 0){
                     color = 'red';
+                    ticketsMissed++;
                 } else {
                     color = 'yellow';
+                    ticketsWarning++;
                 }
 
                 // @todo Fetch the ticket and parse to see if a response has been posted.
@@ -81,13 +88,47 @@ if (regex.test(document.body.innerText)) {
             // Style the SLA cell and print it out!
             // @todo Update the Date Created and Date Updated columns with timeago functionality.
             // @todo Allow click to toggle between Relative and Absolute date strings.
+            $('#listRow'+i).addClass(color);
             $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
+
+        // Add buttons to allow filtering by the SLA status.
+        $('#countDiv').append('&nbsp;&nbsp;<input class="formButton toggleBySLA SLAall" name="all" type="button" value="Show All">');
+        $('#countDiv').append('<input class="formButton toggleBySLA" name="red" type="button" value="'+ticketsMissed+' Missed SLA">');
+        $('#countDiv').append('<input class="formButton toggleBySLA" name="yellow" type="button" value="'+ticketsWarning+' Warning SLA">');
+        $('#countDiv').append('<input class="formButton toggleBySLA" name="green" type="button" value="'+ticketsGood+' Good SLA">');
+        // Hide the "Show All" since on page load we are already showing all.
+        $('input.toggleBySLA.SLAall').hide();
+        // Bind the toggleBySLA() function to the filter buttons.
+        $('input.toggleBySLA').click(toggleBySLA);
 
         // Update in real time!
         // @todo Make sure the color of the cell updates as thresholds are passed.
         $.timeago.settings.allowFuture = true;
         $('abbr.timeago').timeago();
+    }
+}
+
+// Allows users to show only tickets which match a certain SLA status.
+function toggleBySLA() {
+    var toggleTarget = window.event.srcElement.attributes["name"].value;
+
+    if (toggleTarget == "all") {
+        $('input.toggleBySLA.SLAall').hide();
+
+        $('tr.gridRow.grey').show();
+        $('tr.gridRow.red').show();
+        $('tr.gridRow.yellow').show();
+        $('tr.gridRow.green').show();
+    } else {
+        $('input.toggleBySLA.SLAall').show();
+
+        $('tr.gridRow.grey').hide();
+        $('tr.gridRow.red').hide();
+        $('tr.gridRow.yellow').hide();
+        $('tr.gridRow.green').hide();
+        
+        $('tr.gridRow.'+toggleTarget).show();
     }
 }
 
