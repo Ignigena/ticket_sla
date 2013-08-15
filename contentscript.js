@@ -145,8 +145,12 @@ function ticketListUITidy() {
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
+
     // Shorten the RA column display.
     $("thead td:contains('Remote Administration')").html("RA");
+
+    // Shorten the Onboarding column display.
+    $("thead td:contains('Onboarding Account')").html("Onboarding");
 
     // Hack to get the table header to resize properly.
     $(".lockedTableHeader").width('1px');
