@@ -90,10 +90,8 @@ if (regex.test(document.body.innerText)) {
             $('#listRow'+i).addClass(color);
             $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
 
-            $('#listRow'+i+' td:gt(9):lt(3)[value]').html(function(index, oldhtml) {
-                var properDate = moment(oldhtml.slice(0, -3), 'M/D/YYYY h:mm A').format();
-                return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
-            });
+            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
+            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
         }
 
         // Add buttons to allow filtering by the SLA status.
@@ -228,4 +226,9 @@ function getColumnIndexByName(columnName) {
     });
 
     return columnNumber;
+}
+
+function makeExistingDateRelative(oldhtml) {
+    var properDate = moment(oldhtml.slice(0, -3), 'M/D/YYYY h:mm A').format();
+    return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
 }
