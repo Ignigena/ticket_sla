@@ -94,11 +94,6 @@ if (regex.test(document.body.innerText)) {
                 var properDate = moment(oldhtml.slice(0, -3), 'M/D/YYYY h:mm A').format();
                 return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
             });
-
-            // Combine the Ticket Type and Subcategory columns.
-            if ('Ticket Type' in tickets[0] && 'Subcategory' in tickets[0] && tickets[i]['Subcategory'].length > 0) {
-                $('#listRow'+i+' td:nth-child(14)').replaceWith('<td>'+tickets[i]['Ticket Type']+' > '+tickets[i]['Subcategory']+'</td>');
-            }
         }
 
         // Add buttons to allow filtering by the SLA status.
@@ -144,14 +139,11 @@ function toggleBySLA() {
 }
 
 function ticketListUITidy() {
-    // Remove the Expiry Timestamp and Subcategory columns since they're redundant.
-    $('form div > table tr td:last-child').hide();
-    $('form div > table tr td:nth-child(15)').hide();
+    // Remove the Expiry Timestamp column since it's redundant.
+    hideColumnByColumnName('Expiry Timestamp');
 
     // Remove the Ticket Origin column.
-    if ('Ticket Origin' in tickets[0]) {
-        $('form div > table tr td:nth-child(11)').hide();
-    }
+    hideColumnByColumnName('Ticket Origin');
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
