@@ -218,3 +218,22 @@ function legacySLACalculator(created, customer, urgency) {
         return created.add('hours', timeline);
     }
 }
+
+function hideColumnByColumnName(columnName) {
+    var columnIndex = getColumnIndexByName(columnName);
+    // Verify the column exists in this view.
+    if (columnIndex) {
+        // Hide it!
+        $('form div > table tr td:nth-child('+columnIndex+')').hide();
+    }
+}
+
+function getColumnIndexByName(columnName) {
+    var indexOfKey = 2;
+    var columnNumber = $.map(tickets[0], function(val, key) {
+        indexOfKey++
+        return key == columnName ? indexOfKey : null;
+    });
+
+    return columnNumber;
+}
