@@ -233,7 +233,11 @@ function getColumnIndexByName(columnName) {
         return key == columnName ? indexOfKey : null;
     });
 
-    return columnNumber;
+    if (columnNumber >= 1) {
+        return columnNumber;
+    } else {
+        return null;
+    }
 }
 
 function makeExistingDateRelative(oldhtml) {
