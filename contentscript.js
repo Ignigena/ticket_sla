@@ -117,7 +117,7 @@ if (ticketDetailRegex.test(document.body.innerText)) {
         if (expiryTimestamp) {
             var sla = formatTimestamp(expiryTimestamp);
 
-            $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.5%;position:fixed;top:96px;background-color:'+sla['color']+';padding:8px;z-index:10;text-align:center;color:white;font-weight:bold;">Response required <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
+            $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.8%;position:fixed;top:96px;background-color:'+sla['color']+';padding:8px;z-index:10;text-align:center;color:white;font-weight:bold;">Response required <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
             $('#ticketLeftCol').css('padding-top','40px');
 
             $.timeago.settings.allowFuture = true;
