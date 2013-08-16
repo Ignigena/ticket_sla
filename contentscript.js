@@ -152,12 +152,13 @@ function ticketListUITidy() {
     // Shorten the Onboarding column display.
     $("thead td:contains('Onboarding Account')").html("Onboarding");
 
-    // Hack to get the table header to resize properly.
-    $(".lockedTableHeader").width('1px');
-
     if (getColumnIndexByName('Status')) {
         $('form div > table tr td:nth-child('+getColumnIndexByName('Status')+')').width('25px');
     }
+
+    // Hack to get the table to resize properly in the window.
+    $(".lockedTableHeader").width('1px');
+    $(".lockedTableContainer").height(($(".lockedTableContainer").height()-16)+'px');
 }
 
 // Legacy SLA calculator for those tickets with no Expiry Timestamp populated.
