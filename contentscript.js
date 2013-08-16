@@ -6,7 +6,6 @@
 var regex = /Ticket\ List.*\(.*\)/;
 
 if (regex.test(document.body.innerText)) {
-    chrome.extension.sendRequest({}, function(response) {});
     chrome.storage.local.get('newWindowTickets',function(data){
         if(data.newWindowTickets){
             $("#tableContent tbody tr td a").each(function () {
