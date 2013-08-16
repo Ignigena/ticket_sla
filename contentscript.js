@@ -3,9 +3,10 @@
  * Matt Lucasiewicz
  */
 
-var regex = /Ticket\ List.*\(.*\)/;
+var ticketListRegex = /Ticket\ List.*\(.*\)/;
 
-if (regex.test(document.body.innerText)) {
+// If this is the ticket list, process it accordingly.
+if (ticketListRegex.test(document.body.innerText)) {
     chrome.storage.local.get('newWindowTickets',function(data){
         if(data.newWindowTickets){
             $("#tableContent tbody tr td a").each(function () {
