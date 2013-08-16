@@ -54,25 +54,21 @@ if (ticketListRegex.test(document.body.innerText)) {
 
             // Check to see if the Expiry Timestamp column has synced over to Parature.
             if (tickets[i]['Expiry Timestamp'].length > 0) {
-                var expire = moment(tickets[i]['Expiry Timestamp'].slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
-            
-                // Colour the cell based on whether or not SLA was missed
-                var diff = expire.diff(moment(), "minutes");
-                if (diff >= 30) {
-                    color = 'green';
+                var expiry = formatTimestamp(tickets[i]['Expiry Timestamp']);
+                
+                if (expiry['color']=='green') {
                     ticketsGood++;
-                } else if (diff <= 0){
-                    color = 'red';
+                } else if (expiry['color']=='red'){
                     ticketsMissed++;
                 } else {
-                    color = 'yellow';
                     ticketsWarning++;
                 }
 
                 // @todo Fetch the ticket and parse to see if a response has been posted.
 
                 // Relative time until or since the SLA is either hit or missed.
-                sla = expire.format();
+                sla = expiry['timestamp'];
+                color = expiry['color'];
             } else {
                 // Define the customer, urgency, and created columns
                 var customer = tickets[i]['SLA'];
