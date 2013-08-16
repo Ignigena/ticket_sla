@@ -94,16 +94,8 @@ if (regex.test(document.body.innerText)) {
             $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
         }
 
-        // Add buttons to allow filtering by the SLA status.
-        $('#countDiv').append('&nbsp;&nbsp;<input class="formButton toggleBySLA SLAall" name="all" type="button" value="Show All">');
-        $('#countDiv').append('<input class="formButton toggleBySLA" name="red" type="button" value="'+ticketsMissed+' Missed SLA">');
-        $('#countDiv').append('<input class="formButton toggleBySLA" name="yellow" type="button" value="'+ticketsWarning+' Warning SLA">');
-        $('#countDiv').append('<input class="formButton toggleBySLA" name="green" type="button" value="'+ticketsGood+' Good SLA">');
-        // Hide the "Show All" since on page load we are already showing all.
-        $('input.toggleBySLA.SLAall').hide();
-        // Bind the toggleBySLA() function to the filter buttons.
-        $('input.toggleBySLA').click(toggleBySLA);
-
+        // A few utility functions to enhance the ticket grid display.
+        ticketListSLAButtons();
         ticketListUITidy();
 
         // Update in real time!
@@ -134,6 +126,18 @@ function toggleBySLA() {
         
         $('tr.gridRow.'+toggleTarget).show();
     }
+}
+
+function ticketListSLAButtons() {
+    // Add buttons to allow filtering by the SLA status.
+    $('#countDiv').append('&nbsp;&nbsp;<input class="formButton toggleBySLA SLAall" name="all" type="button" value="Show All">');
+    $('#countDiv').append('<input class="formButton toggleBySLA" name="red" type="button" value="'+ticketsMissed+' Missed SLA">');
+    $('#countDiv').append('<input class="formButton toggleBySLA" name="yellow" type="button" value="'+ticketsWarning+' Warning SLA">');
+    $('#countDiv').append('<input class="formButton toggleBySLA" name="green" type="button" value="'+ticketsGood+' Good SLA">');
+    // Hide the "Show All" since on page load we are already showing all.
+    $('input.toggleBySLA.SLAall').hide();
+    // Bind the toggleBySLA() function to the filter buttons.
+    $('input.toggleBySLA').click(toggleBySLA);
 }
 
 function ticketListUITidy() {
