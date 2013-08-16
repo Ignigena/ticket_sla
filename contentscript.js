@@ -119,26 +119,9 @@ if (ticketDetailRegex.test(document.body.innerText)) {
         var expiryTimestamp = expiryTimestampRegex.exec(document.body.innerText)[1];
 
         if (expiryTimestamp) {
-            var color = 'grey';
-            var expire = moment(expiryTimestamp.slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
-                
-            // Colour the cell based on whether or not SLA was missed
-            var diff = expire.diff(moment(), "minutes");
-            if (diff >= 30) {
-                color = 'green';
-                ticketsGood++;
-            } else if (diff <= 0){
-                color = 'red';
-                ticketsMissed++;
-            } else {
-                color = 'yellow';
-                ticketsWarning++;
-            }
+            var sla = formatTimestamp(expiryTimestamp);
 
-            // Relative time until or since the SLA is either hit or missed.
-            sla = expire.format();
-
-            $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.5%;position:fixed;top:96px;background-color:'+color+';padding:8px;z-index:10;text-align:center;color:white;font-weight:bold;">Response required <abbr class="timeago" title="'+sla+'">'+sla+'</abbr></div>');
+            $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.5%;position:fixed;top:96px;background-color:'+sla['color']+';padding:8px;z-index:10;text-align:center;color:white;font-weight:bold;">Response required <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
             $('#ticketLeftCol').css('padding-top','40px');
 
             $.timeago.settings.allowFuture = true;
@@ -290,4 +273,24 @@ function getColumnIndexByName(columnName) {
 function makeExistingDateRelative(oldhtml) {
     var properDate = moment(oldhtml.slice(0, -3), 'M/D/YYYY h:mm A').format();
     return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
+}
+
+function formatTimestamp(timestamp) {
+    var color = 'grey';
+    var expire = moment(timestamp.slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
+        
+    // Colour the cell based on whether or not SLA was missed
+    var diff = expire.diff(moment(), "minutes");
+    if (diff >= 30) {
+        color = 'green';
+    } else if (diff <= 0){
+        color = 'red';
+    } else {
+        color = 'yellow';
+    }
+
+    return {
+        "color" : color,
+        "timestamp" : expire.format(),
+    }
 }
