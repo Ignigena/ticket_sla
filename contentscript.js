@@ -4,6 +4,7 @@
  */
 
 var ticketListRegex = /Ticket\ List.*\(.*\)/;
+var ticketDetailRegex = /Ticket\ Summary/;
 
 // If this is the ticket list, process it accordingly.
 if (ticketListRegex.test(document.body.innerText)) {
@@ -102,6 +103,47 @@ if (ticketListRegex.test(document.body.innerText)) {
         // @todo Make sure the color of the cell updates as thresholds are passed.
         $.timeago.settings.allowFuture = true;
         $('abbr.timeago').timeago();
+    }
+}
+
+// If this is the ticket page, process accordingly.
+if (ticketDetailRegex.test(document.body.innerText)) {
+    // If the ticket status is any of these, it will be considered as acknowledged.
+    // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
+    var ticketAckedRegex = /Status:.*(Work\ In\ Progress|Need\ More\ Info|Needs\ Reply|Reopened)/;
+
+    // If the ticket has not been acked, show a banner with the time until SLA.
+    if (!ticketAckedRegex.test(document.body.innerText)) {
+        // Fetch the Expiry Timestamp field from the ticket body.
+        var expiryTimestampRegex = /Expiry\ Timestamp:.*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}\ .{3})/;
+        var expiryTimestamp = expiryTimestampRegex.exec(document.body.innerText)[1];
+
+        if (expiryTimestamp) {
+            var color = 'grey';
+            var expire = moment(expiryTimestamp.slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
+                
+            // Colour the cell based on whether or not SLA was missed
+            var diff = expire.diff(moment(), "minutes");
+            if (diff >= 30) {
+                color = 'green';
+                ticketsGood++;
+            } else if (diff <= 0){
+                color = 'red';
+                ticketsMissed++;
+            } else {
+                color = 'yellow';
+                ticketsWarning++;
+            }
+
+            // Relative time until or since the SLA is either hit or missed.
+            sla = expire.format();
+
+            $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.5%;position:fixed;top:96px;background-color:'+color+';padding:8px;z-index:10;text-align:center;color:white;font-weight:bold;">Response required <abbr class="timeago" title="'+sla+'">'+sla+'</abbr></div>');
+            $('#ticketLeftCol').css('padding-top','40px');
+
+            $.timeago.settings.allowFuture = true;
+            $('abbr.timeago').timeago();
+        }
     }
 }
 
