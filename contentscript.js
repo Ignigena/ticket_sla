@@ -128,6 +128,17 @@ if (ticketDetailRegex.test(document.body.innerText)) {
             $.timeago.settings.allowFuture = true;
             $('abbr.timeago').timeago();
         }
+
+        // Once the history table loads, check the ticket history for an acknowledge.
+        $("#historyTableWrapper").bind("DOMSubtreeModified", function() {
+            // Check the ticket history to see if any external communication has happened.
+            $('td.yui-dt-col-action').each(function(index, item) {
+                if ($(item).text() == 'Posted External Comment' || $(item).text() == 'Requested Info') {
+                    $('#slaBanner').hide();
+                    $('#ticketLeftCol').css('padding-top','0');
+                }
+            });
+        });
     }
 }
 
