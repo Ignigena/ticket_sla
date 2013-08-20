@@ -106,10 +106,10 @@ if (ticketListRegex.test(document.body.innerText)) {
 if (ticketDetailRegex.test(document.body.innerText)) {
     // If the ticket status is any of these, it will be considered as acknowledged.
     // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
-    var ticketAckedRegex = /Status:.*(Need\ More\ Info|Needs\ Reply|Reopened|Closed)/;
+    var ticketStatusRegex = /Status:.*(Need\ More\ Info|Needs\ Reply|Solution\ Suggested|Reopened|Closed)/;
 
-    // If the ticket has not been acked, show a banner with the time until SLA.
-    if (!ticketAckedRegex.test(document.body.innerText)) {
+    // Based on the status, it's possible the ticket has not been acknowledged.
+    if (!ticketStatusRegex.test(document.body.innerText)) {
         // Fetch the Expiry Timestamp field from the ticket body.
         var expiryTimestampRegex = /Expiry\ Timestamp:.*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}\ .{3})/;
         var expiryTimestamp = expiryTimestampRegex.exec(document.body.innerText)[1];
