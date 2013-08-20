@@ -106,7 +106,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 if (ticketDetailRegex.test(document.body.innerText)) {
     // If the ticket status is any of these, it will be considered as acknowledged.
     // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
-    var ticketAckedRegex = /Status:.*(Work\ In\ Progress|Need\ More\ Info|Needs\ Reply|Reopened|Closed)/;
+    var ticketAckedRegex = /Status:.*(Need\ More\ Info|Needs\ Reply|Reopened|Closed)/;
 
     // If the ticket has not been acked, show a banner with the time until SLA.
     if (!ticketAckedRegex.test(document.body.innerText)) {
