@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
   <app appid='fnjbifchgnplkbnmfdfljphnemfbbpjb'>
-    <updatecheck codebase='https://github.com/Ignigena/ticket_sla/releases/download/v0.5/ticket_sla.crx' version='0.5' />
+    <updatecheck codebase='https://s3.amazonaws.com/github-cloud/releases/10041693/b82f3346-09d8-11e3-98dd-a035f6629b2b.crx?response-content-disposition=attachment%3B%20filename%3Dticket_sla.crx&AWSAccessKeyId=AKIAISTNZFOVBIJMK3TQ&Expires=1377032102&Signature=spONMGtxLiL%2B7o%2BdVlMpqSkwDdU%3D' version='0.5' />
   </app>
 </gupdate>
