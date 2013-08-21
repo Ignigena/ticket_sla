@@ -75,9 +75,12 @@ if (ticketListRegex.test(document.body.innerText)) {
                     console.log(status);
                     if (status['hit']) {
                         $('.sla'+status['row']).html("SLA Hit");
-                        $('.sla'+status['row']).css("background-color", "green");
+                        $('.sla'+status['row']).removeClass('sla-red');
+                        $('.sla'+status['row']).addClass('hit');
                     } else if (status['response']) {
                         $('.sla'+status['row']).html("SLA Missed");
+                        $('.sla'+status['row']).addClass('hit');
+                        $('.sla'+status['row']).addClass('ackd');
                     }
                 });
 
@@ -100,7 +103,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).addClass(color);
-            $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+';text-align:center" class="slate sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
+            $('#listRow'+i).prepend('<td nowrap class="sla-report sla-'+color+' sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
 
             $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
             $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
@@ -145,7 +148,7 @@ if (ticketDetailRegex.test(document.body.innerText)) {
                         textColor = "black";
                     }
 
-                    $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.8%;position:fixed;top:96px;background-color:'+sla['color']+';padding:8px;z-index:10;text-align:center;color:'+textColor+';font-weight:bold;">Response required <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
+                    $('#ticketLeftCol').prepend('<div id="slaBanner" class="'+sla['color']+'"><strong>Response required</strong> <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
                     $('#ticketLeftCol').css('padding-top','40px');
 
                     $.timeago.settings.allowFuture = true;

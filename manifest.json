@@ -15,6 +15,7 @@
         "https://s5.parature.com/ics/tt/ticket*"
       ],
       "js" : ["jquery-2.0.0.min.js", "moment.min.js", "jquery.timeago.js", "contentscript.js"],
+      "css" : ["contentstyle.css"],
       "run_at" : "document_idle",
       "all_frames" : true
     }

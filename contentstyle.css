@@ -1,0 +1,48 @@
+td.sla-report {
+  width: 90px;
+  text-align: center;
+  border: 1px solid #bce8f1;
+  color: #3a87ad;
+  background-color: #d9edf7;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+td.sla-report.sla-green,
+td.sla-report.hit {
+  color: #468847;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+td.sla-report.sla-red,
+#slaBanner.red {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+td.sla-report.sla-yellow,
+#slaBanner.yellow {
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+td.sla-report.ackd,
+td.sla-report.hit {
+  font-weight: bold;
+}
+
+#slaBanner {
+  width:57.8%;
+  position:fixed;
+  top:96px;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  border: 1px solid #fbeed5;
+  padding:7px;
+  z-index:10;
+  text-align:center;
+  color: #468847;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
