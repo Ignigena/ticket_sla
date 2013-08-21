@@ -72,7 +72,6 @@ if (ticketListRegex.test(document.body.innerText)) {
             
                 // Once the SLA status is determined, update the row accordingly.
                 $.when(slaStatus).done(function(status) {
-                    console.log(status);
                     if (status['hit']) {
                         $('.sla'+status['row']).html("SLA Hit");
                         $('.sla'+status['row']).removeClass('sla-red');
@@ -144,10 +143,6 @@ if (ticketDetailRegex.test(document.body.innerText)) {
             // Once we determine if a response is required, add the banner if necessary.
             $.when(slaStatus).done(function(status) {
                 if (!status['response']) {
-                    if (sla['color'] == "yellow") {
-                        textColor = "black";
-                    }
-
                     $('#ticketLeftCol').prepend('<div id="slaBanner" class="'+sla['color']+'"><strong>Response required</strong> <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
                     $('#ticketLeftCol').css('padding-top','40px');
 
