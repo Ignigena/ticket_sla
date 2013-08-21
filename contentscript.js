@@ -64,7 +64,22 @@ if (ticketListRegex.test(document.body.innerText)) {
                     ticketsWarning++;
                 }
 
-                // @todo Fetch the ticket and parse to see if a response has been posted.
+                // Grab the session key so we can look at the ticket history.
+                var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
+                var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
+
+                var slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, expiry, i);
+            
+                // Once the SLA status is determined, update the row accordingly.
+                $.when(slaStatus).done(function(status) {
+                    console.log(status);
+                    if (status['hit']) {
+                        $('.sla'+status['row']).html("SLA Hit");
+                        $('.sla'+status['row']).css("background-color", "green");
+                    } else if (status['response']) {
+                        $('.sla'+status['row']).html("SLA Missed");
+                    }
+                });
 
                 // Relative time until or since the SLA is either hit or missed.
                 sla = expiry['timestamp'];
@@ -85,7 +100,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).addClass(color);
-            $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+'" class="slate"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
+            $('#listRow'+i).prepend('<td nowrap style="width:90px;background-color:'+color+';text-align:center" class="slate sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
 
             $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
             $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
@@ -115,30 +130,29 @@ if (ticketDetailRegex.test(document.body.innerText)) {
         var expiryTimestamp = expiryTimestampRegex.exec(document.body.innerText)[1];
 
         if (expiryTimestamp) {
+            // Grab the session key so we can look at the ticket history.
+            var sessionKeyRegex = /SessionId\ =\ \'(.*)\'/;
+            var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
+
             var sla = formatTimestamp(expiryTimestamp);
+            var slaStatus = checkForSLA(window.location.search.slice(11), sessionKey, sla);
             var textColor = "white";
 
-            if (sla['color'] == "yellow") {
-                textColor = "black";
-            }
+            // Once we determine if a response is required, add the banner if necessary.
+            $.when(slaStatus).done(function(status) {
+                if (!status['response']) {
+                    if (sla['color'] == "yellow") {
+                        textColor = "black";
+                    }
 
-            $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.8%;position:fixed;top:96px;background-color:'+sla['color']+';padding:8px;z-index:10;text-align:center;color:'+textColor+';font-weight:bold;">Response required <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
-            $('#ticketLeftCol').css('padding-top','40px');
+                    $('#ticketLeftCol').prepend('<div id="slaBanner" style="width:57.8%;position:fixed;top:96px;background-color:'+sla['color']+';padding:8px;z-index:10;text-align:center;color:'+textColor+';font-weight:bold;">Response required <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
+                    $('#ticketLeftCol').css('padding-top','40px');
 
-            $.timeago.settings.allowFuture = true;
-            $('abbr.timeago').timeago();
-        }
-
-        // Once the history table loads, check the ticket history for an acknowledge.
-        $("#historyTableWrapper").bind("DOMSubtreeModified", function() {
-            // Check the ticket history to see if any external communication has happened.
-            $('td.yui-dt-col-action').each(function(index, item) {
-                if ($(item).text() == 'Posted External Comment' || $(item).text() == 'Requested Info') {
-                    $('#slaBanner').hide();
-                    $('#ticketLeftCol').css('padding-top','0');
+                    $.timeago.settings.allowFuture = true;
+                    $('abbr.timeago').timeago();
                 }
             });
-        });
+        }
     }
 }
 
@@ -305,4 +319,60 @@ function formatTimestamp(timestamp) {
         "color" : color,
         "timestamp" : expire.format(),
     }
+}
+
+function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
+    // Using jQuery's "Deferred" class we can be notified once the request has completed.
+    var defer = new $.Deferred();
+
+    var slaTime = slaFormattedTime['timestamp'];
+    var responseSent = false;
+    var slaHit = false;
+
+    // Post data required by Parature to return a proper response.
+    var postData = [{
+        "ServiceName" : "Ticket",
+        "OperationName" : "FindTicketActionHistory",
+        "SessionId" : sessionKey,
+        "Arguments" : {
+            "search" : "{\"Id\" : "+ticketNumber+",\"PageSize\" : 25,\"PageNumber\" : 1}"
+        }
+    }];
+    
+    // Make the AJAX request.
+    $.ajax({
+        type: "POST",
+        url: "https://s5.parature.com/jsonrequest/RequestHandler.aspx",
+        data: JSON.stringify(postData),
+        dataType: "json",
+    }).done(function(data) {
+        // All actions performed on the ticket.
+        var ticketActions = data[0]['ReturnData']['Dtos'];
+
+        // For each action, determine whether external communication has been made and whether or not SLA was hit.
+        for (i = 0; i < ticketActions.length; i++) {
+            var externalCommunication = ticketActions[i]['ActionPerformed']['EmailCustomer'];
+            var actionDate = ticketActions[i]['ActionDate'];
+
+            // Only continue if this is external communication by a Supporta.
+            if (externalCommunication && ticketActions[i]['PerformedByCsr'] != null) {
+                // External communication has been made by a Supporta.
+                responseSent = true;
+                if (moment(slaTime).diff(moment(actionDate), 'minutes') >= 0) {
+                    // SLA has been hit!
+                    slaHit = true;
+                }
+            }
+        }
+
+        // Tell the deferred response that all the data is ready to return.
+        defer.resolve({
+            'response' : responseSent,
+            'hit' : slaHit,
+            'row' : row
+        });
+    });
+
+    // We return a promise here to support the asynchronous nature of the request.
+    return defer.promise()
 }
