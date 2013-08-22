@@ -1,6 +1,6 @@
 {
   "name" : "SLA Remaining",
-  "version" : "0.6.2",
+  "version" : "0.7",
   "description" : "Shows SLA remaining on current ticket list.",
   "browser_action" :
   {
@@ -8,7 +8,14 @@
     "default_title" : "Acquia SLA",
     "default_popup": "sla.html"
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "tabs",
+    "storage",
+    "http://*/*"
+  ],
+  "background" : {
+    "scripts": ["background.js"]
+  },
   "content_scripts" : [
     {
       "matches" : [
