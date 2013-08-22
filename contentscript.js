@@ -75,6 +75,7 @@ if (ticketListRegex.test(document.body.innerText)) {
                     if (status['hit']) {
                         $('.sla'+status['row']).html("SLA Hit");
                         $('.sla'+status['row']).removeClass('sla-red');
+                        $('.sla'+status['row']).removeClass('sla-yellow');
                         $('.sla'+status['row']).addClass('hit');
                     } else if (status['response']) {
                         $('.sla'+status['row']).html("SLA Missed");
