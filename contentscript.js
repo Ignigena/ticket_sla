@@ -350,10 +350,11 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
         // For each action, determine whether external communication has been made and whether or not SLA was hit.
         for (i = 0; i < ticketActions.length; i++) {
             var externalCommunication = ticketActions[i]['ActionPerformed']['EmailCustomer'];
+            var showToCustomer = ticketActions[i]['ShowToCustomer'];
             var actionDate = ticketActions[i]['ActionDate'];
 
             // Only continue if this is external communication by a Supporta.
-            if (externalCommunication && ticketActions[i]['PerformedByCsr'] != null) {
+            if ((externalCommunication || showToCustomer) && ticketActions[i]['PerformedByCsr'] != null) {
                 // External communication has been made by a Supporta.
                 responseSent = true;
                 if (moment(slaTime).diff(moment(actionDate), 'minutes') >= 0) {
