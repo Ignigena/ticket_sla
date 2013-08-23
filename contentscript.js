@@ -64,26 +64,6 @@ if (ticketListRegex.test(document.body.innerText)) {
                     ticketsWarning++;
                 }
 
-                // Grab the session key so we can look at the ticket history.
-                var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
-                var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
-
-                var slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, expiry, i);
-            
-                // Once the SLA status is determined, update the row accordingly.
-                $.when(slaStatus).done(function(status) {
-                    if (status['hit']) {
-                        $('.sla'+status['row']).html("SLA Hit");
-                        $('.sla'+status['row']).removeClass('sla-red');
-                        $('.sla'+status['row']).removeClass('sla-yellow');
-                        $('.sla'+status['row']).addClass('hit');
-                    } else if (status['response']) {
-                        $('.sla'+status['row']).html("SLA Missed");
-                        $('.sla'+status['row']).addClass('hit');
-                        $('.sla'+status['row']).addClass('ackd');
-                    }
-                });
-
                 // Relative time until or since the SLA is either hit or missed.
                 sla = expiry['timestamp'];
                 color = expiry['color'];
@@ -99,6 +79,33 @@ if (ticketListRegex.test(document.body.innerText)) {
                     sla = $.timeago(estimatedSLA.format()) + ' (Estimated)';
                 }
             }
+
+            // Grab the session key so we can look at the ticket history.
+            var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
+            var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
+            var slaStatus;
+
+            if (expiry != null) {
+                slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, expiry, i);
+                expiry = null;
+            } else if (estimatedSLA != null) {
+                slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, { 'timestamp' : estimatedSLA }, i);
+                estimatedSLA = null;
+            }
+        
+            // Once the SLA status is determined, update the row accordingly.
+            $.when(slaStatus).done(function(status) {
+                if (status['hit']) {
+                    $('.sla'+status['row']).html("SLA Hit");
+                    $('.sla'+status['row']).removeClass('sla-red');
+                    $('.sla'+status['row']).removeClass('sla-yellow');
+                    $('.sla'+status['row']).addClass('hit');
+                } else if (status['response']) {
+                    $('.sla'+status['row']).html("SLA Missed");
+                    $('.sla'+status['row']).addClass('ackd');
+                    $('.sla'+status['row']).addClass('sla-red');
+                }
+            });
 
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
