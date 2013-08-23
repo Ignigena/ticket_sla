@@ -97,13 +97,12 @@ if (ticketListRegex.test(document.body.innerText)) {
             $.when(slaStatus).done(function(status) {
                 if (status['hit']) {
                     $('.sla'+status['row']).html("SLA Hit");
-                    $('.sla'+status['row']).removeClass('sla-red');
-                    $('.sla'+status['row']).removeClass('sla-yellow');
-                    $('.sla'+status['row']).addClass('hit');
+                    $('.sla'+status['row']).removeClass('sla-red sla-yellow').addClass('hit');
+                    $('#listRow'+status['row']).removeClass('red yellow').addClass('green');
                 } else if (status['response']) {
                     $('.sla'+status['row']).html("SLA Missed");
-                    $('.sla'+status['row']).addClass('ackd');
-                    $('.sla'+status['row']).addClass('sla-red');
+                    $('.sla'+status['row']).addClass('ackd sla-red');
+                    $('#listRow'+status['row']).removeClass('yellow green').addClass('red');
                 }
             });
 
