@@ -4,7 +4,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   pageURL = tab.url;
 
   if (pageURL !== undefined && changeInfo.status == "complete") {
-    host = pageURL.split('/')[2];
+    var host = pageURL.split('/')[2];
 
     trustedHosts = [
       'newtab',
@@ -12,20 +12,48 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     ];
 
     if (trustedHosts.indexOf(host) == '-1') {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "http://"+host+"/ACQUIA_MONITOR", true);
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-          var status = xhr.responseText.slice(-8, -1);
-          if (status == "success") {
-            chrome.browserAction.setBadgeText({ text: "√", tabId: tab.id });
-            chrome.browserAction.setTitle({ title: "This site is hosted with Acquia.", tabId: tab.id });
-          } else {
-            chrome.browserAction.setTitle({ title: "Acquia SLA", tabId: tab.id });
+      chrome.storage.local.get('hostCache',function(data){
+          var cachedHosts = {};
+          var hostedStatus = false;
+          var currentTime = new Date().getTime();
+
+          if (data.hostCache) {
+            cachedHosts = JSON.parse(data.hostCache);
           }
-        }
-      }
-      xhr.send();
+
+          if (!cachedHosts[host] || currentTime >= cachedHosts[host]['cached']+86400) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://"+host+"/ACQUIA_MONITOR", true);
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                var status = xhr.responseText.slice(-8, -1);
+                if (status == "success") {
+                  hostedStatus = true;
+                } else {
+                  hostedStatus = false;
+                }
+                cachedHosts[host] = { hosted: hostedStatus, cached: currentTime }
+                chrome.storage.local.set({hostCache: JSON.stringify(cachedHosts)});
+
+                updateBrowserAction(hostedStatus);
+              }
+            }
+            xhr.send();
+          } else {
+            hostedStatus = cachedHosts[host]['hosted'];
+
+            updateBrowserAction(hostedStatus);
+          }
+      });
+    }
+  }
+
+  function updateBrowserAction(hostedStatus) {
+    if (hostedStatus) {
+      chrome.browserAction.setBadgeText({ text: "√", tabId: tab.id });
+      chrome.browserAction.setTitle({ title: "This site is hosted with Acquia.", tabId: tab.id });
+    } else {
+      chrome.browserAction.setTitle({ title: "Acquia SLA", tabId: tab.id });
     }
   }
 });
