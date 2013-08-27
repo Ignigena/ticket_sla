@@ -95,6 +95,8 @@ if (ticketListRegex.test(document.body.innerText)) {
         
             // Once the SLA status is determined, update the row accordingly.
             $.when(slaStatus).done(function(status) {
+                if (!status) return;
+
                 if (status['hit']) {
                     $('.sla'+status['row']).html("SLA Hit");
                     $('.sla'+status['row']).removeClass('sla-red sla-yellow').addClass('hit');
