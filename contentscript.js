@@ -132,7 +132,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 if (ticketDetailRegex.test(document.body.innerText)) {
     // If the ticket status is any of these, it will be considered as acknowledged.
     // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
-    var ticketStatusRegex = /Status:.*(Need\ More\ Info|Needs\ Reply|Solution\ Suggested|Reopened|Closed)/;
+    var ticketStatusRegex = /Status:.*(Need\ More\ Info|Solution\ Suggested|Reopened|Closed)/;
 
     // Based on the status, it's possible the ticket has not been acknowledged.
     if (!ticketStatusRegex.test(document.body.innerText)) {
