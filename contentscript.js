@@ -71,7 +71,7 @@ if (ticketListRegex.test(document.body.innerText)) {
                 // Define the customer, urgency, and created columns
                 var customer = tickets[i]['SLA'];
                 var urgency = tickets[i]['Urgency'];
-                var created = moment(tickets[i]['Date Created'].slice(0, -3), 'M/D/YYYY h:mm A');
+                var created = moment(tickets[i]['Date Created'], 'M/D/YYYY h:mm A zzz');
 
                 var estimatedSLA = legacySLACalculator(created, customer, urgency);
 
@@ -295,14 +295,14 @@ function getColumnIndexByName(columnName) {
 }
 
 function makeExistingDateRelative(oldhtml) {
-    var properDate = moment(oldhtml.slice(0, -3), 'M/D/YYYY h:mm A').format();
+    var properDate = moment(oldhtml, 'M/D/YYYY h:mm A zzz').format();
     return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
 }
 
 function formatTimestamp(timestamp) {
     var color = 'grey';
-    var expire = moment(timestamp.slice(0,-3)+'-0400', 'YYYY-MM-DD HH:mm ZZ');
-        
+    var expire = moment(timestamp, 'YYYY-MM-DD HH:mm zzz');
+
     // Colour the cell based on whether or not SLA was missed
     var diff = expire.diff(moment(), "minutes");
     if (diff >= 30) {

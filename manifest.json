@@ -1,6 +1,6 @@
 {
   "name" : "SLA Remaining",
-  "version" : "0.7.4",
+  "version" : "0.7.5",
   "description" : "Shows SLA remaining on current ticket list.",
   "browser_action" :
   {
