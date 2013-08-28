@@ -112,14 +112,12 @@ if (ticketListRegex.test(document.body.innerText)) {
             // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).addClass(color);
             $('#listRow'+i).prepend('<td nowrap class="sla-report sla-'+color+' sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
-
-            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
-            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml); });
         }
 
         // A few utility functions to enhance the ticket grid display.
         ticketListSLAButtons();
         ticketListUITidy();
+        ticketListRelativeDates(tickets.length);
 
         // Update in real time!
         // @todo Make sure the color of the cell updates as thresholds are passed.
@@ -294,8 +292,8 @@ function getColumnIndexByName(columnName) {
     }
 }
 
-function makeExistingDateRelative(oldhtml) {
-    var properDate = moment(oldhtml, 'M/D/YYYY h:mm A zzz').format();
+function makeExistingDateRelative(oldhtml, dateFormat) {
+    var properDate = moment(oldhtml, dateFormat).format();
     return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
 }
 
@@ -374,4 +372,33 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
 
     // We return a promise here to support the asynchronous nature of the request.
     return defer.promise()
+}
+
+function ticketListRelativeDates(count) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://s5.parature.com/ics/setup/user.asp?userID=5299&task=mod", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        var possibleFormats = {
+            'mm/dd/yyyy' : 'M/D/YYYY h:mm A zzz',
+            'mm/dd/yy' : 'M/D/YY h:mm A zzz',
+            'dd/mm/yyyy' : 'D/M/YYYY h:mm A zzz',
+            'dd/mm/yy' : 'D/M/YY h:mm A zzz',
+            'month dd, yyyy' : 'MMMM D, YYYY h:mm A zzz',
+            'month dd, yy' : 'MMMM D, YYYY h:mm A zzz',
+        };
+        var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
+        var dateFormat = possibleFormats[selectedFormat];
+        var i = 0;
+
+        while (i < count) {
+            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+            i++;
+        }
+
+        $('abbr.timeago').timeago();
+      }
+    }
+    xhr.send();
 }
