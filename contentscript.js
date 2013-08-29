@@ -47,6 +47,8 @@ if (ticketListRegex.test(document.body.innerText)) {
         $("#lockedHeader tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
         $("#tableContent thead tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
 
+        ticketListRelativeDates(tickets.length);
+
         // Loop through each row of tickets.
         for (i = 0; i < tickets.length; i++) {
             var color = 'grey';
@@ -117,7 +119,6 @@ if (ticketListRegex.test(document.body.innerText)) {
         // A few utility functions to enhance the ticket grid display.
         ticketListSLAButtons();
         ticketListUITidy();
-        ticketListRelativeDates(tickets.length);
 
         // Update in real time!
         // @todo Make sure the color of the cell updates as thresholds are passed.
