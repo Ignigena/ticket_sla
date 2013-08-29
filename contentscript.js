@@ -86,6 +86,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
             var slaStatus;
+            var outOfScope;
 
             if (expiry != null) {
                 slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, expiry, i);
@@ -98,6 +99,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Once the SLA status is determined, update the row accordingly.
             $.when(slaStatus).done(function(status) {
                 if (!status) return;
+                if ($('.sla'+status['row']).hasClass('sla-none')) return;
 
                 if (status['hit']) {
                     $('.sla'+status['row']).html("SLA Hit");
@@ -108,6 +110,19 @@ if (ticketListRegex.test(document.body.innerText)) {
                     $('.sla'+status['row']).addClass('ackd sla-red');
                     $('#listRow'+status['row']).removeClass('yellow green').addClass('red');
                 }
+
+                // Check for Out Of Scope tickets, specifically to show appropriate SLA status for Developer tickets.
+                outOfScope = checkForOutOfScope(tickets[status['row']]['Ticket #'], status['row']);
+
+                $.when(outOfScope).done(function(status) {
+                    if (!status) return;
+
+                    if (status['oos']) {
+                        $('.sla'+status['row']).html("Out of Scope");
+                        $('.sla'+status['row']).removeClass('sla-red sla-yellow sla-green').addClass('sla-none');
+                        $('#listRow'+status['row']).removeClass('red yellow green').addClass('no-scope');
+                    }
+                });
             });
 
             // Style the SLA cell and print it out!
@@ -182,6 +197,8 @@ function ticketListSLAButtons() {
     $('#countDiv').append('<input class="formButton toggleBySLA" name="red" type="button" value="'+ticketsMissed+' Missed SLA">');
     $('#countDiv').append('<input class="formButton toggleBySLA" name="yellow" type="button" value="'+ticketsWarning+' Warning SLA">');
     $('#countDiv').append('<input class="formButton toggleBySLA" name="green" type="button" value="'+ticketsGood+' Good SLA">');
+    $('#countDiv').append('<input class="formButton toggleBySLA" name="no-scope" type="button" value="Out of Scope">');
+    
     // Hide the "Show All" since on page load we are already showing all.
     $('input.toggleBySLA.SLAall').hide();
     // Bind the toggleBySLA() function to the filter buttons.
@@ -318,6 +335,27 @@ function formatTimestamp(timestamp) {
     }
 }
 
+function checkForOutOfScope(ticketNumber, row) {
+    var defer = new $.Deferred();
+    var outOfScope = false;
+
+    $.ajax("https://s5.parature.com/ics/tt/ticketDetail.asp?ticket_id="+ticketNumber).done(function(data) {
+        var outOfScopeRegex = /Out\ of\ Scope\?\:\&nbsp\;\<\/td\>\<td\>Yes/;
+
+        // If this is the ticket list, process it accordingly.
+        if (outOfScopeRegex.test(data)) {
+            outOfScope = true;
+        }
+
+        defer.resolve({
+            'oos' : outOfScope,
+            'row' : row
+        });
+    });
+
+    return defer.promise();
+}
+
 function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
     // Using jQuery's "Deferred" class we can be notified once the request has completed.
     var defer = new $.Deferred();
@@ -372,7 +410,7 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
     });
 
     // We return a promise here to support the asynchronous nature of the request.
-    return defer.promise()
+    return defer.promise();
 }
 
 function ticketListRelativeDates(count) {
