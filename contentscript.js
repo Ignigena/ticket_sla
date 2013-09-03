@@ -102,13 +102,9 @@ if (ticketListRegex.test(document.body.innerText)) {
                 if ($('.sla'+status['row']).hasClass('sla-none')) return;
 
                 if (status['hit']) {
-                    $('.sla'+status['row']).html("SLA Hit");
-                    $('.sla'+status['row']).removeClass('sla-red sla-yellow').addClass('hit');
-                    $('#listRow'+status['row']).removeClass('red yellow').addClass('green');
+                    changeTicketStatus(status['row'], 'hit');
                 } else if (status['response']) {
-                    $('.sla'+status['row']).html("SLA Missed");
-                    $('.sla'+status['row']).addClass('ackd sla-red');
-                    $('#listRow'+status['row']).removeClass('yellow green').addClass('red');
+                    changeTicketStatus(status['row'], 'ackd');
                 }
 
                 // Check for Out Of Scope tickets, specifically to show appropriate SLA status for Developer tickets.
@@ -119,7 +115,6 @@ if (ticketListRegex.test(document.body.innerText)) {
 
                     if (status['oos']) {
                         $('.sla'+status['row']).html("Out of Scope");
-                        $('.sla'+status['row']).removeClass('sla-red sla-yellow sla-green').addClass('sla-none');
                         $('#listRow'+status['row']).removeClass('red yellow green').addClass('no-scope');
                     }
                 });
@@ -128,7 +123,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
             $('#listRow'+i).addClass(color);
-            $('#listRow'+i).prepend('<td nowrap class="sla-report sla-'+color+' sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
+            $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
 
         // A few utility functions to enhance the ticket grid display.
@@ -228,6 +223,29 @@ function ticketListUITidy() {
     // Hack to get the table to resize properly in the window.
     $(".lockedTableHeader").width('1px');
     $(".lockedTableContainer").height(($(".lockedTableContainer").height()-16)+'px');
+}
+
+// Change a specific ticket row to a different SLA status.
+// Will update the color, language, and filter buttons at the top.
+function changeTicketStatus(rowNumber, newStatus) {
+    var currentStatus = $('#listRow'+rowNumber).attr('class');
+    currentStatus = currentStatus.replace(/\s/g, "").replace(/gridRow/g, "");
+
+    if (currentStatus == newStatus) {
+        // Nothing to do here.
+        return;
+    }
+
+    $('#listRow'+rowNumber).removeClass(currentStatus);
+    $('#listRow'+rowNumber).addClass(newStatus);
+
+    if (newStatus == "hit") {
+        $('.sla'+rowNumber).html("SLA Hit");
+        $('.sla'+rowNumber).addClass('hit');
+    } else if (newStatus == "ackd") {
+        $('.sla'+rowNumber).html("SLA Missed");
+        $('.sla'+rowNumber).addClass('ackd');
+    }
 }
 
 // Legacy SLA calculator for those tickets with no Expiry Timestamp populated.

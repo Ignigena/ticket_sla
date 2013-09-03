@@ -7,21 +7,22 @@ td.sla-report {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-td.sla-report.sla-green,
-td.sla-report.hit {
+tr.green td.sla-report,
+tr.hit td.sla-report {
   color: #468847;
   background-color: #dff0d8;
   border-color: #d6e9c6;
 }
 
-td.sla-report.sla-red,
+tr.red td.sla-report,
+tr.ackd td.sla-report,
 #slaBanner.red {
   color: #b94a48;
   background-color: #f2dede;
   border-color: #eed3d7;
 }
 
-td.sla-report.sla-yellow,
+tr.yellow td.sla-report,
 #slaBanner.yellow {
   color: #c09853;
   background-color: #fcf8e3;
