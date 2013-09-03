@@ -57,14 +57,6 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Check to see if the Expiry Timestamp column has synced over to Parature.
             if (tickets[i]['Expiry Timestamp'].length > 0) {
                 var expiry = formatTimestamp(tickets[i]['Expiry Timestamp']);
-                
-                if (expiry['color']=='green') {
-                    ticketsGood++;
-                } else if (expiry['color']=='red'){
-                    ticketsMissed++;
-                } else {
-                    ticketsWarning++;
-                }
 
                 // Relative time until or since the SLA is either hit or missed.
                 sla = expiry['timestamp'];
@@ -193,21 +185,27 @@ function toggleBySLA() {
 
     if (toggleTarget == "all") {
         $('input.toggleBySLA.SLAall').hide();
-        $('tr.gridRow.grey, tr.gridRow.red, tr.gridRow.yellow, tr.gridRow.green').show();
+        $('tr.gridRow.grey, tr.gridRow.red, tr.gridRow.yellow, tr.gridRow.green, tr.gridRow.hit, tr.gridRow.ackd').show();
     } else {
         $('input.toggleBySLA.SLAall').show();
-        $('tr.gridRow.grey, tr.gridRow.red, tr.gridRow.yellow, tr.gridRow.green').hide();
+        $('tr.gridRow.grey, tr.gridRow.red, tr.gridRow.yellow, tr.gridRow.green, tr.gridRow.hit, tr.gridRow.ackd').hide();
         $('tr.gridRow.'+toggleTarget).show();
+
+        if (toggleTarget == 'green') {
+            $('tr.gridRow.hit').show();
+        } else if (toggleTarget == 'red') {
+            $('tr.gridRow.ackd').show();
+        }
     }
 }
 
 function ticketListSLAButtons() {
     // Add buttons to allow filtering by the SLA status.
     $('#countDiv').append('&nbsp;&nbsp;<input class="formButton toggleBySLA SLAall" name="all" type="button" value="Show All">');
-    $('#countDiv').append('<input class="formButton toggleBySLA" name="red" type="button" value="'+ticketsMissed+' Missed SLA">');
-    $('#countDiv').append('<input class="formButton toggleBySLA" name="yellow" type="button" value="'+ticketsWarning+' Warning SLA">');
-    $('#countDiv').append('<input class="formButton toggleBySLA" name="green" type="button" value="'+ticketsGood+' Good SLA">');
-    $('#countDiv').append('<input class="formButton toggleBySLA" name="no-scope" type="button" value="Out of Scope">');
+    $('#countDiv').append('<input class="formButton toggleBySLA SLAred" name="red" type="button" value="Missed SLA">');
+    $('#countDiv').append('<input class="formButton toggleBySLA SLAyellow" name="yellow" type="button" value="Warning SLA">');
+    $('#countDiv').append('<input class="formButton toggleBySLA SLAgreen" name="green" type="button" value="Good SLA">');
+    $('#countDiv').append('<input class="formButton toggleBySLA SLAnone" name="no-scope" type="button" value="Out of Scope">');
     
     // Hide the "Show All" since on page load we are already showing all.
     $('input.toggleBySLA.SLAall').hide();
@@ -245,6 +243,14 @@ function ticketListUITidy() {
 function changeTicketStatus(rowNumber, newStatus) {
     var currentStatus = $('#listRow'+rowNumber).attr('class');
     currentStatus = currentStatus.replace(/\s/g, "").replace(/gridRow/g, "");
+
+    ticketsMissed = $('tr.red').length + $('tr.ackd').length;
+    ticketsWarning = $('tr.yellow').length;
+    ticketsGood = $('tr.green').length + $('tr.hit').length;
+
+    $('.SLAred').attr('value', ticketsMissed+' Missed SLA');
+    $('.SLAyellow').attr('value', ticketsWarning+' Warning SLA');
+    $('.SLAgreen').attr('value', ticketsGood+' Good SLA');
 
     if (currentStatus == newStatus) {
         // Nothing to do here.
