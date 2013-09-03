@@ -185,10 +185,10 @@ function toggleBySLA() {
 
     if (toggleTarget == "all") {
         $('input.toggleBySLA.SLAall').hide();
-        $('tr.gridRow.grey, tr.gridRow.red, tr.gridRow.yellow, tr.gridRow.green, tr.gridRow.hit, tr.gridRow.ackd').show();
+        $('tr.gridRow').show();
     } else {
         $('input.toggleBySLA.SLAall').show();
-        $('tr.gridRow.grey, tr.gridRow.red, tr.gridRow.yellow, tr.gridRow.green, tr.gridRow.hit, tr.gridRow.ackd').hide();
+        $('tr.gridRow').hide();
         $('tr.gridRow.'+toggleTarget).show();
 
         if (toggleTarget == 'green') {
