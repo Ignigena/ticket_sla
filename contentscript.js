@@ -6,6 +6,10 @@
 var ticketListRegex = /Ticket\ List.*\(.*\)/;
 var ticketDetailRegex = /Ticket\ Summary/;
 
+var ticketsMissed = 0;
+var ticketsWarning = 0;
+var ticketsGood = 0;
+
 // If this is the ticket list, process it accordingly.
 if (ticketListRegex.test(document.body.innerText)) {
     chrome.storage.local.get('newWindowTickets',function(data){
@@ -37,10 +41,6 @@ if (ticketListRegex.test(document.body.innerText)) {
         });
         tickets.push(arrayItem);
     });
-
-    var ticketsMissed = 0;
-    var ticketsWarning = 0;
-    var ticketsGood = 0;
 
     if(tickets.length > 0 && 'Expiry Timestamp' in tickets[0]){
         // Add the extra column for Time to SLA.
@@ -131,9 +131,24 @@ if (ticketListRegex.test(document.body.innerText)) {
         ticketListUITidy();
 
         // Update in real time!
-        // @todo Make sure the color of the cell updates as thresholds are passed.
         $.timeago.settings.allowFuture = true;
         $('abbr.timeago').timeago();
+
+        // Respond to changes in the SLA status as the timestamps count down.
+        $("abbr.timeago").on('timechanged', function(event, timestamp, timeDifference) {
+            var minuteDifference = (timeDifference / 1000) / 60;
+            var rowNumber = $(this).parent().parent().attr('id').slice(7);
+
+            if (minuteDifference >= -30) {
+                if (minuteDifference <= 0) {
+                    // SLA warning threshold, 30 minutes remain.
+                    changeTicketStatus(rowNumber, 'yellow');
+                } else {
+                    // SLA has been missed.
+                    changeTicketStatus(rowNumber, 'red');
+                }
+            }
+        });
     }
 }
 

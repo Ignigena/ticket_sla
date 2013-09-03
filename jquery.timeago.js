@@ -152,6 +152,7 @@
     var data = prepareData(this);
     if (!isNaN(data.datetime)) {
       $(this).text(inWords(data.datetime));
+      $(this).trigger('timechanged', [data.datetime, distance(data.datetime)]);
     }
     return this;
   }
