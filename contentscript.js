@@ -261,10 +261,8 @@ function changeTicketStatus(rowNumber, newStatus, minutes) {
 
     if (newStatus == "hit") {
         $('.sla'+rowNumber).html("SLA Hit");
-        $('.sla'+rowNumber).addClass('hit');
     } else if (newStatus == "ackd") {
         $('.sla'+rowNumber).html("SLA Missed");
-        $('.sla'+rowNumber).addClass('ackd');
     }
 
     // Only display an alert if the ticket turns yellow after the page loads or has less than 5 minutes left.

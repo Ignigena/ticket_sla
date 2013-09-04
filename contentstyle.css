@@ -29,8 +29,8 @@ tr.yellow td.sla-report,
   border-color: #fbeed5;
 }
 
-td.sla-report.ackd,
-td.sla-report.hit {
+tr.ackd td.sla-report,
+tr.hit td.sla-report {
   font-weight: bold;
 }
 
