@@ -1,8 +1,9 @@
 // Saves options to localStorage.
-    var select = document.getElementById("newWindowTickets");
-    var checked = select.checked;
-    chrome.storage.local.set({newWindowTickets: checked});
 function saveOptions() {
+    chrome.storage.local.set({
+        newWindowTickets: document.getElementById("newWindowTickets").checked,
+        chromeNotifications: document.getElementById("chromeNotifications").checked
+    });
 
     // Update status to let user know options were saved.
     var status = document.getElementById("status");
@@ -17,7 +18,9 @@ function restoreOptions() {
     chrome.storage.local.get('newWindowTickets',function(data){
         document.getElementById("newWindowTickets").checked=data.newWindowTickets;
     });
+    chrome.storage.local.get('chromeNotifications',function(data){
+        document.getElementById("chromeNotifications").checked=data.chromeNotifications;
+    });
 }
-document.addEventListener('DOMContentLoaded', restore_options);
-document.querySelector('input').addEventListener('click', save_options);document.addEventListener('DOMContentLoaded', restoreOptions);
+document.addEventListener('DOMContentLoaded', restoreOptions);
 $('input').click(saveOptions);

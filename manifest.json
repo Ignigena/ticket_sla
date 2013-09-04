@@ -1,6 +1,6 @@
 {
   "name" : "SLA Remaining",
-  "version" : "0.8",
+  "version" : "0.9",
   "description" : "Shows SLA remaining on current ticket list.",
   "browser_action" :
   {
@@ -11,7 +11,8 @@
   "permissions": [
     "tabs",
     "storage",
-    "http://*/*"
+    "http://*/*",
+    "notifications"
   ],
   "background" : {
     "scripts": ["background.js"]
