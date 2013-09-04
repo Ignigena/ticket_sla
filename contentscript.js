@@ -43,6 +43,9 @@ if (ticketListRegex.test(document.body.innerText)) {
     });
 
     if(tickets.length > 0 && 'Expiry Timestamp' in tickets[0]){
+        // Add the SLA filtering buttons.
+        ticketListSLAButtons();
+
         // Add the extra column for Time to SLA.
         $("#lockedHeader tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
         $("#tableContent thead tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
@@ -114,12 +117,11 @@ if (ticketListRegex.test(document.body.innerText)) {
 
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
-            $('#listRow'+i).addClass(color);
+            changeTicketStatus(i, color);
             $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
 
         // A few utility functions to enhance the ticket grid display.
-        ticketListSLAButtons();
         ticketListUITidy();
 
         // Update in real time!
@@ -244,19 +246,6 @@ function changeTicketStatus(rowNumber, newStatus) {
     var currentStatus = $('#listRow'+rowNumber).attr('class');
     currentStatus = currentStatus.replace(/\s/g, "").replace(/gridRow/g, "");
 
-    ticketsMissed = $('tr.red').length + $('tr.ackd').length;
-    ticketsWarning = $('tr.yellow').length;
-    ticketsGood = $('tr.green').length + $('tr.hit').length;
-
-    $('.SLAred').attr('value', ticketsMissed+' Missed SLA');
-    $('.SLAyellow').attr('value', ticketsWarning+' Warning SLA');
-    $('.SLAgreen').attr('value', ticketsGood+' Good SLA');
-
-    if (currentStatus == newStatus) {
-        // Nothing to do here.
-        return;
-    }
-
     $('#listRow'+rowNumber).removeClass(currentStatus);
     $('#listRow'+rowNumber).addClass(newStatus);
 
@@ -267,6 +256,14 @@ function changeTicketStatus(rowNumber, newStatus) {
         $('.sla'+rowNumber).html("SLA Missed");
         $('.sla'+rowNumber).addClass('ackd');
     }
+
+    ticketsMissed = $('tr.red, tr.ackd').length;
+    ticketsWarning = $('tr.yellow').length;
+    ticketsGood = $('tr.green, tr.hit').length;
+
+    $('.SLAred').attr('value', ticketsMissed+' Missed SLA');
+    $('.SLAyellow').attr('value', ticketsWarning+' Warning SLA');
+    $('.SLAgreen').attr('value', ticketsGood+' Good SLA');
 }
 
 // Legacy SLA calculator for those tickets with no Expiry Timestamp populated.
