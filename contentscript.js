@@ -509,9 +509,15 @@ function ticketListRelativeDates(count) {
                 var dateFormat = possibleFormats[selectedFormat];
                 var i = 0;
 
+                var dateCreatedColumn = getColumnIndexByName('Date Created');
+                var dateUpdatedColumn = getColumnIndexByName('Date Updated');
+
                 while (i < count) {
-                    $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
-                    $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+                    if (dateCreatedColumn >= 1)
+                        $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+                    if (dateUpdatedColumn >= 1)
+                        $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+
                     i++;
                 }
 
