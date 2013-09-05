@@ -1,6 +1,6 @@
 {
   "name" : "SLA Remaining",
-  "version" : "0.9.1",
+  "version" : "0.9.2",
   "description" : "Shows SLA remaining on current ticket list.",
   "icons" :
   {
@@ -24,7 +24,8 @@
   "content_scripts" : [
     {
       "matches" : [
-        "https://s5.parature.com/ics/tt/ticket*"
+        "https://s5.parature.com/ics/tt/ticket*",
+        "https://s5.parature.com/ics/tt/filters.asp"
       ],
       "js" : ["jquery-2.0.3.min.js", "moment.min.js", "jquery.timeago.js", "contentscript.js"],
       "css" : ["contentstyle.css"],

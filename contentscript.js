@@ -4,11 +4,18 @@
  */
 
 var ticketListRegex = /Ticket\ List.*\(.*\)/;
-var ticketDetailRegex = /Ticket\ Summary/;
+var ticketDetailRegex = /Ticket\ Description/;
+var ticketQueuesRegex = /Filters\s*15066\ -/;
 
 var ticketsMissed = 0;
 var ticketsWarning = 0;
 var ticketsGood = 0;
+
+// DOM manipulation on the ticket queues list.
+if (ticketQueuesRegex.test(document.body.innerText)) {
+    // Add a link to the "New and Unsassigned" queue at the top of the list.
+    $("#dparentTree0").prepend('<div class="dTreeNode p0"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="https://s5.parature.com/ics/tt/ticketList.asp?viewID=5488&title=New+and+Unassigned+Tickets" target="content" class="node">New and Unassigned Tickets</a></div>');
+}
 
 // If this is the ticket list, process it accordingly.
 if (ticketListRegex.test(document.body.innerText)) {
