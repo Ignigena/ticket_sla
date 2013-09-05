@@ -110,7 +110,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 
                     if (status['oos']) {
                         $('.sla'+status['row']).html("Out of Scope");
-                        $('#listRow'+status['row']).removeClass('red yellow green').addClass('no-scope');
+                        $('#listRow'+status['row']).removeClass('red yellow green ackd hit').addClass('no-scope');
                     }
                 });
             });
