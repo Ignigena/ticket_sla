@@ -47,3 +47,14 @@ tr.hit td.sla-report {
   color: #468847;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
+
+.dTreeNode.toptier {
+  position: fixed;
+  background: #f7f7f5;
+  width: 100%;
+  padding-top: 3px;
+}
+
+#dparentTree0 {
+  padding-top: 28px;
+}

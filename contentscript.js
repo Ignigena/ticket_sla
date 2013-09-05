@@ -13,8 +13,24 @@ var ticketsGood = 0;
 
 // DOM manipulation on the ticket queues list.
 if (ticketQueuesRegex.test(document.body.innerText)) {
+    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketList.asp?viewID=5488";
     // Add a link to the "New and Unsassigned" queue at the top of the list.
-    $("#dparentTree0").prepend('<div class="dTreeNode p0"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="https://s5.parature.com/ics/tt/ticketList.asp?viewID=5488&title=New+and+Unassigned+Tickets" target="content" class="node">New and Unassigned Tickets</a></div>');
+    $("#mainDiv > div").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="'+ticketViewURL+'" target="content" class="node">New and Unassigned Tickets</a></div>');
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", ticketViewURL, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+)\)";/
+        var openTicketsMatch = openTicketsRegex.exec(xhr.responseText);
+        var openTickets = openTicketsMatch[1];
+
+        if (openTickets >= 1) {
+            $(".toptier a.node").html('<b>New and Unassigned Tickets</b> <span class="itemCount">('+openTickets+')</span>');
+        }
+      }
+    }
+    xhr.send();
 }
 
 // If this is the ticket list, process it accordingly.
