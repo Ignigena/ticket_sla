@@ -1,6 +1,6 @@
 {
   "name" : "SLA Remaining",
-  "version" : "0.9",
+  "version" : "0.9.1",
   "description" : "Shows SLA remaining on current ticket list.",
   "icons" :
   {

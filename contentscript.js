@@ -465,30 +465,55 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
 }
 
 function ticketListRelativeDates(count) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://s5.parature.com/ics/setup/user.asp?userID=5299&task=mod", true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4) {
-        var possibleFormats = {
-            'mm/dd/yyyy' : 'M/D/YYYY h:mm A zzz',
-            'mm/dd/yy' : 'M/D/YY h:mm A zzz',
-            'dd/mm/yyyy' : 'D/M/YYYY h:mm A zzz',
-            'dd/mm/yy' : 'D/M/YY h:mm A zzz',
-            'month dd, yyyy' : 'MMMM D, YYYY h:mm A zzz',
-            'month dd, yy' : 'MMMM D, YYYY h:mm A zzz',
-        };
-        var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
-        var dateFormat = possibleFormats[selectedFormat];
-        var i = 0;
+    chrome.storage.local.get('paratureUserID',function(data){
+        userID = data.paratureUserID;
 
-        while (i < count) {
-            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
-            $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
-            i++;
+        if (userID) {
+            // If the user ID is stored in Chrome, fetch the date format settings.
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://s5.parature.com/ics/setup/user.asp?userID="+userID+"&task=mod", true);
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                var possibleFormats = {
+                    'mm/dd/yyyy' : 'M/D/YYYY h:mm A zzz',
+                    'mm/dd/yy' : 'M/D/YY h:mm A zzz',
+                    'dd/mm/yyyy' : 'D/M/YYYY h:mm A zzz',
+                    'dd/mm/yy' : 'D/M/YY h:mm A zzz',
+                    'month dd, yyyy' : 'MMMM D, YYYY h:mm A zzz',
+                    'month dd, yy' : 'MMMM D, YYYY h:mm A zzz',
+                };
+                var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
+                var dateFormat = possibleFormats[selectedFormat];
+                var i = 0;
+
+                while (i < count) {
+                    $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Created')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+                    $('#listRow'+i+' td:nth-child('+getColumnIndexByName('Date Updated')+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+                    i++;
+                }
+
+                $('abbr.timeago').timeago();
+              }
+            }
+            xhr.send();
+        } else {
+            // If the user ID is not stored in Chrome we need to fetch it and store it before we can format the date.
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://s5.parature.com/ics/service/top.asp", true);
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                var userIDRegex = /.*\?userID=(\d+)/;
+                var userIDMatches = userIDRegex.exec(xhr.responseText);
+
+                chrome.storage.local.set({
+                    paratureUserID: userIDMatches[1]
+                });
+
+                // Now that it's stored, let's try this again.
+                ticketListRelativeDates(count);
+              }
+            }
+            xhr.send();
         }
-
-        $('abbr.timeago').timeago();
-      }
-    }
-    xhr.send();
+    });
 }
