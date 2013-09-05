@@ -70,8 +70,8 @@ if (ticketListRegex.test(document.body.innerText)) {
         ticketListSLAButtons();
 
         // Add the extra column for Time to SLA.
-        $("#lockedHeader tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
-        $("#tableContent thead tr").prepend('<td class="winColName" nowrap style="width:90px">Time to SLA</td>');
+        $("#lockedHeader tr").prepend('<td class="winColName slacolumn" nowrap style="width:90px">Time to SLA</td>');
+        $("#tableContent thead tr").prepend('<td class="winColName slacolumn" nowrap style="width:90px">Time to SLA</td>');
 
         ticketListRelativeDates(tickets.length);
 
@@ -141,7 +141,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
             changeTicketStatus(i, color);
-            $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
+            $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'" data-sort-value="'+moment(sla).unix()+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
 
         // A few utility functions to enhance the ticket grid display.
@@ -271,6 +271,14 @@ function ticketListUITidy() {
     // Hack to get the table to resize properly in the window.
     $(".lockedTableHeader").width('1px');
     $(".lockedTableContainer").height(($(".lockedTableContainer").height()-16)+'px');
+
+    var tableHeader = $('#tableContent thead tr').html();
+    tableHeader = tableHeader.replace(/<td /g, '<th ').replace(/<\/td>/g, '</th>');
+    $('#tableContent thead tr').html(tableHeader);
+
+    $("#tableContent thead th").attr('data-sort', 'string');
+    $("#tableContent thead .slacolumn").attr('data-sort', 'int');
+    $("#tableContent").stupidtable();
 }
 
 // Change a specific ticket row to a different SLA status.

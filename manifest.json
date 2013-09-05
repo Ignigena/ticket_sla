@@ -27,7 +27,7 @@
         "https://s5.parature.com/ics/tt/ticket*",
         "https://s5.parature.com/ics/tt/filters.asp"
       ],
-      "js" : ["jquery-2.0.3.min.js", "moment.min.js", "jquery.timeago.js", "contentscript.js"],
+      "js" : ["jquery-2.0.3.min.js", "moment.min.js", "jquery.timeago.js", "stupidtable.min.js", "contentscript.js"],
       "css" : ["contentstyle.css"],
       "run_at" : "document_idle",
       "all_frames" : true

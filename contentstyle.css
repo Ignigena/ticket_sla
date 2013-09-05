@@ -58,3 +58,7 @@ tr.hit td.sla-report {
 #dparentTree0 {
   padding-top: 28px;
 }
+
+#tableContent thead th {
+  cursor: pointer;
+}
