@@ -4,6 +4,7 @@
  */
 
 var ticketListRegex = /Ticket\ List.*\(.*\)/;
+var ticketListSLARegex = /Ticket\ List.*Tickets\ By\ SLA.*\(.*\)/;
 var ticketDetailRegex = /Ticket\ Description/;
 var ticketQueuesRegex = /Filters\s*15066\ -/;
 
@@ -13,7 +14,7 @@ var ticketsGood = 0;
 
 // DOM manipulation on the ticket queues list.
 if (ticketQueuesRegex.test(document.body.innerText)) {
-    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_status=1415";
+    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_status=1415&title=All+Tickets+By+SLA";
     // Add a link to the "New and Unsassigned" queue at the top of the list.
     $("#mainDiv > div").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="'+ticketViewURL+'" target="content" class="node">All New Tickets</a></div>');
 
@@ -144,8 +145,8 @@ if (ticketListRegex.test(document.body.innerText)) {
             $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'" data-sort-value="'+moment(sla).unix()+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
 
-        // A few utility functions to enhance the ticket grid display.
-        ticketListUITidy();
+        // Tidy up the ticket list and sort by SLA if we're on the All Tickets By SLA queue.
+        ticketListUITidy(ticketListSLARegex.test(document.body.innerText));
 
         // Update in real time!
         $.timeago.settings.allowFuture = true;
@@ -248,7 +249,7 @@ function ticketListSLAButtons() {
     $('input.toggleBySLA').click(toggleBySLA);
 }
 
-function ticketListUITidy() {
+function ticketListUITidy(slaSort) {
     // Remove the Expiry Timestamp column since it's redundant.
     hideColumnByColumnName('Expiry Timestamp');
 
@@ -279,6 +280,10 @@ function ticketListUITidy() {
     $("#tableContent thead th").attr('data-sort', 'string');
     $("#tableContent thead .slacolumn").attr('data-sort', 'int');
     $("#tableContent").stupidtable();
+
+    if (slaSort) {
+        $('#tableContent thead th.slacolumn').trigger('click');
+    }
 }
 
 // Change a specific ticket row to a different SLA status.
