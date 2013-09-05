@@ -13,9 +13,9 @@ var ticketsGood = 0;
 
 // DOM manipulation on the ticket queues list.
 if (ticketQueuesRegex.test(document.body.innerText)) {
-    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketList.asp?viewID=5488";
+    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_status=1415";
     // Add a link to the "New and Unsassigned" queue at the top of the list.
-    $("#mainDiv > div").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="'+ticketViewURL+'" target="content" class="node">New and Unassigned Tickets</a></div>');
+    $("#mainDiv > div").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="'+ticketViewURL+'" target="content" class="node">All New Tickets</a></div>');
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", ticketViewURL, true);
@@ -26,7 +26,7 @@ if (ticketQueuesRegex.test(document.body.innerText)) {
         var openTickets = openTicketsMatch[1];
 
         if (openTickets >= 1) {
-            $(".toptier a.node").html('<b>New and Unassigned Tickets</b> <span class="itemCount">('+openTickets+')</span>');
+            $(".toptier a.node").html('<b>All New Tickets</b> <span class="itemCount">('+openTickets+')</span>');
         }
       }
     }
