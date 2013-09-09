@@ -28,7 +28,7 @@
         "https://s5.parature.com/ics/tt/filters.asp"
       ],
       "js" : [
-        "jquery-2.0.3.min.js", "moment.min.js", "jquery.timeago.js", "stupidtable.min.js",
+        "scripts/external/jquery-2.0.3.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js",
         "scripts/date_utilities.js", "contentscript.js"
       ],
       "css" : ["contentstyle.css"],
@@ -36,7 +36,7 @@
       "all_frames" : true
     }
   ],
-  "web_accessible_resources" : ["jquery-2.0.3.min.map"],
+  "web_accessible_resources" : ["scripts/external/jquery-2.0.3.min.map"],
   "options_page": "options.html",
   "update_url": "https://raw.github.com/Ignigena/ticket_sla/master/updates.xml",
   "manifest_version": 2
