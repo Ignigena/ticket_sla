@@ -19,7 +19,7 @@
     "notifications"
   ],
   "background" : {
-    "scripts": ["background.js"]
+    "scripts": ["scripts/background.js"]
   },
   "content_scripts" : [
     {
@@ -29,7 +29,7 @@
       ],
       "js" : [
         "scripts/external/jquery-2.0.3.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js",
-        "scripts/date_utilities.js", "contentscript.js"
+        "scripts/date_utilities.js", "scripts/contentscript.js"
       ],
       "css" : ["contentstyle.css"],
       "run_at" : "document_idle",
