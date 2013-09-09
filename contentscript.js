@@ -398,8 +398,50 @@ function getColumnIndexByName(columnName) {
 }
 
 function makeExistingDateRelative(oldhtml, dateFormat) {
+    // Grab the last four characters to accomodate for four-letter timezones.
+    var timezone = oldhtml.slice(-4);
+    // Replace the four digit timezone with the UTC equivelant.
+    oldhtml = oldhtml.replace(timezone, convertTimezone(timezone));
+
+    // Convert into a proper date format.
     var properDate = moment(oldhtml, dateFormat).format();
+    // Return HTML to enable conversion into a relative date format.
     return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
+}
+
+function convertTimezone(oldtimezone) {
+    // Remove empty spaces since some timezones are 4 characters long.
+    oldtimezone = oldtimezone.replace(" ", "");
+
+    // All valid timezones as defined by Parature and their UTC equivelants.
+    validTimezones = {
+        "HST" : "-1000",
+        "AKST" : "-0900", "AKDT" : "-0800",
+        "PST" : "-0800", "PDT" : "-0700",
+        "MST" : "-0700", "MDT" : "-0600",
+        "CST" : "-0600", "CDT" : "-0500",
+        "EST" : "-0500", "EDT" : "-0400",
+        "GMT" : "0",
+        "WEST" : "+0100", "WET" : "0",
+        "BST" : "+0100",
+        "CEST" : "+0200", "CET" : "+0100",
+        "ITA" : "+0100",
+        "EEST" : "+0300", "EET" : "+0200",
+        "MSK" : "+0300", "MSD" : "+0300",
+        "GST" : "+0400",
+        "EKST" : "+0600", "EKT" : "+0600",
+        "PKT" : "+0500",
+        "IST" : "+0530",
+        "AWST" : "+0800", "AWDT" : "+0900",
+        "CCT" : "+0800",
+        "JST" : "+0900",
+        "KST" : "+0900",
+        "ACST" : "+0930", "ACDT" : "+1030",
+        "AEST" : "+1000", "AEDT" : "+1100"
+    };
+
+    // Add an extra space back in the event we've parsed a 3 character timezone.
+    return " "+validTimezones[oldtimezone];
 }
 
 function formatTimestamp(timestamp) {
@@ -511,12 +553,12 @@ function ticketListRelativeDates(count) {
             xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {
                 var possibleFormats = {
-                    'mm/dd/yyyy' : 'M/D/YYYY h:mm A zzz',
-                    'mm/dd/yy' : 'M/D/YY h:mm A zzz',
-                    'dd/mm/yyyy' : 'D/M/YYYY h:mm A zzz',
-                    'dd/mm/yy' : 'D/M/YY h:mm A zzz',
-                    'month dd, yyyy' : 'MMMM D, YYYY h:mm A zzz',
-                    'month dd, yy' : 'MMMM D, YYYY h:mm A zzz',
+                    'mm/dd/yyyy' : 'M/D/YYYY h:mm A ZZ',
+                    'mm/dd/yy' : 'M/D/YY h:mm A ZZ',
+                    'dd/mm/yyyy' : 'D/M/YYYY h:mm A ZZ',
+                    'dd/mm/yy' : 'D/M/YY h:mm A ZZ',
+                    'month dd, yyyy' : 'MMMM D, YYYY h:mm A ZZ',
+                    'month dd, yy' : 'MMMM D, YYYY h:mm A ZZ',
                 };
                 var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
                 var dateFormat = possibleFormats[selectedFormat];
