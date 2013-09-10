@@ -46,7 +46,7 @@ function convertTimezone(oldtimezone) {
     return " "+validTimezones[oldtimezone];
 }
 
-function formatTimestamp(timestamp) {
+function formatSLATimestamp(timestamp) {
     var color = 'grey';
     var expire = moment(timestamp, 'YYYY-MM-DD HH:mm zzz');
 

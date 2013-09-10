@@ -83,7 +83,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 
             // Check to see if the Expiry Timestamp column has synced over to Parature.
             if (tickets[i]['Expiry Timestamp'].length > 0) {
-                var expiry = formatTimestamp(tickets[i]['Expiry Timestamp']);
+                var expiry = formatSLATimestamp(tickets[i]['Expiry Timestamp']);
 
                 // Relative time until or since the SLA is either hit or missed.
                 sla = expiry['timestamp'];
@@ -187,7 +187,7 @@ if (ticketDetailRegex.test(document.body.innerText)) {
             var sessionKeyRegex = /SessionId\ =\ \'(.*)\'/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
 
-            var sla = formatTimestamp(expiryTimestamp);
+            var sla = formatSLATimestamp(expiryTimestamp);
             var slaStatus = checkForSLA(window.location.search.slice(11), sessionKey, sla);
             var textColor = "white";
 
