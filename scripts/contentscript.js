@@ -450,7 +450,7 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
         for (i = 0; i < ticketActions.length; i++) {
             var externalCommunication = ticketActions[i]['ActionPerformed']['EmailCustomer'];
             var showToCustomer = ticketActions[i]['ShowToCustomer'];
-            var actionDate = ticketActions[i]['ActionDate'];
+            var actionDate = ticketActions[i]['ActionDate']+convertTimezone(ticketActions[i]['FormattedDateTime'].slice(-4));
 
             // Only continue if this is external communication by a Supporta.
             if ((externalCommunication || showToCustomer) && (ticketActions[i]['PerformedByCsr'] != null && ticketActions[i]['PerformedByCsr']['Id'] != 0)) {
