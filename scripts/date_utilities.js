@@ -46,9 +46,19 @@ function convertTimezone(oldtimezone) {
     return " "+validTimezones[oldtimezone];
 }
 
+/**
+ * Format the SLA timestamp and cell colouring.
+ *
+ * param string timestamp
+ *   The Expiry Timestamp field.
+ *
+ * return array
+ *   color => SLA status in colour form.
+ *   timestamp => The formatted timestamp.
+ */
 function formatSLATimestamp(timestamp) {
     var color = 'grey';
-    var expire = moment(timestamp, 'YYYY-MM-DD HH:mm zzz');
+    var expire = moment(timestamp.slice(0,-3)+"-0400", 'YYYY-MM-DD HH:mm ZZ');
 
     // Colour the cell based on whether or not SLA was missed
     var diff = expire.diff(moment(), "minutes");
