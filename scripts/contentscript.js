@@ -206,7 +206,7 @@ if (ticketDetailRegex.test(document.body.innerText)) {
 
                         // If the ticket is within a 5 minute window of missing SLA, show an alert.
                         if (minuteDifference >= -5 && minuteDifference <= 0) {
-                            chrome.extension.sendRequest({title: 'Ticket Nearing SLA', msg: 'A ticket you are viewing is 5 minutes or less from missing SLA!'});
+                            chrome.extension.sendRequest({execute: 'notification', title: 'Ticket Nearing SLA', msg: 'A ticket you are viewing is 5 minutes or less from missing SLA!'});
                         }
                     });
                 }
@@ -305,7 +305,7 @@ function changeTicketStatus(rowNumber, newStatus, minutes) {
     if (newStatus == 'yellow' && (currentStatus != newStatus || minutes >= -5)) {
         minutes = (minutes >= -5) ? 5 : 30;
         ticketNumber = tickets[rowNumber]['Ticket #']
-        chrome.extension.sendRequest({mode: 'load', ticket: ticketNumber, title: 'Ticket Nearing SLA', msg: 'Ticket '+ticketNumber+' is '+minutes+' minutes or less from missing SLA!  Click to view.'});
+        chrome.extension.sendRequest({execute: 'notification', mode: 'load', ticket: ticketNumber, title: 'Ticket Nearing SLA', msg: 'Ticket '+ticketNumber+' is '+minutes+' minutes or less from missing SLA!  Click to view.'});
     }
 
     ticketsMissed = $('tr.red, tr.ackd').length;
