@@ -22,9 +22,9 @@ if (ticketQueuesRegex.test(document.body.innerText)) {
     xhr.open("GET", ticketViewURL, true);
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4) {
-        var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+)\)";/
+        var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
         var openTicketsMatch = openTicketsRegex.exec(xhr.responseText);
-        var openTickets = openTicketsMatch[1];
+        var openTickets = openTicketsMatch[2];
 
         if (openTickets >= 1) {
             $(".toptier a.node").html('<b>All New Tickets</b> <span class="itemCount">('+openTickets+')</span>');
