@@ -1,0 +1,611 @@
+body,div,p,a,font,span,h1,h2,h3,ol,ul,li,select,input {
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+* {
+  cursor: default;
+}
+
+html {
+  min-height: 212px;
+  min-width: 300px;
+}
+
+body {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 5px;
+  font: 13px "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+  right: 0;
+  top: 0;
+  background-color: transparent;
+  overflow: hidden;
+  box-shadow: 0 0 0;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+}
+
+.selectableText {
+  cursor: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+}
+
+a {
+  text-decoration: none;
+  color: hsl(210, 80%, 45%);
+  cursor: pointer;
+}
+
+ul {
+  overflow-x:hidden;
+  overflow-y:auto;
+  list-style-type: none;
+}
+
+button {
+  -webkit-appearance: none;
+  border: none;
+  background-color: transparent;
+  display: block;
+}
+
+/* @group Title bar */
+
+  #titleBar {
+    height: 22px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    border-radius: 5px 5px 0 0;
+    background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.22)), to(hsla(0, 0%, 0%, 0))) hsl(0, 0%, 90%);
+    background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.22) 0%, hsla(0, 0%, 0%, 0) 100%) hsl(0, 0%, 90%);
+    box-shadow: inset 0 -2px 0 hsla(0, 0%, 100%, 0.1), inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
+    text-align: center;
+    z-index: 0;
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+  }
+  
+  .close {
+    position: absolute;
+    top: 0;
+    left: 2px;
+    opacity: 0.6;
+    z-index: 1;
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+  }
+  
+  .close:hover {
+    opacity: 1;
+  }
+  
+  #titleBar h1 {
+    font-size: 13px;
+    font-weight: normal;
+    font-style: normal;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.69);
+    color: hsla(0, 0%, 0%, 0.7);
+    position: absolute;
+    top: 2px;
+    right: 22px;
+    left: 22px;
+  }
+  
+/* @end */
+
+/* @group Tab bar */
+
+  #tabBar {
+    position: absolute;
+    top: 22px;
+    bottom: 0;
+    left: 0;
+    width: 32px;
+    padding: 2px;
+    overflow: hidden;
+    box-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.75), inset -1px 1px 1px hsla(0, 0%, 0%, 0.4);
+    border-bottom-left-radius: 5px;
+    z-index: 1;
+    background-color: #303030;
+    background-size: 100px 100px;
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+  }
+  
+  #tabBar ul {
+    overflow: hidden;
+  }
+  
+  #tabBar li button {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #tabBar li {
+    height: 32px;
+    display: block;
+    opacity: 0.7;
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+  }
+  
+  #tabBar li:hover {
+    opacity: 1;
+  }
+  
+  #tabBar li:active {
+    opacity: 1;
+  }
+  
+  #tabBar li#settings {
+    position: absolute;
+    bottom: 40px;
+  }
+  
+  #tabBar #troubleshooting {
+    display: none;
+    position: absolute;
+    bottom: 72px;
+  }
+  
+  body.trouble #tabBar #troubleshooting {
+    display: block;
+  }
+  
+  #lockButton {
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 8px;
+    border-bottom-left-radius: 5px;
+    background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.25)), to(hsla(0, 0%, 0%, 0))) hsl(0, 0%, 65%);
+    background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.25) 0%, hsla(0, 0%, 0%, 0) 100%) hsl(0, 0%, 65%);
+    box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.4), 0 -1px 0 hsla(0, 0%, 0%, 0.5), inset 0 1px 0 hsla(0, 0%, 100%, 0.4);
+  }
+  
+  #lockButton:active {
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 0%, 0.3), 0 -1px 0 hsla(0, 0%, 100%, 0.1), inset -1px 1px 1px hsla(0, 0%, 0%, 0.5);
+    background-color: hsl(0, 0%, 55%);
+  }
+  
+  #lockButton img {
+    opacity: 0.6;
+  }
+  
+  body.animated #lockButton img {
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+  }
+  
+  #lockButton:hover img {
+    opacity: 1;
+  }
+  
+  #lockButton:active img {
+    opacity: 0.6;
+  }
+  
+  body.animated #lockButton:active img {
+    -webkit-transition: opacity 0s;
+    transition: opacity 0s;
+  }
+  
+/* @end */
+
+/* @group Nav bar */
+
+  .navBar {
+    height: 26px;
+    background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.1)), to(rgba(0, 0, 0, 0))) hsl(0, 0%, 95%);
+    background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.1) 0%, rgba(0, 0, 0, 0) 100%) hsl(0, 0%, 95%);
+    box-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.39), inset 0 -1px 0 rgba(0, 0, 0, 0.4), inset 1px 0 0 hsla(0, 0%, 100%, 0.4), inset 0 1px 0 hsl(0, 0%, 100%);
+    z-index: 1;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+  }
+  
+  .navBar button {
+    height: 25px;
+    display: block;
+    padding-right: 8px;
+    padding-left: 8px;
+    background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.1)), to(rgba(0, 0, 0, 0))) hsl(0, 0%, 95%);
+    background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.1) 0%, rgba(0, 0, 0, 0) 100%) hsl(0, 0%, 95%);
+    text-shadow: 0 1px 0 hsl(0, 0%, 100%);
+    color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    opacity: 0;
+  }
+  
+  body.animated .navBar button {
+    -webkit-transition-property: opacity, background-color, color;
+    -webkit-transition-duration: 0.25s;
+    transition-property: opacity, background-color, color;
+    transition-duration: 0.25s;
+  }
+  
+  .simpleNav,
+  .listNav,
+  .detailsNav {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+  }
+  
+  .navBar button.left {
+    box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.1), 1px 0 0 hsla(0, 0%, 100%, 0.6);
+    margin-left: 1px;
+  }
+  
+  .navBar button.right {
+    box-shadow: inset 1px 0 0 hsla(0, 0%, 100%, 0.6), -1px 0 0 hsla(0, 0%, 0%, 0.1);
+    margin-right: 1px;
+  }
+  
+  .navBar button img {
+    opacity: 0.8;
+    padding-top: 3px;
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+  }
+  
+  .navBar button:hover {
+    color: hsla(0, 0%, 0%, 0.8);
+    background-color: hsl(0, 0%, 100%);
+  }
+  
+  .navBar button:active {
+    background-color: hsl(0, 0%, 90%);
+    -webkit-transition: background-color 0s;
+    transition: background-color 0s;
+  }
+  
+  .navBar button:hover img {
+    opacity: 1;
+  }
+  
+  .navBar h1 {
+    font-size: 13px;
+    text-shadow: 0 1px 0 hsl(0, 0%, 100%);
+    padding-top: 4px;
+    color: rgba(0, 0, 0, 0.7);
+    padding-left: 8px;
+    padding-right: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  
+  .navBar .simpleNav h1 {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  
+/* @end */
+
+
+/* @group Content */
+
+  .content {
+    position: absolute;
+    top: 26px;
+    border-bottom-right-radius: 5px;
+    color: hsla(0, 0%, 0%, 0.8);
+    z-index: 0;
+    width: 100%;
+    bottom: 0;
+    overflow: hidden;
+    background-color: hsl(0, 0%, 100%);
+  }
+  
+  .content button,
+  #welcome button {
+    padding: 0 8px;
+    height: 24px;
+    display: block;
+    border-radius: 4px;
+    box-shadow: inset 1px 0 0 hsla(0, 0%, 0%, 0.3), inset 0 -1px 0 hsla(0, 0%, 0%, 0.4), inset -1px 0 0 hsla(0, 0%, 0%, 0.3), inset 0 1px 0 hsla(0, 0%, 0%, 0.3), inset 0 2px 0 #ffffff;
+    text-shadow: 0 1px 0 hsl(0, 0%, 100%);
+    text-align: center;
+    background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.15)), to(hsla(0, 0%, 0%, 0))) hsla(0, 0%, 0%, 0.1);
+    background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.15) 0%, hsla(0, 0%, 0%, 0) 100%) hsla(0, 0%, 0%, 0.1);
+    border-style: none;
+    font: 13px "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+  }
+  
+  .content button:hover,
+  #welcome button:hover {
+    background-color: hsla(0, 0%, 0%, 0);
+  }
+  
+  .content button:active,
+  .content button.active,
+  #welcome button:active,
+  #welcome button.active {
+    background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.25)), to(hsla(0, 0%, 100%, 0.25))) hsl(210, 80%, 60%);
+    background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.25) 0%, hsla(0, 0%, 100%, 0.25) 100%) hsl(210, 80%, 60%);
+    box-shadow: inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsla(0, 0%, 0%, 0.4), inset -1px 0 0 hsla(0, 0%, 0%, 0.3), inset 0 1px 0 hsla(0, 0%, 0%, 0.3), inset 0 2px 0 hsla(0, 0%, 100%, 0.5);
+    color: hsl(0, 0%, 100%);
+    text-shadow: 0 -1px 0 hsl(0, 0%, 0%);
+    -webkit-transition: all 0s;
+    transition: all 0s;
+  }
+  
+  .content button.small {
+    font-size: 12px;
+    height: 22px;
+  }
+
+  .content button.details {
+    text-align: left;
+  }
+  
+  .content button.details:after {
+    content: url(../images/content/rightChevron.png);
+    content: -webkit-image-set(url(../images/content/rightChevron.png) 1x, url(../images/content/rightChevron@2x.png) 2x);
+    width: 9px;
+    height: 14px;
+    position: absolute;
+    right: 10px;
+    margin-top: 1px;
+  }
+
+
+  /* @group Settings */
+    
+    #settingsWrapper .padding {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 10px 10px 0;
+      overflow: auto;
+    }
+    
+    #settingsWrapper .settingsDetails .padding {
+      padding: 15px 15px 0;
+    }
+    
+    .settingsList ul {
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+  
+    .settingsList ul.buttons {
+      text-align: center;
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    .settingsList ul.details li img {
+      float: left;
+      margin-top: -2px;
+      margin-right: 8px;
+      margin-left: -4px;
+    }
+    
+    /* @group Default Items */
+    
+      .settingsList li {
+        box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsla(0, 0%, 0%, 0.15), inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 1px 0 hsl(0, 0%, 100%);
+        background-color: hsla(0, 0%, 0%, 0.05);
+        text-shadow: 0 1px 0 hsl(0, 0%, 100%);
+        background-image: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.05)), to(hsla(0, 0%, 0%, 0)));
+        background-image: linear-gradient(0deg, hsla(0, 0%, 0%, 0.05) 0%, hsla(0, 0%, 0%, 0) 100%);
+        position: relative;
+        padding-right: 10px;
+        padding-left: 10px;
+        height: 24px;
+        padding-top: 7px;
+        -webkit-transition: all 0.25s;
+        transition: all 0.25s;
+      }
+      
+      .settingsList li:first-child {
+        border-radius: 6px 6px 0 0;
+        box-shadow: inset 0 1px 0 hsla(0, 0%, 0%, 0.2), inset 0 2px 0 hsl(0, 0%, 100%), inset -1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsla(0, 0%, 0%, 0.15), inset 1px 0 0 hsla(0, 0%, 0%, 0.2);
+        height: 25px;
+      }
+      
+      .settingsList li:last-child {
+        border-radius: 0 0 6px 6px;
+        box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsla(0, 0%, 0%, 0.4), inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 1px 0 hsl(0, 0%, 100%);
+        height: 25px;
+      }
+    
+      .settingsList li:only-child {
+        border-radius: 6px;
+        box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsla(0, 0%, 0%, 0.4), inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 1px 0 hsla(0, 0%, 0%, 0.2), inset 0 2px 0 hsl(0, 0%, 100%);
+        height: 25px;
+      }
+    
+    /* @end */
+    
+    .settingsList li:hover {
+      background-color: hsl(0, 0%, 100%);
+    }
+    
+    /* @group Active Items */
+    
+    .settingsList li:active,
+    .settingsList li.active {
+      box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsl(0, 0%, 0%), inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 1px 0 hsla(0, 0%, 100%, 0.5), 0 -1px 0 hsla(0, 0%, 0%, 0.2);
+      color: hsl(0, 0%, 100%);
+      text-shadow: 0 1px 0 hsl(0, 0%, 0%);
+      background: -webkit-gradient(linear, left bottom, left top, from(hsla(0, 0%, 0%, 0.25)), to(hsla(0, 0%, 100%, 0.25))) hsl(210, 80%, 60%);
+      background: linear-gradient(0deg, hsla(0, 0%, 0%, 0.25) 0%, hsla(0, 0%, 100%, 0.25) 100%) hsl(210, 80%, 60%);
+      -webkit-transition: all 0s;
+      transition: all 0s;
+    }
+  
+    .settingsList li:first-child:active,
+    .settingsList li:first-child.active {
+      box-shadow: inset 0 1px 0 hsla(0, 0%, 0%, 0.3), inset 0 2px 0 hsla(0, 0%, 100%, 0.5), inset -1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsl(0, 0%, 0%), inset 1px 0 0 hsla(0, 0%, 0%, 0.2);
+    }
+    
+    .settingsList li:last-child:active,
+    .settingsList li:last-child.active {
+      box-shadow: inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsl(0, 0%, 0%), inset -1px 0 0 hsla(0, 0%, 0%, 0.3), inset 0 1px 0 hsla(0, 0%, 100%, 0.5), 0 -1px 0 hsla(0, 0%, 0%, 0.2);
+    }
+    
+    .settingsList li:only-child:active,
+    .settingsList li:only-child.active {
+      box-shadow: inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 -1px 0 hsla(0, 0%, 0%, 0.4), inset -1px 0 0 hsla(0, 0%, 0%, 0.3), inset 0 1px 0 hsla(0, 0%, 0%, 0.3), inset 0 2px 0 hsla(0, 0%, 100%, 0.5);
+    }
+      
+    #importBrowserLoginsButton {
+      display: none;
+    }
+    /* @end */
+    
+    .settingsList li .detail {
+      position: absolute;
+      right: 30px;
+      font-weight: normal;
+      font-style: normal;
+      color: hsla(0, 0%, 0%, 0.6);
+      margin-top: 1px;
+    }
+    
+    .settingsList li:active .detail {
+      color: hsl(0, 0%, 100%);
+      text-shadow: 0 -1px 0 hsl(0, 0%, 0%);
+    }
+    
+    .settingsList ul.details li::after {
+      content: url(../images/details-indicator.png);
+      content: -webkit-image-set(url(../images/details-indicator.png) 1x, url(../images/details-indicator@2x.png) 2x);
+      width: 9px;
+      height: 17px;
+      float: right;
+      opacity: 0.75;
+      margin-right: -2px;
+    }
+    
+    .settingsList ul.details li:active::after {
+      content: url(../images/details-indicator-active.png);
+      content: -webkit-image-set(url(../images/details-indicator-active.png) 1x, url(../images/details-indicator-active@2x.png) 2x);
+    }
+    
+    .settingsDetails h2 {
+      font-size: 15px;
+      margin-top: 12px;
+      margin-left: 15px;
+      margin-bottom: 10px;
+      color: hsla(0, 0%, 0%, 0.4);
+    }
+    
+    .settingsDetails fieldset {
+      padding-bottom: 0;
+    }
+    
+    .settingsDetails label.right {
+      text-align: left;
+      padding-left: 20px;
+      display: block;
+      margin-bottom: 6px;
+      margin-right: 15px;
+    }
+    
+    .settingsDetails label.textarea {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    
+    .settingsDetails textarea {
+      display: block;
+      font: 13px "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+      height: 80px;
+      padding: 5px 7px;
+      width: 210px;
+      border-radius: 4px;
+      border-style: none;
+      box-shadow: inset 0 1px 1px hsla(0, 0%, 0%, 0.8), inset -1px 0 0 hsla(0, 0%, 0%, 0.1), inset 0 -1px 0 hsla(0, 0%, 0%, 0.3), inset 1px 0 0 hsla(0, 0%, 0%, 0.1), 0 1px 0 hsl(0, 0%, 100%);
+      cursor: text;
+    }
+    
+    .settingsDetails input[type="checkbox"],
+    .settingsDetails input[type="radio"] {
+      margin-bottom: 7px;
+      margin-right: 10px;
+      float: left;
+      margin-top: 1px;
+    }
+    
+    .settingsDetails p {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+    
+    #loginSettings,
+    #securitySettings,
+    #aboutDetails {
+      display: none;
+    }
+    
+    body.securitySettings #securitySettings {
+      display: block;
+    }
+    
+    body.loginSettings #loginSettings {
+      display: block;
+    }
+    
+    body.aboutDetails #aboutDetails {
+      display: block;
+    }
+    
+    #aboutDetails {
+      text-align: center;
+    }
+    
+    /* @end */
+  
+/* @end */
+
+#locked, section.detailsContent, div.detailsNav, #debuggingOptions {
+  display: none; 
+}
+
+span.meterFull.weak { 
+  width: 30%; 
+}
+
+#aboutDetails { 
+  padding-top:40px; 
+}
+
+#aboutDetails > h2 { 
+  padding:0;
+  margin-left: 0; 
+  margin-bottom: 5px; 
+  margin-top: 5px; 
+  font-size: 19px; 
+}

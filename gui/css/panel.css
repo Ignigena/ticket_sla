@@ -1,0 +1,58 @@
+.navBar {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), 0 -1px 0 hsla(0, 0%, 0%, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.4), inset 1px 0 0 hsla(0, 0%, 0%, 0.2), inset 0 1px 0 hsl(0, 0%, 100%)
+}
+
+.navBar button.right {
+  right: 0;
+  opacity: 1;
+  z-index: 1;
+  border-top-right-radius: 4px;
+  outline: none;
+}
+
+#tabBar {
+  top: 26px;
+}
+
+#tabBar li {
+  margin: 5px 0;
+}
+
+section {
+  display: none;
+  position: absolute;
+  right: 0;
+  left: 36px;
+  bottom: 0;
+  top: 26px;
+  padding: 10px 10px 0;
+  -webkit-transition: opacity 0.25s;
+  transition: opacity 0.25s;
+  background: #fafafa url(../images/noise.png);
+  border-bottom-right-radius: 4px;
+  box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), 0 -1px 0 hsla(0, 0%, 0%, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 hsl(0, 0%, 100%);
+}
+
+section.default {
+  display: block;
+}
+
+section#sla {
+  padding: 5px 5px 0;
+}
+
+#sla table {
+  margin-top: 12px;
+}
+
+#sla table td {
+  text-align: center;
+}
+
+#sla table .servicelevel {
+  font-weight: bold;
+  font-size: 10px;
+  text-align: left;
+}
