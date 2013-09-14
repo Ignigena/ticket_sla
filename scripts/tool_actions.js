@@ -29,3 +29,28 @@ toolActions.notification = function notifications(request) {
     }
   });
 }
+
+toolActions.getAcquiaMonitor = function getAcquiaMonitor(request) {
+  var defer = new $.Deferred();
+
+  chrome.tabs.getSelected(function(tab){
+    var host = tab.url.split('/')[2];
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://"+host+"/ACQUIA_MONITOR", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        var monitor = {};
+        var response = xhr.responseText.split("\n");
+        $.each(response, function(index, item) {
+          var lineDecode = item.split("=");
+          monitor[lineDecode[0]] = lineDecode[1];
+        });
+        defer.resolve(monitor);
+      }
+    }
+    xhr.send();
+  });
+
+  return defer.promise();
+}
