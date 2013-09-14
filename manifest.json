@@ -1,7 +1,7 @@
 {
-  "name" : "SLA Remaining",
+  "name" : "Acquia Support",
   "version" : "0.9.8",
-  "description" : "Shows SLA remaining on current ticket list.",
+  "description" : "Support tools extension for Chrome.",
   "icons" :
   {
     "48" : "slatoolbar.png"
@@ -9,8 +9,8 @@
   "browser_action" :
   {
     "default_icon" : "toolbar.png",
-    "default_title" : "Acquia SLA",
-    "default_popup": "sla.html"
+    "default_title" : "Support Tools",
+    "default_popup": "gui/panel.html"
   },
   "permissions": [
     "tabs",
@@ -19,7 +19,7 @@
     "notifications"
   ],
   "background" : {
-    "scripts": ["scripts/background.js", "scripts/tool_actions.js"]
+    "scripts": ["scripts/external/jquery-2.0.3.min.js", "scripts/background.js", "scripts/tool_actions.js"]
   },
   "content_scripts" : [
     {

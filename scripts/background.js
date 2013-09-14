@@ -54,7 +54,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       chrome.browserAction.setIcon({ path: 'toolbar-acquia.png', tabId: tab.id });
       chrome.browserAction.setTitle({ title: "This site is hosted with Acquia.", tabId: tab.id });
     } else {
-      chrome.browserAction.setTitle({ title: "Acquia SLA", tabId: tab.id });
+      chrome.browserAction.setTitle({ title: "Support Tools", tabId: tab.id });
     }
   }
 });
