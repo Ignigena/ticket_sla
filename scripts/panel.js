@@ -9,8 +9,18 @@ chrome.tabs.getSelected(function(tab){
       chrome.extension.sendRequest({execute: 'getAcquiaMonitor'}, function(response){
         panelInitUI(response);
       });
+      $('section').hide();
+      $('section#tools').show();
+    } else {
+      $('li.tabTools').hide();
     }
   });
+});
+
+$('#tabBar li img').click(function() {
+  var toggleTarget = window.event.srcElement.attributes["target"].value;
+  $('section').hide();
+  $('section#'+toggleTarget).show();
 });
 
 function panelInitUI(monitordata) {
@@ -24,6 +34,19 @@ function panelInitUI(monitordata) {
     }
   }
   xhr.send();
+
+  // Credit for this goes to Byron who wrote the original bookmarklet this is distilled from.
+  // Currently does not work for non-FPM sites per https://backlog.acquia.com/browse/CL-3541
+  var apcPercentage = Math.round(siteInfo.apc_used / siteInfo.apc_total * 1e3) / 10;
+  if (apcPercentage > 85) {
+    $('.meterBar .meterFull').addClass('terrible');
+  } else if (apcPercentage < 4) {
+    // Host is not on FPM and numbers are inaccurate.
+    apcPercentage = 100;
+  } else {
+    $('.meterBar .meterFull').addClass('good');
+  }
+  $('.meterBar .meterFull').attr('style', 'width: '+apcPercentage+'%;');
 }
 
 function activateCCIButton(nodeID) {
