@@ -1,3 +1,9 @@
+var trustedHosts = [
+  'newtab',
+  'extensions',
+  's5.parature.com',
+];
+
 chrome.browserAction.setBadgeBackgroundColor({ color: "#468847" });
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
@@ -5,11 +11,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
   if (pageURL !== undefined && changeInfo.status == "complete") {
     var host = pageURL.split('/')[2];
-
-    trustedHosts = [
-      'newtab',
-      's5.parature.com',
-    ];
 
     if (trustedHosts.indexOf(host) == '-1') {
       chrome.storage.local.get('hostCache',function(data){
@@ -59,5 +60,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-  return toolActions[request.execute](request);
+  var toolFunction = toolActions[request.execute](request);
+  $.when(toolFunction).done(function(response){ sendResponse(response); });
 });
