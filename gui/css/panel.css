@@ -12,6 +12,10 @@
   outline: none;
 }
 
+h1.title.cci-button {
+  margin-left: 25px;
+}
+
 #tabBar {
   top: 26px;
 }
