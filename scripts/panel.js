@@ -38,15 +38,19 @@ function panelInitUI(monitordata) {
   // Credit for this goes to Byron who wrote the original bookmarklet this is distilled from.
   // Currently does not work for non-FPM sites per https://backlog.acquia.com/browse/CL-3541
   var apcPercentage = Math.round(siteInfo.apc_used / siteInfo.apc_total * 1e3) / 10;
-  if (apcPercentage > 85) {
-    $('.meterBar .meterFull').addClass('terrible');
-  } else if (apcPercentage < 4) {
+  fillMeter('apc', apcPercentage);
+
+function fillMeter(meter, percentage) {
+  var meterSelector = '.meterBar.'+meter+' .meterFull';
+  if (percentage > 85) {
+    $(meterSelector).addClass('terrible');
+  } else if (percentage < 4 && meter == 'apc') {
     // Host is not on FPM and numbers are inaccurate.
-    apcPercentage = 100;
+    percentage = 100;
   } else {
-    $('.meterBar .meterFull').addClass('good');
+    $(meterSelector).addClass('good');
   }
-  $('.meterBar .meterFull').attr('style', 'width: '+apcPercentage+'%;');
+  $(meterSelector).attr('style', 'width: '+percentage+'%;');
 }
 
 function activateCCIButton(nodeID) {
