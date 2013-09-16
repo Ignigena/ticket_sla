@@ -1,7 +1,11 @@
 var cciNode;
+var uuid;
+var subscriptionNumber;
 var siteInfo;
 
+// Hide elements of the UI so we can show them when certain conditions are met.
 $('.navBar button.cci').hide();
+$('.dc-only').hide();
 
 chrome.tabs.getSelected(function(tab){
   chrome.browserAction.getTitle({ tabId: tab.id }, function(title){
@@ -30,7 +34,9 @@ function panelInitUI(monitordata) {
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var cciRegex = /views\-field\-uuid.*\s+.*\/node\/(\d+)\/dashboard/;
+      var uuidRegex = /views\-field\-uuid.*\s+.*\/node\/uuid\/(.*)\/cloud/;
       activateCCIButton(cciRegex.exec(xhr.responseText)[1]);
+      activateSubscriptionInfo(uuidRegex.exec(xhr.responseText)[1]);
     }
   }
   xhr.send();
@@ -39,6 +45,48 @@ function panelInitUI(monitordata) {
   // Currently does not work for non-FPM sites per https://backlog.acquia.com/browse/CL-3541
   var apcPercentage = Math.round(siteInfo.apc_used / siteInfo.apc_total * 1e3) / 10;
   fillMeter('apc', apcPercentage);
+}
+
+function activateSubscriptionInfo(initUUID) {
+  uuid = initUUID;
+  tier = siteInfo.hostname.split('.')[1];
+
+  // We can only get server graphs if this person is a Devcloud customer.
+  if (tier == 'devcloud') {
+    $('.dc-only').show();
+
+    // This is a really messy way to get the subscription number, but alas it is the only option.
+    var xhrSub = new XMLHttpRequest();
+    xhrSub.open('GET', 'https://insight.acquia.com/node/uuid/'+uuid+'/cloud', true);
+    xhrSub.onreadystatechange = function() {
+      if (xhrSub.readyState == 4) {
+        var subscriptionNumberRegex = /href\=\"\/cloud\/servers\?s=(\d+)\"/;
+        subscriptionNumber = subscriptionNumberRegex.exec(xhrSub.responseText)[1];
+
+        // Now that we have the subscription number we can get the Server graph data.
+        var xhrGraph = new XMLHttpRequest();
+        // "end_hour" value is expected to be current hour rounded up in seconds.
+        var endHour = moment().format('H')*60*60+3600;
+        var xhrGraphLocation = 'https://insight.acquia.com/cloud/servers/graph/hardware?s='+subscriptionNumber+'&srv='+siteInfo.hostname.split('.')[0]+'&stats_srv=2253&mode=0&start='+moment().subtract('days', 6).format('MMM D YYYY')+'&start_hour=0&end='+moment().format('MMM D YYYY')+'&end_hour='+endHour;
+        xhrGraph.open('GET', xhrGraphLocation, true);
+        xhrGraph.onreadystatechange = function() {
+          if (xhrGraph.readyState == 4) {
+            var serverMonitor = $.parseJSON(xhrGraph.responseText);
+            var cpuUsage = serverMonitor[1].arguments[0].slice(0, -1);
+            var memoryUsage = serverMonitor[7].arguments[0].slice(0, -1);
+            var diskUsage = serverMonitor[7].arguments[0].slice(0, -1);
+            console.log(serverMonitor);
+            fillMeter('cpu', cpuUsage);
+            fillMeter('memory', memoryUsage);
+            fillMeter('disk', diskUsage);
+          }
+        }
+        xhrGraph.send();
+      }
+    }
+    xhrSub.send();
+  }
+}
 
 function fillMeter(meter, percentage) {
   var meterSelector = '.meterBar.'+meter+' .meterFull';
