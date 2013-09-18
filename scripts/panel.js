@@ -2,6 +2,7 @@ var cciNode;
 var uuid;
 var subscriptionNumber;
 var siteInfo;
+var thermopylae = false;
 
 // Hide elements of the UI so we can show them when certain conditions are met.
 $('.navBar button.cci').hide();
@@ -15,7 +16,8 @@ xhr.open('GET', 'http://localhost:47051', true);
 xhr.onreadystatechange = function() {
   if (xhr.readyState == 4 && xhr.responseText) {
     var thermopylaeStatus = JSON.parse(xhr.responseText);
-    $('.thermopylae').show();
+    $('.thermopylae.show').show();
+    thermopylae = true;
   }
 }
 xhr.send();
@@ -28,6 +30,9 @@ chrome.tabs.getSelected(function(tab){
       });
       $('section').hide();
       $('section#tools').show();
+      if (thermopylae) {
+        $('li.tabEnvironment').show();
+      }
     } else {
       $('li.tabTools').hide();
     }
@@ -108,10 +113,27 @@ function activateEnvironmentInfo() {
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var environmentInfo = JSON.parse(xhr.responseText)['response'];
-      $.each(environmentInfo, function( index, value ) {
+      $.each(environmentInfo, function(index, value) {
         $('#environment ul.details').append(
-          $('<li>').attr('class', 'tab').append(index)
+          $('<li>').attr('class', 'docroot').attr('target', index).append(index).append(
+            $('<span>').attr('class', 'deployed').append(environmentInfo[index]['deployed'])
+          )
         );
+        $.each(environmentInfo[index]['servers'], function(serverName, serverValue) {
+          $('#environment ul.details').append(
+            $('<li>').attr('class', serverName+' servers server__'+index).append(serverName)
+          );
+        });
+      });
+      $('#environment ul.details').click(function() {
+        var toggleTarget = window.event.srcElement.attributes["target"].value;
+        var serverTarget = '#environment ul .server__'+toggleTarget;
+        if ($(serverTarget).is(':hidden')) {
+          $('#environment ul .servers').hide();
+          $(serverTarget).show();
+        } else {
+          $('#environment ul .servers').hide();
+        }
       });
     }
   }
