@@ -6,6 +6,19 @@ var siteInfo;
 // Hide elements of the UI so we can show them when certain conditions are met.
 $('.navBar button.cci').hide();
 $('.dc-only').hide();
+$('.thermopylae').hide();
+
+// Highly experimental integration with Thermopylae.
+// Only show features that rely on Thermopylae if the backend is running.
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'http://localhost:47051', true);
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4 && xhr.responseText) {
+    var thermopylaeStatus = JSON.parse(xhr.responseText);
+    $('.thermopylae').show();
+  }
+}
+xhr.send();
 
 chrome.tabs.getSelected(function(tab){
   chrome.browserAction.getTitle({ tabId: tab.id }, function(title){
@@ -86,6 +99,23 @@ function activateSubscriptionInfo(initUUID) {
     }
     xhrSub.send();
   }
+  activateEnvironmentInfo();
+}
+
+function activateEnvironmentInfo() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://localhost:47051/'+siteInfo.site, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      var environmentInfo = JSON.parse(xhr.responseText)['response'];
+      $.each(environmentInfo, function( index, value ) {
+        $('#environment ul.details').append(
+          $('<li>').attr('class', 'tab').append(index)
+        );
+      });
+    }
+  }
+  xhr.send();
 }
 
 function fillMeter(meter, percentage) {
