@@ -5,7 +5,7 @@ var siteInfo;
 var thermopylae = false;
 
 // Hide elements of the UI so we can show them when certain conditions are met.
-$('.navBar button.cci').hide();
+$('.cci').hide();
 $('.dc-only').hide();
 $('.thermopylae').hide();
 
@@ -160,7 +160,7 @@ function activateCCIButton(nodeID) {
   $('.navBar button.cci').click(function(){
     chrome.tabs.create({ url: 'http://cci.acquia.com/node/'+cciNode+'/dashboard' });
   });
-  $('.navBar button.cci').show();
+  $('.cci').show();
 
   parseCCIDashboardForGoodies(nodeID);
 }
