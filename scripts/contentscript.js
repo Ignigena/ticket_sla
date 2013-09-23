@@ -459,6 +459,10 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
         data: JSON.stringify(postData),
         dataType: "json",
     }).done(function(data) {
+        if (!data[0]['ReturnData']) {
+            return;
+        }
+
         // All actions performed on the ticket.
         var ticketActions = data[0]['ReturnData']['Dtos'];
 
