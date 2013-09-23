@@ -130,14 +130,11 @@ function getSelectedDateFormat(row) {
                     'month dd, yy' : 'MMMM D, YYYY h:mm A ZZ',
                 };
                 var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
-                if (row) {
-                    defer.resolve({
-                        'format' : possibleFormats[selectedFormat],
-                        'row' : row
-                    });
-                } else {
-                    defer.resolve(possibleFormats[selectedFormat]);
-                }
+
+                defer.resolve({
+                    'format' : possibleFormats[selectedFormat],
+                    'row' : row
+                });
               }
             }
             xhr.send();
@@ -177,14 +174,14 @@ function ticketListRelativeDates(count) {
     var dateCreatedColumn = getColumnIndexByName('Date Created');
     var dateUpdatedColumn = getColumnIndexByName('Date Updated');
     var dateFormat;
-    dateFormat = getSelectedDateFormat();
+    dateFormat = getSelectedDateFormat(0);
 
     $.when(dateFormat).done(function(status) {
         while (i < count) {
             if (dateCreatedColumn >= 1)
-                $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+                $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, status['format']); });
             if (dateUpdatedColumn >= 1)
-                $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+                $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, status['format']); });
 
             i++;
         }
