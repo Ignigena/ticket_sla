@@ -12,6 +12,8 @@ var ticketsMissed = 0;
 var ticketsWarning = 0;
 var ticketsGood = 0;
 
+var tickets = [];
+
 // DOM manipulation on the ticket queues list.
 if (ticketQueuesRegex.test(document.body.innerText)) {
     var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_status=1415&title=All+Tickets+By+SLA";
@@ -45,7 +47,6 @@ if (ticketListRegex.test(document.body.innerText)) {
     });
 
     // Parse the table for all the tickets.
-    var tickets = [];
     var headers = [];
     $('#tableContent thead td').each(function(index, item) {
         headers[index] = $(item).text();
@@ -80,6 +81,7 @@ if (ticketListRegex.test(document.body.innerText)) {
         for (i = 0; i < tickets.length; i++) {
             var color = 'grey';
             var sla = 'Unknown';
+            var slaStatus;
 
             // Check to see if the Expiry Timestamp column has synced over to Parature.
             if (tickets[i]['Expiry Timestamp'].length > 0) {
@@ -92,51 +94,41 @@ if (ticketListRegex.test(document.body.innerText)) {
                 // Define the customer, urgency, and created columns
                 var customer = tickets[i]['SLA'];
                 var urgency = tickets[i]['Urgency'];
-                var created = moment(tickets[i]['Date Created'], 'M/D/YYYY h:mm A zzz');
+                var dateFormat;
+                dateFormat = getSelectedDateFormat(i);
 
-                var estimatedSLA = legacySLACalculator(created, customer, urgency);
+                $.when(dateFormat).done(function(format) {
+                    var created = generateProperDate(tickets[format['row']]['Date Created'], format['format']);
 
-                if (estimatedSLA) {
-                    sla = $.timeago(estimatedSLA.format()) + ' (Estimated)';
-                }
+                    var estimatedSLA = legacySLACalculator(created, customer, urgency);
+
+                    if (estimatedSLA) {
+                        sla = $.timeago(estimatedSLA.format()) + ' (Estimated)';
+                        slaStatus = checkForSLA(tickets[format['row']]['Ticket #'], sessionKey, { 'timestamp' : estimatedSLA }, format['row']);
+                        estimatedSLA = null;
+                    }
+
+                    $('#listRow'+format['row']+' .sla-report').html(sla);
+
+                    $.when(slaStatus).done(function(status) {
+                        formatRowBasedOnSLAStatus(status);
+                    });
+                });
             }
 
             // Grab the session key so we can look at the ticket history.
             var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
-            var slaStatus;
             var outOfScope;
 
             if (expiry != null) {
                 slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, expiry, i);
                 expiry = null;
-            } else if (estimatedSLA != null) {
-                slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, { 'timestamp' : estimatedSLA }, i);
-                estimatedSLA = null;
             }
         
             // Once the SLA status is determined, update the row accordingly.
             $.when(slaStatus).done(function(status) {
-                if (!status) return;
-                if ($('.sla'+status['row']).hasClass('sla-none')) return;
-
-                if (status['hit']) {
-                    changeTicketStatus(status['row'], 'hit');
-                } else if (status['response']) {
-                    changeTicketStatus(status['row'], 'ackd');
-                }
-
-                // Check for Out Of Scope tickets, specifically to show appropriate SLA status for Developer tickets.
-                outOfScope = checkForOutOfScope(tickets[status['row']]['Ticket #'], status['row']);
-
-                $.when(outOfScope).done(function(status) {
-                    if (!status) return;
-
-                    if (status['oos']) {
-                        $('.sla'+status['row']).html("Out of Scope");
-                        $('#listRow'+status['row']).removeClass('red yellow green ackd hit').addClass('no-scope');
-                    }
-                });
+                formatRowBasedOnSLAStatus(status);
             });
 
             // Style the SLA cell and print it out!
@@ -213,6 +205,29 @@ if (ticketDetailRegex.test(document.body.innerText)) {
             });
         }
     }
+}
+
+function formatRowBasedOnSLAStatus(status) {
+    if (!status) return;
+    if ($('.sla'+status['row']).hasClass('sla-none')) return;
+
+    if (status['hit']) {
+        changeTicketStatus(status['row'], 'hit');
+    } else if (status['response']) {
+        changeTicketStatus(status['row'], 'ackd');
+    }
+
+    // Check for Out Of Scope tickets, specifically to show appropriate SLA status for Developer tickets.
+    outOfScope = checkForOutOfScope(tickets[status['row']]['Ticket #'], status['row']);
+
+    $.when(outOfScope).done(function(status) {
+        if (!status) return;
+
+        if (status['oos']) {
+            $('.sla'+status['row']).html("Out of Scope");
+            $('#listRow'+status['row']).removeClass('red yellow green ackd hit').addClass('no-scope');
+        }
+    });
 }
 
 // Allows users to show only tickets which match a certain SLA status.

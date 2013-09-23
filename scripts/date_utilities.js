@@ -89,24 +89,29 @@ function formatSLATimestamp(timestamp) {
  *   An HTML string in proper formatting for TimeAgo libary.
  */
 function makeExistingDateRelative(oldhtml, dateFormat) {
-    // Grab the last four characters to accomodate for four-letter timezones.
-    var timezone = oldhtml.slice(-4);
-    // Replace the four digit timezone with the UTC equivelant.
-    oldhtml = oldhtml.replace(timezone, convertTimezone(timezone));
-
     // Convert into a proper date format.
-    var properDate = moment(oldhtml, dateFormat).format();
+    var properDate = generateProperDate(oldhtml, dateFormat)
+    properDate = properDate.format();
     // Return HTML to enable conversion into a relative date format.
     return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
 }
 
+function generateProperDate(oldDate, dateFormat) {
+    // Grab the last four characters to accomodate for four-letter timezones.
+    var timezone = oldDate.slice(-4);
+    // Replace the four digit timezone with the UTC equivelant.
+    oldDate = oldDate.replace(timezone, convertTimezone(timezone));
+    console.log(dateFormat);
+    // Convert into a proper date format.
+    return moment(oldDate, dateFormat);
+}
+
 /**
- * Convert all Parature dates to relative timestamps.
- *
- * param int count
- *   How many rows need to be converted.
+ * Get the currently selected date format from the CSR settings.
  */
-function ticketListRelativeDates(count) {
+function getSelectedDateFormat(row) {
+    var defer = new $.Deferred();
+
     chrome.storage.local.get('paratureUserID',function(data){
         userID = data.paratureUserID;
 
@@ -125,22 +130,14 @@ function ticketListRelativeDates(count) {
                     'month dd, yy' : 'MMMM D, YYYY h:mm A ZZ',
                 };
                 var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
-                var dateFormat = possibleFormats[selectedFormat];
-                var i = 0;
-
-                var dateCreatedColumn = getColumnIndexByName('Date Created');
-                var dateUpdatedColumn = getColumnIndexByName('Date Updated');
-
-                while (i < count) {
-                    if (dateCreatedColumn >= 1)
-                        $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
-                    if (dateUpdatedColumn >= 1)
-                        $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
-
-                    i++;
+                if (row) {
+                    defer.resolve({
+                        'format' : possibleFormats[selectedFormat],
+                        'row' : row
+                    });
+                } else {
+                    defer.resolve(possibleFormats[selectedFormat]);
                 }
-
-                $('abbr.timeago').timeago();
               }
             }
             xhr.send();
@@ -163,5 +160,35 @@ function ticketListRelativeDates(count) {
             }
             xhr.send();
         }
+    });
+
+    return defer.promise();
+}
+
+/**
+ * Convert all Parature dates to relative timestamps.
+ *
+ * param int count
+ *   How many rows need to be converted.
+ */
+function ticketListRelativeDates(count) {      
+    var i = 0;
+
+    var dateCreatedColumn = getColumnIndexByName('Date Created');
+    var dateUpdatedColumn = getColumnIndexByName('Date Updated');
+    var dateFormat;
+    dateFormat = getSelectedDateFormat();
+
+    $.when(dateFormat).done(function(status) {
+        while (i < count) {
+            if (dateCreatedColumn >= 1)
+                $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+            if (dateUpdatedColumn >= 1)
+                $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, dateFormat); });
+
+            i++;
+        }
+
+        $('abbr.timeago').timeago();
     });
 }
