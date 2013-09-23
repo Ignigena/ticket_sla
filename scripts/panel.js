@@ -161,4 +161,22 @@ function activateCCIButton(nodeID) {
     chrome.tabs.create({ url: 'http://cci.acquia.com/node/'+cciNode+'/dashboard' });
   });
   $('.navBar button.cci').show();
+
+  parseCCIDashboardForGoodies(nodeID);
+}
+
+function parseCCIDashboardForGoodies(cciNode) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://cci.acquia.com/cci_sub_dashboard/parature_ajax/ajax/'+cciNode, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      var ticketTable = JSON.parse(xhr.responseText)[1]['data'];
+      $('#tickets').html(ticketTable);
+      $('#tickets table th:nth-child(1)').html('Recent Tickets');
+      $('#tickets table td:nth-child(2),#tickets table th:nth-child(2)').hide();
+      $('#tickets table td:nth-child(3),#tickets table th:nth-child(3)').hide();
+      $('#tickets table td:nth-child(4),#tickets table th:nth-child(4)').hide();
+    }
+  }
+  xhr.send();
 }
