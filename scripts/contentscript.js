@@ -119,7 +119,6 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Grab the session key so we can look at the ticket history.
             var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
-            var outOfScope;
 
             if (expiry != null) {
                 slaStatus = checkForSLA(tickets[i]['Ticket #'], sessionKey, expiry, i);
@@ -208,6 +207,8 @@ if (ticketDetailRegex.test(document.body.innerText)) {
 }
 
 function formatRowBasedOnSLAStatus(status) {
+    var outOfScope;
+
     if (!status) return;
     if ($('.sla'+status['row']).hasClass('sla-none')) return;
 
