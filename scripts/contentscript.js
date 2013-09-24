@@ -7,6 +7,7 @@ var ticketListRegex = /Ticket\ List.*\(.*\)/;
 var ticketListSLARegex = /Ticket\ List.*Tickets\ By\ SLA.*\(.*\)/;
 var ticketDetailRegex = /Ticket\ Description/;
 var ticketQueuesRegex = /Filters\s*15066\ -/;
+var outOfScopeRegex = /Out\ of\ Scope\?\:\&nbsp\;\<\/td\>\<td\>Yes/;
 
 var ticketsMissed = 0;
 var ticketsWarning = 0;
@@ -185,7 +186,11 @@ if (ticketDetailRegex.test(document.body.innerText)) {
             // Once we determine if a response is required, add the banner if necessary.
             $.when(slaStatus).done(function(status) {
                 if (!status['response']) {
-                    $('#ticketLeftCol').prepend('<div id="slaBanner" class="'+sla['color']+'"><strong>Response required</strong> <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
+                    if (outOfScopeRegex.test(document.body.innerHTML)) {
+                        $('#ticketLeftCol').prepend('<div id="slaBanner" class="grey"><strong>This ticket has been marked as Out of Scope</strong> A response is still required.</div>');
+                    } else {
+                        $('#ticketLeftCol').prepend('<div id="slaBanner" class="'+sla['color']+'"><strong>Response required</strong> <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
+                    }
                     $('#ticketLeftCol').css('padding-top','40px');
 
                     $.timeago.settings.allowFuture = true;
@@ -418,8 +423,6 @@ function checkForOutOfScope(ticketNumber, row) {
     var outOfScope = false;
 
     $.ajax("https://s5.parature.com/ics/tt/ticketDetail.asp?ticket_id="+ticketNumber).done(function(data) {
-        var outOfScopeRegex = /Out\ of\ Scope\?\:\&nbsp\;\<\/td\>\<td\>Yes/;
-
         // If this is the ticket list, process it accordingly.
         if (outOfScopeRegex.test(data)) {
             outOfScope = true;
