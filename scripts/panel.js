@@ -80,6 +80,8 @@ function activateSubscriptionInfo(initUUID) {
 
   // We can only get server graphs if this person is a Devcloud customer.
   if (tier == 'devcloud') {
+    var target = document.getElementById('tools');
+    var spinner = new Spinner(spinnerOptions).spin(target);
     $('.dc-only').show();
 
     // This is a really messy way to get the subscription number, but alas it is the only option.
@@ -106,6 +108,7 @@ function activateSubscriptionInfo(initUUID) {
             fillMeter('cpu', cpuUsage);
             fillMeter('memory', memoryUsage);
             fillMeter('disk', diskUsage);
+            spinner.stop();
           }
         }
         xhrGraph.send();
@@ -117,6 +120,8 @@ function activateSubscriptionInfo(initUUID) {
 }
 
 function activateEnvironmentInfo() {
+  var target = document.getElementById('environment');
+  var spinner = new Spinner(spinnerOptions).spin(target);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'http://localhost:47051/'+siteInfo.site, true);
   xhr.onreadystatechange = function() {
@@ -144,6 +149,7 @@ function activateEnvironmentInfo() {
           $('#environment ul .servers').hide();
         }
       });
+      spinner.stop();
     }
   }
   xhr.send();
