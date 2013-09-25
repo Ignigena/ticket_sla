@@ -54,3 +54,21 @@ toolActions.getAcquiaMonitor = function getAcquiaMonitor(request) {
 
   return defer.promise();
 }
+
+toolActions.pinToWeb = function pinToWeb(request) {
+  var current = $.cookie('ah_app_server');
+
+  if (current) {
+      if (request.pinTo) {
+        $.removeCookie('ah_app_server');
+      }
+      return('unpinned:'+current+':'+request.pinTo);
+  } else {
+      if (request.pinTo) {
+        var tmp = request.pinTo.split('.');
+        console.log(tmp);
+        $.cookie('ah_app_server', tmp[0]);
+      }
+      return('pinned:'+tmp[0]+':'+request.pinTo);
+  }
+}

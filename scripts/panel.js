@@ -18,6 +18,15 @@ $('.cci').hide();
 $('.dc-only').hide();
 $('.thermopylae').hide();
 
+// Get the current pinned status to update the UI appropriately.
+chrome.extension.sendRequest({execute: 'pinToWeb'}, function(response) {
+  if (response.split(':')[0] == 'unpinned') {
+    $('#tools .toolPin').addClass('active');
+  } else {
+    $('#tools .toolPin').removeClass('active');
+  }
+});
+
 // Highly experimental integration with Thermopylae.
 // Only show features that rely on Thermopylae if the backend is running.
 var xhr = new XMLHttpRequest();
@@ -56,6 +65,17 @@ $('#tabBar li img').click(function() {
 
 function panelInitUI(monitordata) {
   siteInfo = monitordata;
+
+  $('#tools .toolPin').click(function() {
+    chrome.extension.sendRequest({execute: 'pinToWeb', pinTo: siteInfo.hostname}, function(response) {
+      if (response.split(':')[0] == 'pinned') {
+        $('#tools .toolPin').addClass('active');
+      } else {
+        $('#tools .toolPin').removeClass('active');
+      }
+    });
+  });
+
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://cci.acquia.com/reports/support?field_leg_hosting_site_value_op=%3D&field_leg_hosting_site_value='+siteInfo.site, true);
   xhr.onreadystatechange = function() {

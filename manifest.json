@@ -20,7 +20,7 @@
     "notifications"
   ],
   "background" : {
-    "scripts": ["scripts/external/jquery-2.0.3.min.js", "scripts/background.js", "scripts/tool_actions.js"]
+    "scripts": ["scripts/external/jquery-2.0.3.min.js", "scripts/external/jquery.cookie.js", "scripts/background.js", "scripts/tool_actions.js"]
   },
   "content_scripts" : [
     {
