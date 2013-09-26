@@ -22,17 +22,24 @@ iframe#frameMenu {
 iframe#nav {
   width: 225px;
   height: 100%;
+  margin-left: 0;
+  -webkit-transition: all 0.5s;
+}
+iframe#nav.hidden {
+  margin-left: -226px;
 }
 
 iframe[name='content'] {
   width: -webkit-calc(100% - 225px);
   height: 100%;
+  -webkit-transition: all 0.5s;
 }
 iframe[name='content'].fullwidth {
   width: 100%;
 }
 
 section#navbar {
+  position: relative;
   float: left;
   background-color: #f1f1f1;
   border: 0 solid #dedede;
@@ -41,6 +48,7 @@ section#navbar {
   box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.1);
   width: 65px;
   height: 100%;
+  z-index: 10;
 }
 
 section#navbar #logo {

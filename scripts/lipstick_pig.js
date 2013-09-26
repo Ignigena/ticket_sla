@@ -65,7 +65,7 @@ if ($('#mainFrameSet').length) {
 
   $("#nav").load(function() {
     var myTicketLink = $("#sparentTree201", $('#nav').contents()).attr('href');
-    myTicketLink = myTicketLink.replace('filter_status=', 'filter_status=1411,1418,1413,1416');
+    myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
     myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
     $('section#navbar a.mytickets').attr('href', '/ics/tt/'+myTicketLink);
   });
@@ -73,10 +73,10 @@ if ($('#mainFrameSet').length) {
   $("iframe[name='content']").load(function() {
 
     if ($("#ticketform", $("iframe[name='content']").contents()).length) {
-      $("#nav").hide();
+      $("#nav").addClass('hidden');
       $("iframe[name='content']").addClass('fullwidth');
     } else {
-      $("#nav").show();
+      $("#nav").removeClass('hidden');
       $("iframe[name='content']").removeClass('fullwidth');
     }
   });
