@@ -150,13 +150,15 @@ function activateEnvironmentInfo() {
       $.each(environmentInfo, function(index, value) {
         $('#environment ul.details').append(
           $('<li>').attr('class', 'docroot').attr('target', index).append(index).append(
-            $('<span>').attr('class', 'deployed').append(environmentInfo[index]['deployed'])
+            //$('<span>').attr('class', 'deployed').append(environmentInfo[index][0]['deployed']);
           )
         );
-        $.each(environmentInfo[index]['servers'], function(serverName, serverValue) {
-          $('#environment ul.details').append(
-            $('<li>').attr('class', serverName+' servers server__'+index).append(serverName)
-          );
+        $.each(environmentInfo[index], function(region, regionValue) {
+          $.each(environmentInfo[index][region], function(serverName, serverValue) {
+            $('#environment ul.details').append(
+              $('<li>').attr('class', serverName+' servers server__'+index).append(serverName)
+            );
+          });
         });
       });
       $('#environment ul.details').click(function() {
