@@ -42,8 +42,8 @@ if ($('#mainFrameSet').length) {
         $("#messageStart", $('#frameMenu').contents()).trigger('click');
       });
     }
-    $('section#navbar').append('<a class="button mytickets" target="content" title="My Tickets">{</a>');
-    $('section#navbar').append('<a class="button tab tickets" target="ticket" title="Tickets">n</a>');
+    $('section#navbar').append('<div class="mytickets"><a class="button mytickets" target="content" title="My Tickets">{</a><span class="countbadge">0</span></div>');
+    $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" target="ticket" title="Tickets">n</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<a class="button tab customers" target="customer" title="Customers">&lt;</a>');
     $('section#navbar').append('<a class="button tab subs" target="asset" title="Subscriptions">&gt;</a>');
     $('section#navbar').append('<a class="button tab reports" target="reports" title="Reports">g</a>');
@@ -61,6 +61,17 @@ if ($('#mainFrameSet').length) {
       var action = window.event.srcElement.attributes["target"].value;
       menu.document.location.href="javascript:menuClick('"+action+"', null, ''); void 0";
     });
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://s5.parature.com/ics/csrchat/Widget.aspx", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        var openTicketsRegex = /\>(\d+)\</;
+        var openTicketsMatch = openTicketsRegex.exec(xhr.responseText);
+        $(".mytickets .countbadge").text(openTicketsMatch[1]);
+        $(".mytickets .countbadge").addClass('activated');
+      }
+    }
+    xhr.send();
   });
 
   $("#nav").load(function() {
@@ -68,6 +79,20 @@ if ($('#mainFrameSet').length) {
     myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
     myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
     $('section#navbar a.mytickets').attr('href', '/ics/tt/'+myTicketLink);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_status=1415", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+        var openTicketsMatch = openTicketsRegex.exec(xhr.responseText);
+        if (openTicketsMatch) {
+            $(".alltickets .countbadge").text(openTicketsMatch[2]);
+            $(".alltickets .countbadge").addClass('activated');
+        }
+      }
+    }
+    xhr.send();
   });
 
   $("iframe[name='content']").load(function() {
