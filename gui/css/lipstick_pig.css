@@ -1,0 +1,114 @@
+@font-face {
+    font-family: 'glyphish';
+    src: url('chrome-extension://__MSG_@@extension_id__/gui/glyphish-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+  margin: 0;
+}
+iframe {
+  border: 0;
+  float: left;
+}
+
+iframe#frameMenu {
+  margin-top: -30px;
+  height: 55px;
+  width: 100%;
+}
+
+iframe#nav {
+  width: 225px;
+  height: 100%;
+}
+
+iframe[name='content'] {
+  width: -webkit-calc(100% - 225px);
+  height: 100%;
+}
+iframe[name='content'].fullwidth {
+  width: 100%;
+}
+
+section#navbar {
+  float: left;
+  background-color: #f1f1f1;
+  border: 0 solid #dedede;
+  border-right-width: 1px;
+  -webkit-box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.1);
+  width: 65px;
+  height: 100%;
+}
+
+section#navbar #logo {
+  width: 45px;
+  margin: 10px 9px;
+  cursor: hand;
+}
+
+section#navbar .button {
+  display: block;
+  font-family: glyphish;
+  font-size: 50px;
+  text-align: center;
+  width: 65px;
+  cursor: hand;
+  text-decoration: none;
+  margin-bottom: 5px;
+  opacity: 0.5;
+  -webkit-transition: all 0.3s;
+}
+
+section#navbar .button:hover {
+  opacity: 0.8;
+  -webkit-transform: scale(1.15,1.15);
+}
+
+section#navbar .button.mytickets {
+  color: black;
+}
+
+section#navbar .button.tickets {
+  color: rgb(139, 26, 26);
+}
+
+section#navbar .button.customers {
+  color: rgb(26, 85, 139);
+}
+
+section#navbar .button.subs {
+  color: rgb(84, 26, 139);
+}
+
+section#navbar .button.reports {
+  color: rgb(26, 139, 31);
+}
+
+section#navbar .button.settings {
+  bottom: 0;
+  font-size: 40px;
+  position: absolute;
+  opacity: 0.2;
+  color: rgb(85, 26, 139);
+}
+
+section#navbar .button.settings:hover {
+  opacity: 0.6;
+}
+
+section#canvas {
+  width: -webkit-calc(100% - 66px);
+  float: left;
+}
+
+.notif-warn {
+  position: absolute;
+  left: 45px;
+  top: 3px;
+  font-family: glyphish;
+  color: #5c562b;
+  cursor: hand;
+}
