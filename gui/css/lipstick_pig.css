@@ -51,6 +51,35 @@ section#navbar {
   z-index: 10;
 }
 
+section#navbar div {
+  position: relative;
+}
+
+section#navbar .countbadge {
+  background-color: #cb4437;
+  border-bottom: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-radius: 3px;
+  font: normal 10px Arial;
+  color: #fff;
+  line-height: 13px;
+  min-width: 15px;
+  position: absolute;
+  right: 5px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.1);
+  top: 0;
+  z-index: 99;
+  -webkit-transform: scale(0.5, 0.5);
+  opacity: 0;
+  -webkit-transition: all 0.2s;
+}
+
+section#navbar .countbadge.activated {
+  -webkit-transform: scale(1.0, 1.0);
+  opacity: 1;
+}
+
 section#navbar #logo {
   width: 45px;
   margin: 10px 9px;
@@ -112,7 +141,7 @@ section#canvas {
   float: left;
 }
 
-.notif-warn {
+section#navbar div.notif-warn {
   position: absolute;
   left: 45px;
   top: 3px;
