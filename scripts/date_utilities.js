@@ -101,7 +101,6 @@ function generateProperDate(oldDate, dateFormat) {
     var timezone = oldDate.slice(-4);
     // Replace the four digit timezone with the UTC equivelant.
     oldDate = oldDate.replace(timezone, convertTimezone(timezone));
-    console.log(dateFormat);
     // Convert into a proper date format.
     return moment(oldDate, dateFormat);
 }
