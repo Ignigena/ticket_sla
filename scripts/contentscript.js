@@ -6,7 +6,6 @@
 var ticketListRegex = /Ticket\ List.*\(.*\)/;
 var ticketListSLARegex = /Ticket\ List.*Tickets\ By\ SLA.*\(.*\)/;
 var ticketDetailRegex = /Ticket\ Description/;
-var ticketQueuesRegex = /Filters\s*15066\ -/;
 var outOfScopeRegex = /Out\ of\ Scope\?\:\&nbsp\;\<\/td\>\<td\>Yes/;
 
 var ticketsMissed = 0;
@@ -16,11 +15,11 @@ var ticketsGood = 0;
 var tickets = [];
 
 // DOM manipulation on the ticket queues list.
-if (ticketQueuesRegex.test(document.body.innerText)) {
+if ($('.folderBack .dTreeNode').length) {
     var allTicketQueues = "2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655";
     var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue="+allTicketQueues+"&title=All+Tickets+By+SLA";
     // Add a link to the "New and Unsassigned" queue at the top of the list.
-    $("#mainDiv > div").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="alltickets" href="'+ticketViewURL+'" target="content" class="node">All New Tickets</a></div>');
+    $("#mainDiv div#dparentTree0").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="alltickets" href="'+ticketViewURL+'" target="content" class="node">All New Tickets</a></div>');
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", ticketViewURL, true);
@@ -32,7 +31,7 @@ if (ticketQueuesRegex.test(document.body.innerText)) {
             var openTickets = openTicketsMatch[2];
 
             if (openTickets >= 1) {
-                $(".toptier a.node").html('<b>All New Tickets</b> <span class="itemCount">('+openTickets+')</span>');
+                $(".toptier a.node").html('<b>All New Tickets</b> <span class="itemCount">'+openTickets+'</span>');
             }
         }
       }

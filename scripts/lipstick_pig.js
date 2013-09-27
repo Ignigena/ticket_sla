@@ -89,10 +89,10 @@ if ($('#mainFrameSet').length) {
     var frameLocation = $("iframe[name='content']").contents().get(0).location.href;
     frameLocation = frameLocation.split('/');
     frameLocationStripped = frameLocation[frameLocation.length-1].split('?')[0];
-    if (frameLocationStripped == "ticketlist.asp" || frameLocationStripped == "splash.asp") {
+    if ((frameLocationStripped == "ticketlist.asp" || frameLocationStripped == "splash.asp") && frameLocation[frameLocation.length-1].split('?')[1]) {
       frameLocationParams = frameLocation[frameLocation.length-1].split('?')[1].split('=');
       frameLocationParams = frameLocationParams[frameLocationParams.length-1];
-      console.log(frameLocationParams);
+
       if (frameLocationStripped == "ticketlist.asp" && frameLocationParams != "My+Active+Tickets") {
         frameLocationParams = "ticketlist.asp";
       }
@@ -158,11 +158,42 @@ function murderFrames() {
 
 // Modifications to the Parature sidebar.
 if ($('.folderBack .dTreeNode').length) {
+  $('body').prepend('<div class="title">Tickets<div class="tools"><span class="tab" show="all">All</span><span class="tab" show="mine">Mine</span><span class="tab" show="others">Others</span></div>');
+  $('table.title').remove();
+  $('table.subtitle').hide();
+  $('.title .tab').click(function() {
+    var action = window.event.srcElement.attributes["show"].value;
+    if (action == 'all') {
+      $('.folderBack .dTreeNode').show();
+      $('.zeroqueue').hide();
+      $('.parent').hide();
+      $('.parent').next().hide();
+    } else if (action == 'mine') {
+      $('.folderBack .dTreeNode').hide();
+      $('#dparentTree197').show();
+      $('#dparentTree197 div').show();
+      $('.zeroqueue').hide();
+    } else {
+      $('.folderBack .dTreeNode').hide();
+    }
+  });
+  $('.folderBack .dTreeNode.empty').remove();
   $('.folderBack .dTreeNode').each(function () {
     if ($(this).text().slice(-3) == '(0)') {
       $(this).addClass('zeroqueue');
+    } else {
+      $('.itemCount', this).text($('.itemCount', this).text().slice(1,-1));
     }
   });
+
+  $('.folderBack .dTreeNode:has(a > img)').addClass('parent');
+  $('.folderBack .parent').each(function() {
+    $(this).addClass($(this).text().split('(')[0].replace(' ', '-'));
+  });
+  $('.folderBack .dTreeNode a:has(img)').hide();
+
+  $('.parent').hide();
+  $('.parent').next().hide();
 
   $('.zeroqueue').hide();
 }

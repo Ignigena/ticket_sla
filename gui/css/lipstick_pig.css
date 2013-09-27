@@ -175,3 +175,91 @@ section#canvas {
   width: -webkit-calc(100% - 66px);
   float: left;
 }
+
+/* Parature sidebar */
+
+body.leftBack {
+  height: 100%;
+  background: rgba(0,0,0,0.03);
+  -webkit-box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 1px 0px inset;
+  margin: 0;
+  padding: 0;
+}
+
+body.leftBack div#mainDiv {
+  padding: 0;
+}
+
+body.leftBack div.folderBack div.dtree div.dTreeNode {
+  height: auto;
+}
+
+body.leftBack .folderBack .dTreeNode img {
+  display: none;
+}
+
+body.leftBack div.folderBack div.dtree div.dTreeNode a {
+  display: block;
+  padding: 5px;
+}
+
+body.leftBack div.folderBack div.dtree div.dTreeNode:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body.leftBack div.folderBack div.dtree div.dTreeNode:hover a {
+  color: black;
+}
+
+body.leftBack table.title {
+  display: none;
+}
+
+body.leftBack div.title {
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 24px 7px 7px;
+  border: 0 !important;
+  margin-bottom: 3px;
+  font-weight: normal;
+  font-size: 18px;
+  font-family: HelveticaNeue;
+  position: relative;
+}
+
+body.leftBack div.title .tools {
+  font-size: 9px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: rgba(255,255,255,0.5);
+}
+
+body.leftBack div.title .tools span {
+  cursor: pointer;
+  padding: 2px 3px;
+  margin-left: 3px;
+  border: 1px solid rgba(255,255,255,0.2);
+  -webkit-border-radius: 3px;
+}
+
+body.leftBack div.title .tools span:hover {
+  color: white;
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.2);
+}
+
+body.leftBack .dTreeNode .itemCount {
+  float: right;
+  border: 1px solid rgb(188, 232, 241);
+  color: rgb(58, 135, 173);
+  background-color: rgb(217, 237, 247);
+  text-shadow: rgba(255, 255, 255, 0.498039) 0px 1px 0px;
+  -webkit-border-radius: 10px;
+  padding: 4px;
+  font-size: 11px;
+  line-height: 10px;
+  margin-top: -2px;
+  min-width: 12px;
+  text-align: center;
+}

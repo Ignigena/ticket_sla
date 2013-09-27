@@ -44,21 +44,9 @@ tr.hit td.sla-report {
   text-align:center;
 }
 
-.dTreeNode.toptier {
-  position: fixed;
-  background: #f7f7f5;
-  width: 100%;
-  padding-top: 3px;
-}
-
-#dparentTree0 {
-  padding-top: 28px;
-}
-
 #tableContent thead th {
   cursor: pointer;
 }
-
 table.customerToolkitHeader {
   position: relative;
 }
