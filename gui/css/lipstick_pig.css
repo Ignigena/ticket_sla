@@ -106,31 +106,53 @@ section#navbar .button {
   -webkit-transition: all 0.3s;
   position: relative;
   z-index: 99;
+  border-left: 0px;
+  color: black;
 }
 
-section#navbar .button:hover {
+section#navbar .button:hover,
+section#navbar .button.active {
   opacity: 0.8;
   -webkit-transform: scale(1.15,1.15);
 }
 
-section#navbar .button.mytickets {
-  color: black;
+section#navbar .button.active:before {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 5px;
+  position: absolute;
+  top: 0;
+  left: 2px;
+  background: black;
 }
 
 section#navbar .button.tickets {
   color: rgb(139, 26, 26);
 }
+section#navbar .button.tickets.active:before {
+  background: rgb(139, 26, 26);
+}
 
 section#navbar .button.customers {
   color: rgb(26, 85, 139);
+}
+section#navbar .button.customers.active:before {
+  background: rgb(26, 85, 139);
 }
 
 section#navbar .button.subs {
   color: rgb(84, 26, 139);
 }
+section#navbar .button.subs.active:before {
+  background: rgb(84, 26, 139);
+}
 
 section#navbar .button.reports {
   color: rgb(26, 139, 31);
+}
+section#navbar .button.reports.active:before {
+  background: rgb(26, 139, 31);
 }
 
 section#navbar .button.settings {
@@ -140,8 +162,12 @@ section#navbar .button.settings {
   opacity: 0.2;
   color: rgb(85, 26, 139);
 }
+section#navbar .button.settings.active:before {
+  background: rgb(85, 26, 139);
+}
 
-section#navbar .button.settings:hover {
+section#navbar .button.settings:hover,
+section#navbar .button.settings.active {
   opacity: 0.6;
 }
 
