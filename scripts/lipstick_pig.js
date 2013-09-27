@@ -16,11 +16,11 @@ if ($('#mainFrameSet').length) {
         $("#messageStart", $('#frameMenu').contents()).trigger('click');
       });
     }
-    $('section#navbar').append('<div class="mytickets"><a class="button mytickets" target="content" title="My Tickets">{</a><span class="countbadge">0</span></div>');
+    $('section#navbar').append('<div class="mytickets"><a class="button tab mytickets" action="ticket" title="My Tickets" navurl="/ics/tt/filters.asp">{</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_status=1415&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<a class="button tab customers" action="customer" title="Customers">&lt;</a>');
     $('section#navbar').append('<a class="button tab subs" action="asset" title="Subscriptions">&gt;</a>');
-    $('section#navbar').append('<a class="button tab action" target="reports" title="Reports">g</a>');
+    $('section#navbar').append('<a class="button tab reports" action="reports" title="Reports">g</a>');
 
     $('section#navbar').append('<a class="button settings" href="https://s5.parature.com/ics/setup/user.asp?userID=5299&task=mod&actionUrl=../service/service.asp" target="content">q</a>');
 
@@ -32,10 +32,16 @@ if ($('#mainFrameSet').length) {
       }
     });
     $('section#navbar .tab').click(function() {
+      $('section#navbar a').removeClass('active');
+      $(window.event.srcElement).addClass('active');
       var action = window.event.srcElement.attributes["action"].value;
-      var navURL = window.event.srcElement.attributes["navurl"].value;
-      var contentURL = window.event.srcElement.attributes["contenturl"].value;
-      menu.document.location.href="javascript:menuClick('"+action+"', '"+navURL+"', '"+contentURL+"');";
+      if (window.event.srcElement.attributes["navurl"]) {
+        var navURL = window.event.srcElement.attributes["navurl"].value;
+        var contentURL = window.event.srcElement.attributes["contenturl"].value;
+        menu.document.location.href="javascript:menuClick('"+action+"', '"+navURL+"', '"+contentURL+"');";
+      } else {
+        menu.document.location.href="javascript:menuClick('"+action+"', null, '');";
+      }
     });
   });
 
@@ -75,6 +81,19 @@ if ($('#mainFrameSet').length) {
   });
 
   $("iframe[name='content']").load(function() {
+    var frameLocation = $("iframe[name='content']").contents().get(0).location.href;
+    frameLocation = frameLocation.split('/');
+    frameLocationStripped = frameLocation[frameLocation.length-1].split('?')[0];
+    if (frameLocationStripped == "ticketlist.asp" || frameLocationStripped == "splash.asp") {
+      frameLocationParams = frameLocation[frameLocation.length-1].split('?')[1].split('=');
+      frameLocationParams = frameLocationParams[frameLocationParams.length-1];
+      console.log(frameLocationParams);
+      if (frameLocationStripped == "ticketlist.asp" && frameLocationParams != "My+Active+Tickets") {
+        frameLocationParams = "ticketlist.asp";
+      }
+      frameLocationStripped = frameLocationParams;
+    }
+    setActiveNav(frameLocationStripped);
 
     if ($("#ticketform", $("iframe[name='content']").contents()).length) {
       $("#nav").addClass('hidden');
@@ -118,10 +137,21 @@ function murderFrames() {
 }
 
 function setActiveNav(page) {
-  $('section#navbar a').removeClass('active');
-  if (page == 'ticketlist.asp') {
-    $('section#navbar a.tickets').addClass('active');
+  var pageMatching = {
+    'My+Active+Tickets' : 'mytickets',
+    'ticketlist.asp' : 'tickets',
+    'ticketDetail.asp' : 'tickets',
+    'admin' : 'customers',
+    'custList.asp' : 'customers',
+    'assetsplash.asp' : 'subs',
+    'metricsCSR.asp' : 'reports',
+    'metricsTicket.asp' : 'reports',
+    'metricsTicketActions.asp' : 'reports',
+    'service.asp' : 'settings',
   }
+
+  $('section#navbar a').removeClass('active');
+  $('section#navbar a.'+pageMatching[page]).addClass('active');
 }
 
 function currentDepartment() {
