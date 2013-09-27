@@ -24,7 +24,7 @@
   "content_scripts" : [
     {
       "matches" : [
-        "*://s5.parature.com/ics/service/main.asp*",
+        "*://s5.parature.com/ics/service/*",
         "*://s5.parature.com/ics/tt/ticket*",
         "*://s5.parature.com/ics/tt/filters.asp"
       ],
