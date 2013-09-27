@@ -47,9 +47,11 @@ if ($('#mainFrameSet').length) {
 
   $("#nav").load(function() {
     var myTicketLink = $("#sparentTree201", $('#nav').contents()).attr('href');
-    myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
-    myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
-    $('section#navbar a.mytickets').attr('href', '/ics/tt/'+myTicketLink);
+    if (myTicketLink) {
+      myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
+      myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
+      $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+myTicketLink);
+    }
 
     // Get the number of total open tickets.
     var openTicketCount = new XMLHttpRequest();
@@ -66,18 +68,20 @@ if ($('#mainFrameSet').length) {
     }
     openTicketCount.send();
 
-    // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
-    var myTicketCount = new XMLHttpRequest();
-    myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
-    myTicketCount.onreadystatechange = function() {
-      if (myTicketCount.readyState == 4) {
-        var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-        var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
-        $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
-        $(".mytickets .countbadge").addClass('activated');
+    if (myTicketLink) {
+      // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
+      var myTicketCount = new XMLHttpRequest();
+      myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
+      myTicketCount.onreadystatechange = function() {
+        if (myTicketCount.readyState == 4) {
+          var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+          var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
+          $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
+          $(".mytickets .countbadge").addClass('activated');
+        }
       }
+      myTicketCount.send();
     }
-    myTicketCount.send();
   });
 
   $("iframe[name='content']").load(function() {
