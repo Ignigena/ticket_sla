@@ -115,7 +115,7 @@ if ($('#mainFrameSet').length) {
         $("iframe[name='content']").removeClass('fullwidth');
       }
     });
-    $('#nav').mouseout(function() {
+    $("iframe[name='content']").hover(function() {
       if ($("#nav").hasClass('washidden')) {
         $("#nav").removeClass('washidden');
         $("#nav").addClass('hidden');
