@@ -75,6 +75,13 @@ section#navbar .countbadge {
   box-shadow: 0px 1px 1px #fff, 0px -1px 0px rgba(0,0,0,0.2);
 }
 
+section#navbar .logo .countbadge {
+  cursor: hand;
+  background-color: rgb(192, 152, 83);
+  top: 5px;
+  min-width: 12px;
+}
+
 section#navbar .countbadge.activated {
   -webkit-transform: scale(1.0, 1.0);
   opacity: 1;
@@ -141,13 +148,4 @@ section#navbar .button.settings:hover {
 section#canvas {
   width: -webkit-calc(100% - 66px);
   float: left;
-}
-
-section#navbar div.notif-warn {
-  position: absolute;
-  left: 45px;
-  top: 3px;
-  font-family: glyphish;
-  color: #5c562b;
-  cursor: hand;
 }

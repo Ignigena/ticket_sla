@@ -8,11 +8,11 @@ if ($('#mainFrameSet').length) {
 
   $("#frameMenu").load(function() {
     var dept = currentDepartment();
-    $('section#navbar').prepend('<img src="'+chrome.extension.getURL(logo[dept])+'" id="logo" title="Switch between queues." />');
+    $('section#navbar').prepend('<div class="logo"><img src="'+chrome.extension.getURL(logo[dept])+'" id="logo" title="Switch between queues." /><span class="countbadge">!</span></div>');
 
     if ($("#messageStart", $('#frameMenu').contents()).length) {
-      $('section#navbar').prepend('<div class="notif-warn">s</div>');
-      $('section#navbar .notif-warn').click(function() {
+      $('section#navbar .logo .countbadge').addClass('activated');
+      $('section#navbar .logo .countbadge').click(function() {
         $("#messageStart", $('#frameMenu').contents()).trigger('click');
       });
     }
