@@ -156,6 +156,17 @@ function murderFrames() {
   $("#frameMenu").hide();
 }
 
+// Modifications to the Parature sidebar.
+if ($('.folderBack .dTreeNode').length) {
+  $('.folderBack .dTreeNode').each(function () {
+    if ($(this).text().slice(-3) == '(0)') {
+      $(this).addClass('zeroqueue');
+    }
+  });
+
+  $('.zeroqueue').hide();
+}
+
 function setActiveNav(page) {
   var pageMatching = {
     'My+Active+Tickets' : 'mytickets',
