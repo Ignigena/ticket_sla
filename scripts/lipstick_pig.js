@@ -4,33 +4,7 @@ if ($('#mainFrameSet').length) {
     '15079' : 'slatoolbar-gardens.png'
   }
 
-  $("frame[name='bottom']").remove();
-  $("frame[name='shady']").remove();
-
-  // New type of the tag
-  var replacementTag = 'iframe';
-
-  // Replace all a tags with the type of replacementTag
-  $('frame').each(function() {
-      var outer = this.outerHTML;
-
-      // Replace opening tag
-      var regex = new RegExp('<' + this.tagName, 'i');
-      var newTag = outer.replace(regex, '<' + replacementTag);
-
-      // Replace closing tag
-      regex = new RegExp('</' + this.tagName, 'i');
-      newTag = newTag.replace(regex, '</' + replacementTag);
-
-      $(this).replaceWith(newTag);
-  });
-  $("frameset#mainFrameSet").wrap('<body>');
-  $("iframe").unwrap();
-
-  $('body').prepend('<section id="navbar"></section><section id="canvas"></section>');
-  $("#nav").appendTo("#canvas");
-  $("iframe[name='content']").appendTo("#canvas");
-  $("#frameMenu").hide();
+  murderFrames();
 
   $("#frameMenu").load(function() {
     var dept = currentDepartment();
@@ -110,6 +84,44 @@ if ($('#mainFrameSet').length) {
       $("iframe[name='content']").removeClass('fullwidth');
     }
   });
+}
+
+// Frames are evil!
+function murderFrames() {
+  $("frame[name='bottom']").remove();
+  $("frame[name='shady']").remove();
+
+  // New type of the tag
+  var replacementTag = 'iframe';
+
+  // Replace all a tags with the type of replacementTag
+  $('frame').each(function() {
+      var outer = this.outerHTML;
+
+      // Replace opening tag
+      var regex = new RegExp('<' + this.tagName, 'i');
+      var newTag = outer.replace(regex, '<' + replacementTag);
+
+      // Replace closing tag
+      regex = new RegExp('</' + this.tagName, 'i');
+      newTag = newTag.replace(regex, '</' + replacementTag);
+
+      $(this).replaceWith(newTag);
+  });
+  $("frameset#mainFrameSet").wrap('<body>');
+  $("iframe").unwrap();
+
+  $('body').prepend('<section id="navbar"></section><section id="canvas"></section>');
+  $("#nav").appendTo("#canvas");
+  $("iframe[name='content']").appendTo("#canvas");
+  $("#frameMenu").hide();
+}
+
+function setActiveNav(page) {
+  $('section#navbar a').removeClass('active');
+  if (page == 'ticketlist.asp') {
+    $('section#navbar a.tickets').addClass('active');
+  }
 }
 
 function currentDepartment() {
