@@ -102,6 +102,7 @@ if (ticketListRegex.test(document.body.innerText)) {
                     var created = generateProperDate(tickets[format['row']]['Date Created'], format['format']);
 
                     var estimatedSLA = legacySLACalculator(created, customer, urgency);
+                    estimatedSLA = moment(estimatedSLA.format());
 
                     if (estimatedSLA) {
                         sla = $.timeago(estimatedSLA.format()) + ' (Estimated)';
