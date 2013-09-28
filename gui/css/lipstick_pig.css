@@ -234,7 +234,8 @@ body.winBack div.title {
 }
 
 body.winBack div.title {
-  background: #475359;
+  background-color: rgba(71, 83, 89, 0.95);
+  z-index: 10;
 }
 
 body.leftBack div.title .tools {
@@ -315,4 +316,18 @@ body.winBack #countDiv input.SLAnone {
 
 body.winBack #countDiv input.inactive {
   opacity: 0.5;
+}
+
+body.winBack form {
+  margin-top: -50px;
+}
+
+body.winBack .lockedTableContainer {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
+
+body.winBack #tableContent {
+  padding-top: 47px;
 }

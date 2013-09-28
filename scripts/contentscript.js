@@ -406,10 +406,10 @@ function formatRowBasedOnSLAStatus(status) {
 // Allows users to show only tickets which match a certain SLA status.
 function toggleBySLA() {
     var toggleTarget = window.event.srcElement.attributes["name"].value;
-
+    $(".toggleBySLA").removeClass('inactive');
+    
     if ($('tr.gridRow:not(.'+toggleTarget+')').is(":hidden")) {
         $('tr.gridRow').show();
-        $(".toggleBySLA").removeClass('inactive');
     } else {
         $('tr.gridRow').hide();
         $('tr.gridRow.'+toggleTarget).show();
