@@ -213,7 +213,8 @@ if ($('#winTab__title').length) {
   $('body').prepend('<div class="title">'+$.trim($('#winTab__title').text())+'</div>');
   $('#countDiv').appendTo('div.title');
   $('#winTab__title').remove();
-  //$('#countDiv').html($('#countDiv').html().replace(/\(.*\)&nbsp;&nbsp;/ig, ""));
+  $('#winTab__columns').hide();
+  $('.lockedTableContainer').attr('style', '');
 }
 
 function setActiveNav(page) {
