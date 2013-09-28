@@ -40,7 +40,7 @@ if ($('.folderBack .dTreeNode').length) {
 }
 
 // If this is the ticket list, process it accordingly.
-if (ticketListRegex.test(document.body.innerText)) {
+if ($("#winTab__columns").length) {
     chrome.storage.local.get('newWindowTickets',function(data){
         if(data.newWindowTickets){
             $("#tableContent tbody tr td a").each(function () {
@@ -280,13 +280,13 @@ function formatRowBasedOnSLAStatus(status) {
 function toggleBySLA() {
     var toggleTarget = window.event.srcElement.attributes["name"].value;
 
-    if (toggleTarget == "all") {
-        $('input.toggleBySLA.SLAall').hide();
+    if ($('tr.gridRow:not(.'+toggleTarget+')').is(":hidden")) {
         $('tr.gridRow').show();
+        $(".toggleBySLA").removeClass('inactive');
     } else {
-        $('input.toggleBySLA.SLAall').show();
         $('tr.gridRow').hide();
         $('tr.gridRow.'+toggleTarget).show();
+        $(".toggleBySLA:not([name='"+toggleTarget+"'])").addClass('inactive');
 
         if (toggleTarget == 'green') {
             $('tr.gridRow.hit').show();
@@ -298,11 +298,12 @@ function toggleBySLA() {
 
 function ticketListSLAButtons() {
     // Add buttons to allow filtering by the SLA status.
-    $('#countDiv').append('&nbsp;&nbsp;<input class="formButton toggleBySLA SLAall" name="all" type="button" value="Show All">');
-    $('#countDiv').append('<input class="formButton toggleBySLA SLAred" name="red" type="button" value="Missed SLA">');
-    $('#countDiv').append('<input class="formButton toggleBySLA SLAyellow" name="yellow" type="button" value="Warning SLA">');
-    $('#countDiv').append('<input class="formButton toggleBySLA SLAgreen" name="green" type="button" value="Good SLA">');
-    $('#countDiv').append('<input class="formButton toggleBySLA SLAnone" name="no-scope" type="button" value="Out of Scope">');
+    $('#countDiv').text('');
+    $('#countDiv').append('<input class="toggleBySLA SLAall" name="all" type="button" value="Show All">');
+    $('#countDiv').append('<input class="toggleBySLA SLAred" name="red" type="button" value="Missed SLA">');
+    $('#countDiv').append('<input class="toggleBySLA SLAyellow" name="yellow" type="button" value="Warning SLA">');
+    $('#countDiv').append('<input class="toggleBySLA SLAgreen" name="green" type="button" value="Good SLA">');
+    $('#countDiv').append('<input class="toggleBySLA SLAnone" name="no-scope" type="button" value="Out of Scope">');
     
     // Hide the "Show All" since on page load we are already showing all.
     $('input.toggleBySLA.SLAall').hide();
@@ -368,10 +369,22 @@ function changeTicketStatus(rowNumber, newStatus, minutes) {
     ticketsMissed = $('tr.red, tr.ackd').length;
     ticketsWarning = $('tr.yellow').length;
     ticketsGood = $('tr.green, tr.hit').length;
+    ticketsNoScope = $('tr.no-scope').length;
+    ticketsAll = ticketsMissed+ticketsWarning+ticketsGood+ticketsNoScope;
 
-    $('.SLAred').attr('value', ticketsMissed+' Missed SLA');
-    $('.SLAyellow').attr('value', ticketsWarning+' Warning SLA');
-    $('.SLAgreen').attr('value', ticketsGood+' Good SLA');
+    $('.SLAred').attr('value', ticketsMissed);
+    $('.SLAyellow').attr('value', ticketsWarning);
+    $('.SLAgreen').attr('value', ticketsGood);
+    $('.SLAnone').attr('value', ticketsGood);
+    $('.SLAred').attr('count', ticketsNoScope);
+    $('.SLAyellow').attr('count', ticketsWarning);
+    $('.SLAgreen').attr('count', ticketsGood);
+    $('.SLAnone').attr('count', ticketsNoScope);
+    $('#countDiv').attr('count', ticketsMissed+ticketsWarning+ticketsGood+ticketsNoScope);
+    $('.SLAred').attr('style', 'width:'+(300/ticketsAll)*ticketsMissed+'px');
+    $('.SLAyellow').attr('style', 'width:'+(300/ticketsAll)*ticketsWarning+'px');
+    $('.SLAgreen').attr('style', 'width:'+(300/ticketsAll)*ticketsGood+'px');
+    $('.SLAnone').attr('style', 'width:'+(300/ticketsAll)*ticketsNoScope+'px');
 }
 
 // Legacy SLA calculator for those tickets with no Expiry Timestamp populated.

@@ -211,11 +211,17 @@ body.leftBack div.folderBack div.dtree div.dTreeNode:hover a {
   color: black;
 }
 
-body.leftBack table.title {
+body.winBack {
+  margin-left: 0 !important;
+}
+
+body.leftBack table.title,
+body.winBack #winTab__title {
   display: none;
 }
 
-body.leftBack div.title {
+body.leftBack div.title,
+body.winBack div.title {
   background: rgba(0,0,0,0.8);
   color: white;
   padding: 24px 7px 7px;
@@ -225,6 +231,10 @@ body.leftBack div.title {
   font-size: 18px;
   font-family: HelveticaNeue;
   position: relative;
+}
+
+body.winBack div.title {
+  background: #475359;
 }
 
 body.leftBack div.title .tools {
@@ -263,4 +273,46 @@ body.leftBack .dTreeNode .itemCount {
   margin-top: -2px;
   min-width: 12px;
   text-align: center;
+}
+
+body.winBack #countDiv {
+  position: absolute;
+  bottom: 7px;
+  right: 5px;
+  box-shadow: 0px 1px 1px rgba(255,255,255,0.5), 0px -1px 0px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  height: 14px;
+  width: 300px;
+  overflow: hidden;
+}
+
+body.winBack #countDiv input {
+  margin: 0;
+  border: 0;
+  height: 100%;
+  padding: 0;
+  color: white;
+  text-align: center;
+  -webkit-border-radius: 0;
+  font-weight: normal;
+}
+
+body.winBack #countDiv input.SLAred {
+  background: #b94a48;
+}
+
+body.winBack #countDiv input.SLAyellow {
+  background: #c09853;
+}
+
+body.winBack #countDiv input.SLAgreen {
+  background: #468847;
+}
+
+body.winBack #countDiv input.SLAnone {
+  background: #3a87ad;
+}
+
+body.winBack #countDiv input.inactive {
+  opacity: 0.5;
 }
