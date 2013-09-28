@@ -16,8 +16,8 @@ if ($('#mainFrameSet').length) {
         $("#messageStart", $('#frameMenu').contents()).trigger('click');
       });
     }
-    $('section#navbar').append('<div class="mytickets"><a class="button tab mytickets" action="ticket" title="My Tickets" navurl="/ics/tt/filters.asp">{</a><span class="countbadge">0</span></div>');
-    $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_status=1415&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
+    $('section#navbar').append('<div class="mytickets"><a class="button tab mytickets" action="ticket" title="My Tickets" navurl="/ics/tt/filters.asp#mytickets">{</a><span class="countbadge">0</span></div>');
+    $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp#all" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_status=1415&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<a class="button tab customers" action="customer" title="Customers">&lt;</a>');
     $('section#navbar').append('<a class="button tab subs" action="asset" title="Subscriptions">&gt;</a>');
     $('section#navbar').append('<a class="button tab reports" action="reports" title="Reports">g</a>');
@@ -122,6 +122,13 @@ if ($('#mainFrameSet').length) {
         $("iframe[name='content']").addClass('fullwidth');
       }
     });
+    if ($("#nav").contents().get(0).location.href.split('#')[1] == 'mytickets') {
+      $('.title .tab.mine', $('#nav').contents()).trigger('click');
+      $('.title .tab.mine', $('#nav').contents()).addClass('active');
+    } else {
+      $('.title .tab.all', $('#nav').contents()).trigger('click');
+      $('.title .tab.all', $('#nav').contents()).addClass('active');
+    }
   });
 }
 
@@ -158,7 +165,7 @@ function murderFrames() {
 
 // Modifications to the Parature sidebar.
 if ($('.folderBack .dTreeNode').length) {
-  $('body').prepend('<div class="title">Tickets<div class="tools"><span class="tab" show="all">All</span><span class="tab" show="mine">Mine</span><span class="tab" show="others">Others</span></div>');
+  $('body').prepend('<div class="title">Tickets<div class="tools"><span class="tab all" show="all">All</span><span class="tab mine" show="mine">Mine</span><span class="tab others" show="others">Others</span></div>');
   $('table.title').remove();
   $('table.subtitle').hide();
   $('.title .tab').click(function() {
@@ -173,9 +180,12 @@ if ($('.folderBack .dTreeNode').length) {
       $('#dparentTree197').show();
       $('#dparentTree197 div').show();
       $('.zeroqueue').hide();
+      $('.My-Recent, .My-Open, #dparentTree198, #dparentTree208 div:nth-child(3)').hide();
     } else {
       $('.folderBack .dTreeNode').hide();
     }
+    $('.title .tab').removeClass('active');
+    $('.title .tab.'+action).addClass('active');
   });
   $('.folderBack .dTreeNode.empty').remove();
   $('.folderBack .dTreeNode').each(function () {
