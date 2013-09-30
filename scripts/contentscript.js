@@ -356,7 +356,7 @@ if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Sum
                         }
                     });
 
-                    $('#slaBanner').css('width', '-webkit-calc('+$('#ticketLeftCol')[0].style.width+' - 22px)');
+                    $('#slaBanner').css('width', '-webkit-calc('+$('#ticketLeftCol')[0].style.width+' - 16px)');
                 }
             });
         }
