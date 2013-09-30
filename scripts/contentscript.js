@@ -4,7 +4,6 @@
  */
 
 var ticketListRegex = /Ticket\ List.*\(.*\)/;
-var ticketListSLARegex = /Ticket\ List.*Tickets\ By\ SLA.*\(.*\)/;
 var ticketDetailRegex = /Ticket\ Description/;
 var outOfScopeRegex = /Out\ of\ Scope\?\:\&nbsp\;\<\/td\>\<td\>Yes/;
 
@@ -152,7 +151,11 @@ if ($("#winTab__columns").length) {
         }
 
         // Tidy up the ticket list and sort by SLA if we're on the All Tickets By SLA queue.
-        ticketListUITidy(ticketListSLARegex.test(document.body.innerText));
+        if (document.location.href.split('&title=')[1] == 'All+Tickets+By+SLA') {
+            ticketListUITidy(true);
+        } else {
+            ticketListUITidy(false);
+        }
 
         // Update in real time!
         $.timeago.settings.allowFuture = true;
