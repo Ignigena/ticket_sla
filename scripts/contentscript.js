@@ -118,6 +118,14 @@ if (ticketListRegex.test(document.body.innerText)) {
                 });
             }
 
+            if (tickets[i]['Onboarding Account'] == 'Yes') {
+                $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('Account Name')-1)+')').append(' <b class="onboarding">Onboarding</b>');
+            }
+
+            if (tickets[i]['Remote Administration'] == 'Yes') {
+                $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('SLA')-1)+')').append(' <b class="ra">+ RA</b>');
+            }
+
             // Grab the session key so we can look at the ticket history.
             var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
@@ -272,20 +280,11 @@ function ticketListSLAButtons() {
 }
 
 function ticketListUITidy(slaSort) {
-    // Remove the Expiry Timestamp column since it's redundant.
-    hideColumnByColumnName('Expiry Timestamp');
-
-    // Remove the Ticket Origin column.
-    hideColumnByColumnName('Ticket Origin');
+    // Remove columns that are redundant or uneccessary.
+    hideColumnByColumnName('Expiry Timestamp', 'Ticket Origin', 'Onboarding Account', 'Remote Administration');
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
-
-    // Shorten the RA column display.
-    $("thead td:contains('Remote Administration')").html("RA");
-
-    // Shorten the Onboarding column display.
-    $("thead td:contains('Onboarding Account')").html("Onboarding");
 
     if (getColumnIndexByName('Status')) {
         $('form div > table tr td:nth-child('+getColumnIndexByName('Status')+')').width('25px');
@@ -397,11 +396,13 @@ function legacySLACalculator(created, customer, urgency) {
 }
 
 function hideColumnByColumnName(columnName) {
-    var columnIndex = getColumnIndexByName(columnName);
-    // Verify the column exists in this view.
-    if (columnIndex) {
-        // Hide it!
-        $('form div > table tr td:nth-child('+columnIndex+')').hide();
+    for (var column in arguments) {
+        var columnIndex = getColumnIndexByName(arguments[column]);
+        // Verify the column exists in this view.
+        if (columnIndex) {
+            // Hide it!
+            $('form div > table tr td:nth-child('+columnIndex+')').hide();
+        }
     }
 }
 
