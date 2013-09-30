@@ -277,9 +277,7 @@ function ticketListSLAButtons() {
 
 function ticketListUITidy(slaSort) {
     // Remove columns that are redundant or uneccessary.
-    hideColumnByColumnName('Expiry Timestamp');
-    hideColumnByColumnName('Ticket Origin');
-    hideColumnByColumnName('Onboarding Account');
+    hideColumnByColumnName('Expiry Timestamp', 'Ticket Origin', 'Onboarding Account', 'Remote Administration');
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
@@ -397,11 +395,13 @@ function legacySLACalculator(created, customer, urgency) {
 }
 
 function hideColumnByColumnName(columnName) {
-    var columnIndex = getColumnIndexByName(columnName);
-    // Verify the column exists in this view.
-    if (columnIndex) {
-        // Hide it!
-        $('form div > table tr td:nth-child('+columnIndex+')').hide();
+    for (var column in arguments) {
+        var columnIndex = getColumnIndexByName(arguments[column]);
+        // Verify the column exists in this view.
+        if (columnIndex) {
+            // Hide it!
+            $('form div > table tr td:nth-child('+columnIndex+')').hide();
+        }
     }
 }
 
