@@ -122,6 +122,10 @@ if (ticketListRegex.test(document.body.innerText)) {
                 $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('Account Name')-1)+')').append(' <b class="onboarding">Onboarding</b>');
             }
 
+            if (tickets[i]['Remote Administration'] == 'Yes') {
+                $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('SLA')-1)+')').append(' <b class="ra">+ RA</b>');
+            }
+
             // Grab the session key so we can look at the ticket history.
             var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
@@ -281,9 +285,6 @@ function ticketListUITidy(slaSort) {
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
-
-    // Shorten the RA column display.
-    $("thead td:contains('Remote Administration')").html("RA");
 
     if (getColumnIndexByName('Status')) {
         $('form div > table tr td:nth-child('+getColumnIndexByName('Status')+')').width('25px');
