@@ -59,3 +59,13 @@ tr.hit td.sla-report {
 #tableContent thead th {
   cursor: pointer;
 }
+
+table.customerToolkitHeader {
+  position: relative;
+}
+
+table.customerToolkitHeader input.viewtickets {
+  position: absolute;
+  right: 0;
+  top: -1px;
+}

@@ -218,6 +218,24 @@ if (ticketDetailRegex.test(document.body.innerText)) {
             });
         }
     }
+
+    // Adding a Show Tickets button to the customer sidebar in a ticket.
+    if ($('.customerToolkitHeader td').length) {
+      var customerID = $('.customerToolkitHeader td:contains("Contact")+td a').attr('href').split('?customerID=')[1];
+      if (customerID) {
+        $('.customerToolkitHeader td:contains("Contact")').append('<input class="viewtickets customer" type="button" value="Show Tickets">');
+        $('.customerToolkitHeader td .viewtickets.customer').click(function() {
+          window.open('https://s5.parature.com/ics/customer/admmytickets.asp?customerID='+customerID);
+        });
+      }
+      var accountID = $('.customerToolkitHeader td:contains("Account")+td a').attr('href').split('?amID=')[1];
+      if (accountID) {
+        $('.customerToolkitHeader td:contains("Account")').append('<input class="viewtickets account" type="button" value="Show Tickets">');
+        $('.customerToolkitHeader td .viewtickets.account').click(function() {
+          window.open('https://s5.parature.com/ics/am/amTickets.asp?amID='+accountID);
+        });
+      }
+    }
 }
 
 function formatRowBasedOnSLAStatus(status) {
