@@ -1,4 +1,5 @@
 if ($('#mainFrameSet').length) {
+  var ticketqueue;
   var logo = {
     '15171' : 'slatoolbar.png',
     '15079' : 'slatoolbar-gardens.png'
@@ -92,10 +93,6 @@ if ($('#mainFrameSet').length) {
     if ((frameLocationStripped == "ticketlist.asp" || frameLocationStripped == "splash.asp") && frameLocation[frameLocation.length-1].split('?')[1]) {
       frameLocationParams = frameLocation[frameLocation.length-1].split('?')[1].split('=');
       frameLocationParams = frameLocationParams[frameLocationParams.length-1];
-
-      if (frameLocationStripped == "ticketlist.asp" && frameLocationParams != "My+Active+Tickets") {
-        frameLocationParams = "ticketlist.asp";
-      }
       frameLocationStripped = frameLocationParams;
     }
     setActiveNav(frameLocationStripped);
@@ -122,7 +119,7 @@ if ($('#mainFrameSet').length) {
         $("iframe[name='content']").addClass('fullwidth');
       }
     });
-    if ($("#nav").contents().get(0).location.href.split('#')[1] == 'mytickets') {
+    if ($("#nav").contents().get(0).location.href.split('#')[1] == 'mytickets' || ticketqueue == 'mine') {
       $('.title .tab.mine', $('#nav').contents()).trigger('click');
       $('.title .tab.mine', $('#nav').contents()).addClass('active');
     } else {
@@ -172,15 +169,12 @@ if ($('.folderBack .dTreeNode').length) {
     var action = window.event.srcElement.attributes["show"].value;
     if (action == 'all') {
       $('.folderBack .dTreeNode').show();
-      $('.zeroqueue').hide();
-      $('.parent').hide();
+      $('.zeroqueue, .parent').hide();
       $('.parent').next().hide();
     } else if (action == 'mine') {
       $('.folderBack .dTreeNode').hide();
-      $('#dparentTree200').show();
-      $('#dparentTree200 div').show();
-      $('.zeroqueue').hide();
-      $('.My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
+      $('#dparentTree200, #dparentTree200 div').show();
+      $('.zeroqueue, .My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
     } else {
       $('.folderBack .dTreeNode').hide();
     }
@@ -220,8 +214,10 @@ if ($('#winTab__title').length) {
 function setActiveNav(page) {
   var pageMatching = {
     'My+Active+Tickets' : 'mytickets',
-    'ticketlist.asp' : 'tickets',
-    'ticketDetail.asp' : 'tickets',
+    'My+Work+In+Progress+Tickets' : 'mytickets',
+    'My+Need+More+Info+Tickets' : 'mytickets',
+    'My+Needs+Reply+Tickets' : 'mytickets',
+    'My+Reopened+Tickets' : 'mytickets',
     'admin' : 'customers',
     'custList.asp' : 'customers',
     'assetsplash.asp' : 'subs',
@@ -232,7 +228,15 @@ function setActiveNav(page) {
   }
 
   $('section#navbar a').removeClass('active');
-  $('section#navbar a.'+pageMatching[page]).addClass('active');
+  if (pageMatching[page]) {
+    $('section#navbar a.'+pageMatching[page]).addClass('active');
+    if (pageMatching[page] == 'mytickets') {
+      ticketqueue = 'mine';
+    }
+  } else {
+    $('section#navbar a.tickets').addClass('active');
+    ticketqueue = 'all';
+  }
 }
 
 function currentDepartment() {
