@@ -37,10 +37,9 @@ tr.hit td.sla-report {
 }
 
 #slaBanner {
-  width:57.8%;
   position:fixed;
   top:96px;
-  padding:7px;
+  padding: 7px 7px 6px;
   z-index:10;
   text-align:center;
 }

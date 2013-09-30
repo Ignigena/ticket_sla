@@ -214,6 +214,8 @@ if (ticketDetailRegex.test(document.body.innerText)) {
                             chrome.extension.sendRequest({execute: 'notification', title: 'Ticket Nearing SLA', msg: 'A ticket you are viewing is 5 minutes or less from missing SLA!'});
                         }
                     });
+
+                    $('#slaBanner').css('width', '-webkit-calc('+$('#ticketLeftCol')[0].style.width+' - 22px)');
                 }
             });
         }
