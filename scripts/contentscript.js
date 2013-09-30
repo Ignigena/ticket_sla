@@ -118,6 +118,10 @@ if (ticketListRegex.test(document.body.innerText)) {
                 });
             }
 
+            if (tickets[i]['Onboarding Account'] == 'Yes') {
+                $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('Account Name')-1)+')').append(' <b class="onboarding">Onboarding</b>');
+            }
+
             // Grab the session key so we can look at the ticket history.
             var sessionKeyRegex = /getFeedbackResponses\(\'(.*)\'\)/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
@@ -272,20 +276,16 @@ function ticketListSLAButtons() {
 }
 
 function ticketListUITidy(slaSort) {
-    // Remove the Expiry Timestamp column since it's redundant.
+    // Remove columns that are redundant or uneccessary.
     hideColumnByColumnName('Expiry Timestamp');
-
-    // Remove the Ticket Origin column.
     hideColumnByColumnName('Ticket Origin');
+    hideColumnByColumnName('Onboarding Account');
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
 
     // Shorten the RA column display.
     $("thead td:contains('Remote Administration')").html("RA");
-
-    // Shorten the Onboarding column display.
-    $("thead td:contains('Onboarding Account')").html("Onboarding");
 
     if (getColumnIndexByName('Status')) {
         $('form div > table tr td:nth-child('+getColumnIndexByName('Status')+')').width('25px');
