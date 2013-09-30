@@ -47,7 +47,7 @@ if ($('#mainFrameSet').length) {
   });
 
   $("#nav").load(function() {
-    var myTicketLink = $("#sparentTree201", $('#nav').contents()).attr('href');
+    var myTicketLink = $("#sparentTree204", $('#nav').contents()).attr('href');
     if (myTicketLink) {
       myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
       myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
@@ -177,10 +177,10 @@ if ($('.folderBack .dTreeNode').length) {
       $('.parent').next().hide();
     } else if (action == 'mine') {
       $('.folderBack .dTreeNode').hide();
-      $('#dparentTree197').show();
-      $('#dparentTree197 div').show();
+      $('#dparentTree200').show();
+      $('#dparentTree200 div').show();
       $('.zeroqueue').hide();
-      $('.My-Recent, .My-Open, #dparentTree198, #dparentTree208 div:nth-child(3)').hide();
+      $('.My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
     } else {
       $('.folderBack .dTreeNode').hide();
     }
