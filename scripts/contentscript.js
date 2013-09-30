@@ -123,7 +123,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             }
 
             if (tickets[i]['Remote Administration'] == 'Yes') {
-                $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('SLA')-1)+')').append(' <b class="ra">+ RA</b>');
+                $('#tableContent tbody tr:nth-child('+(i+1)+') td:nth-child('+(getColumnIndexByName('Summary')-1)+')').append(' <b class="ra">(RA)</b>');
             }
 
             // Grab the session key so we can look at the ticket history.
