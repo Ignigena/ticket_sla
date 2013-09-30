@@ -227,7 +227,7 @@ if (ticketDetailRegex.test(document.body.innerText)) {
                         }
                     });
 
-                    $('#slaBanner').css('width', '-webkit-calc('+$('#ticketLeftCol')[0].style.width+' - 22px)');
+                    $('#slaBanner').css('width', '-webkit-calc('+$('#ticketLeftCol')[0].style.width+' - 16px)');
                 }
             });
         }
