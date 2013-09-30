@@ -328,6 +328,7 @@ body.winBack .lockedTableContainer {
   overflow: scroll;
 }
 
-body.winBack #tableContent {
+body.winBack #tableContent,
+#scrollableContainer .ticketCell {
   padding-top: 47px;
 }
