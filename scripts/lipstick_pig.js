@@ -207,7 +207,6 @@ if ($('#winTab__title').length) {
   $('body').prepend('<div class="title">'+$.trim($('#winTab__title').text())+'</div>');
   $('#countDiv').appendTo('div.title');
   $('#winTab__title').remove();
-  $('#winTab__columns').hide();
   $('.lockedTableContainer').attr('style', '');
 }
 
