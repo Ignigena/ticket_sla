@@ -212,7 +212,8 @@ if (ticketDetailRegex.test(document.body.innerText)) {
                     } else {
                         $('#ticketLeftCol').prepend('<div id="slaBanner" class="'+sla['color']+'"><strong>Response required</strong> <abbr class="timeago" title="'+sla['timestamp']+'">'+sla['timestamp']+'</abbr></div>');
                     }
-                    $('#ticketLeftCol').css('padding-top','80px');
+                    $('#ticketLeftCol').css('padding-top','40px');
+                    $('#ticketLeftCol').css('-webkit-box-sizing','border-box');
 
                     $.timeago.settings.allowFuture = true;
                     $('abbr.timeago').timeago();
