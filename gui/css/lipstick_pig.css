@@ -327,6 +327,8 @@ body.winBack .lockedTableContainer {
 
 body.winBack #tableContent {
   padding-bottom: 30px;
+  margin-bottom: 8px;
+  -webkit-box-sizing: border-box;
 }
 
 #winTab__columns {
