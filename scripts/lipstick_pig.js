@@ -203,11 +203,11 @@ if ($('.folderBack .dTreeNode').length) {
 }
 
 // Modifications to the Parature main page.
-if ($('#winTab__title').length) {
-  $('body').prepend('<div class="title">'+$.trim($('#winTab__title').text())+'</div>');
+if ($('#winTab__title, .winTab.title').length) {
+  $('body').prepend('<div class="title">'+$.trim($('#winTab__title, .winTab.title').text())+'</div>');
   $('#countDiv').appendTo('div.title');
   $('body:has(.ticketCell) #winTab__columns').remove();
-  $('#winTab__title').remove();
+  $('#winTab__title, .winTab.title').remove();
   $('.lockedTableContainer').attr('style', '');
 }
 
