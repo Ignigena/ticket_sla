@@ -82,6 +82,7 @@ if (ticketListRegex.test(document.body.innerText)) {
         for (i = 0; i < tickets.length; i++) {
             var color = 'grey';
             var sla = 'Unknown';
+            var slaRaw;
             var slaStatus;
 
             // Check to see if the Expiry Timestamp column has synced over to Parature.
@@ -90,6 +91,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 
                 // Relative time until or since the SLA is either hit or missed.
                 sla = expiry['timestamp'];
+                slaRaw = moment(sla).unix();
                 color = expiry['color'];
             } else {
                 // Define the customer, urgency, and created columns
@@ -106,6 +108,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 
                     if (estimatedSLA) {
                         sla = $.timeago(estimatedSLA.format()) + ' (Estimated)';
+                        slaRaw = moment(estimatedSLA.format()).unix();
                         slaStatus = checkForSLA(tickets[format['row']]['Ticket #'], sessionKey, { 'timestamp' : estimatedSLA }, format['row']);
                         estimatedSLA = null;
                     }
@@ -143,7 +146,7 @@ if (ticketListRegex.test(document.body.innerText)) {
             // Style the SLA cell and print it out!
             // @todo Allow click to toggle between Relative and Absolute date strings.
             changeTicketStatus(i, color);
-            $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'" data-sort-value="'+moment(sla).unix()+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
+            $('#listRow'+i).prepend('<td nowrap class="sla-report sla'+i+'" data-sort-value="'+slaRaw+'"><abbr class="timeago" title="'+sla+'">'+sla+'</abbr></td>');
         }
 
         // Tidy up the ticket list and sort by SLA if we're on the All Tickets By SLA queue.
