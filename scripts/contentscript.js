@@ -178,7 +178,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 if (ticketDetailRegex.test(document.body.innerText)) {
     // Allow for easy copy/paste of ticket links by updating browser URL.
     var ticketNumber = $('table.webBox td:contains("Ticket #:")+td').text().split('-')[1];
-    window.parent.history.pushState(null, "Title", "/link/desk/15066/15171/Ticket/"+ticketNumber);
+    window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
 
     // If the ticket status is any of these, it will be considered as acknowledged.
     // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
@@ -245,6 +245,8 @@ if (ticketDetailRegex.test(document.body.innerText)) {
         });
       }
     }
+} else {
+    window.parent.history.replaceState(null, "Parature", "/");
 }
 
 function formatRowBasedOnSLAStatus(status) {
