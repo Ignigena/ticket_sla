@@ -23,11 +23,7 @@
   },
   "content_scripts" : [
     {
-      "matches" : [
-        "*://s5.parature.com/ics/service/*",
-        "*://s5.parature.com/ics/tt/ticket*",
-        "*://s5.parature.com/ics/tt/filters.asp"
-      ],
+      "matches" : ["*://s5.parature.com/*"],
       "js" : [
         "scripts/external/jquery-2.0.3.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js", "scripts/external/spin.min.js",
         "scripts/date_utilities.js", "scripts/contentscript.js", "scripts/lipstick_pig.js"
