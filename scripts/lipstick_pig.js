@@ -206,6 +206,7 @@ if ($('.folderBack .dTreeNode').length) {
 if ($('#winTab__title').length) {
   $('body').prepend('<div class="title">'+$.trim($('#winTab__title').text())+'</div>');
   $('#countDiv').appendTo('div.title');
+  $('body:has(.ticketCell) #winTab__columns').remove();
   $('#winTab__title').remove();
   $('.lockedTableContainer').attr('style', '');
 }
