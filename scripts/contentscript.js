@@ -352,8 +352,8 @@ function changeTicketStatus(rowNumber, newStatus, minutes) {
     }
 
     // Only display an alert if the ticket turns yellow after the page loads or has less than 5 minutes left.
-    if (newStatus == 'yellow' && (currentStatus != newStatus || minutes >= -5)) {
         minutes = (minutes >= -5) ? 5 : 30;
+    if (minutes && newStatus == 'yellow' && (currentStatus != newStatus || minutes >= -5)) {
         ticketNumber = tickets[rowNumber]['Ticket #']
         chrome.extension.sendRequest({execute: 'notification', mode: 'load', ticket: ticketNumber, title: 'Ticket Nearing SLA', msg: 'Ticket '+ticketNumber+' is '+minutes+' minutes or less from missing SLA!  Click to view.'});
     }
