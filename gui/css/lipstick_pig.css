@@ -198,12 +198,19 @@ body.leftBack .folderBack .dTreeNode img {
   display: none;
 }
 
+body.leftBack .folderBack .dTreeNode a img {
+  display: block;
+  float: right;
+  padding: 4px 8px;
+}
+
 body.leftBack div.folderBack div.dtree div.dTreeNode a {
   display: block;
   padding: 5px;
 }
 
-body.leftBack div.folderBack div.dtree div.dTreeNode:hover {
+body.leftBack div.folderBack div.dtree div.dTreeNode:hover,
+body.leftBack div.folderBack div.dtree div.dTreeNode.parent {
   background: rgba(0, 0, 0, 0.03);
 }
 
