@@ -361,23 +361,44 @@ body.winBack #tableContent {
 
 div.massaction {
   position: absolute;
-  background: black;
-  padding: 2px;
+  background: -webkit-linear-gradient(top, #4c4c4c 0%,#000000 100%);
+  text-shadow: rgba(0, 0, 0, 1) 0px 1px 2px;
+  padding: 3px 2px 1px;
   -webkit-border-radius: 3px;
   padding-right: 25px;
   left: 0;
   font-family: glyphish;
   font-size: 20px;
-  left: 15px;
+  left: 17px;
   top: 2px;
+  opacity: 1.0;
+  -webkit-transition: all 0.3s;
+  -webkit-transform: scale(1.0, 1.0);
+}
+div.massaction.hidden {
+  -webkit-transform: scale(2.0, 2.0);
+  opacity: 0;
+  left: -150px;
 }
 
 div.massaction a {
   color: gray;
+  text-decoration: none;
+  -webkit-transition: all 0.5s;
+}
+div.massaction a:hover {
+  color: #bbb;
 }
 
 input#check,
 input#allCheck {
   position: relative;
   z-index: 10;
+}
+
+th.slacolumn {
+  -webkit-transition: all 0.5s;
+}
+th.slacolumn.hidden {
+  color: transparent;
 }
