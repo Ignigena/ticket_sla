@@ -355,7 +355,7 @@ function changeTicketStatus(rowNumber, newStatus, minutes) {
     // Only display an alert if the ticket turns yellow after the page loads or has less than 5 minutes left.
     if (minutes && newStatus == 'yellow' && (currentStatus != newStatus || minutes >= -5)) {
         minutes = Math.round(-minutes);
-        if (minutes == 0) {
+        if (minutes <= 1) {
             minutes = 'less than a minute';
         } else {
             minutes = minutes+' minutes';
