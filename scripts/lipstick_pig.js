@@ -123,8 +123,8 @@ if ($('#mainFrameSet').length) {
       $('.title .tab.mine', $('#nav').contents()).trigger('click');
       $('.title .tab.mine', $('#nav').contents()).addClass('active');
     } else {
-      $('.title .tab.all', $('#nav').contents()).trigger('click');
-      $('.title .tab.all', $('#nav').contents()).addClass('active');
+      $('.title .tab.actives', $('#nav').contents()).trigger('click');
+      $('.title .tab.actives', $('#nav').contents()).addClass('active');
     }
   });
 }
@@ -162,12 +162,12 @@ function murderFrames() {
 
 // Modifications to the Parature sidebar.
 if ($('.folderBack .dTreeNode').length) {
-  $('body').prepend('<div class="title">Tickets<div class="tools"><span class="tab all" show="all">All</span><span class="tab mine" show="mine">Mine</span><span class="tab others" show="others">Others</span></div>');
+  $('body').prepend('<div class="title">Tickets<div class="tools"><span class="tab actives" show="actives">Active</span><span class="tab mine" show="mine">Mine</span><span class="tab all" show="all">All</span></div>');
   $('table.title').remove();
   $('table.subtitle').hide();
   $('.title .tab').click(function() {
     var action = window.event.srcElement.attributes["show"].value;
-    if (action == 'all') {
+    if (action == 'actives') {
       $('.folderBack .dTreeNode').show();
       $('.zeroqueue, .parent').hide();
       $('.parent').next().hide();
@@ -176,7 +176,7 @@ if ($('.folderBack .dTreeNode').length) {
       $('#dparentTree200, #dparentTree200 div').show();
       $('.zeroqueue, .My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
     } else {
-      $('.folderBack .dTreeNode').hide();
+      $('.folderBack .dTreeNode').show();
     }
     $('.title .tab').removeClass('active');
     $('.title .tab.'+action).addClass('active');
@@ -194,7 +194,12 @@ if ($('.folderBack .dTreeNode').length) {
   $('.folderBack .parent').each(function() {
     $(this).addClass($(this).text().split('(')[0].replace(' ', '-'));
   });
-  $('.folderBack .dTreeNode a:has(img)').hide();
+  $('.folderBack .dTreeNode a:has(img)').attr('style', 'padding: 0;');
+  if ($('.folderBack .dTreeNode a img').attr('src') == '../images/ftv2mnode.gif') {
+    $('.folderBack .dTreeNode a img').attr('src', '../images/common/icon_doublechevron-down.png');
+  } else {
+    $('.folderBack .dTreeNode a img').attr('src', '../images/common/icon_doublechevron-up.png');
+  }
 
   $('.parent').hide();
   $('.parent').next().hide();
@@ -208,7 +213,6 @@ if ($('#winTab__title, .winTab.title').length) {
   $('#countDiv').appendTo('div.title');
   $('body:has(.ticketCell) #winTab__columns').remove();
   $('#winTab__title, .winTab.title').remove();
-  $('.lockedTableContainer').attr('style', '');
 }
 
 function setActiveNav(page) {
