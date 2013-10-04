@@ -79,6 +79,15 @@ function processTicketList() {
         });
     }
 
+    // "Select All" checkbox should change state if some but not all tickets are selected.
+    $('input[name=check]').click(function() {
+        if ($('input[name=check]:checked').size()) {
+            $('input[name=allCheck]').prop('indeterminate', true).prop('checked', 1);
+        } else {
+            $('input[name=allCheck]').prop('indeterminate', false).prop('checked', 0);
+        }
+    })
+
     // Parse the table for all the tickets.
     var headers = [];
     $('#tableContent thead td').each(function(index, item) {
