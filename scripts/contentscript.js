@@ -80,11 +80,17 @@ function processTicketList() {
     }
 
     // "Select All" checkbox should change state if some but not all tickets are selected.
-    $('input[name=check]').click(function() {
+    $('input[type=checkbox]').click(function() {
         if ($('input[name=check]:checked').size()) {
             $('input[name=allCheck]').prop('indeterminate', true).prop('checked', 1);
+            if ($('div.massaction').size()) {
+                $('div.massaction').show();
+            } else {
+                $('th:has(input[name=allCheck])').prepend('<div class="massaction"><a href="javascript:formSubmitMass(\'mass_action\', \'/ics/tt/massAction.asp\');">!</a><a href="javascript:formSubmitMass(\'mass_edit\', \'/ics/tt/ticketBatchEdit.asp\', 100 );">Q</a><a href="javascript:formSubmit(\'trash\');">C</a></div>');
+            }
         } else {
             $('input[name=allCheck]').prop('indeterminate', false).prop('checked', 0);
+            $('div.massaction').hide();
         }
     })
 
