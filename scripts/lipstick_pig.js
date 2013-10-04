@@ -212,6 +212,7 @@ if ($('#winTab__title, .winTab.title').length) {
   $('body').prepend('<div class="title">'+$.trim($('#winTab__title, .winTab.title').text())+'</div>');
   $('#countDiv').appendTo('div.title');
   $('body:has(.ticketCell) #winTab__columns').remove();
+  $('td.winButton:has(img[title="Mass Action"]), td.winButton:has(img[title="Mass Edit"]), td.winButton:has(img[title="Delete Ticket(s)"])').hide();
   $('#winTab__title, .winTab.title').remove();
 }
 
