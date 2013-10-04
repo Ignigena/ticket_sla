@@ -328,7 +328,7 @@ function ticketListUITidy(slaSort) {
     tableHeader = tableHeader.replace(/<td /g, '<th ').replace(/<\/td>/g, '</th>');
     $('#tableContent thead tr').html(tableHeader);
 
-    $("#tableContent thead th").attr('data-sort', 'string');
+    $("#tableContent thead th").not(":has(input[name=allCheck])").attr('data-sort', 'string');
     $("#tableContent thead .slacolumn").attr('data-sort', 'int');
     $("#tableContent").stupidtable();
 
