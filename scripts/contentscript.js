@@ -266,8 +266,6 @@ if (ticketDetailRegex.test(document.body.innerText)) {
         });
       }
     }
-} else {
-    window.parent.history.replaceState(null, "Parature", "/");
 }
 
 function formatRowBasedOnSLAStatus(status) {
