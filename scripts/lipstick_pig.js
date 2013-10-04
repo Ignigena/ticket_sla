@@ -18,7 +18,7 @@ if ($('#mainFrameSet').length) {
       });
     }
     $('section#navbar').append('<div class="mytickets"><a class="button tab mytickets" action="ticket" title="My Tickets" navurl="/ics/tt/filters.asp#mytickets">{</a><span class="countbadge">0</span></div>');
-    $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp#all" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_status=1415&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
+    $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp#all" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<a class="button tab customers" action="customer" title="Customers">&lt;</a>');
     $('section#navbar').append('<a class="button tab subs" action="asset" title="Subscriptions">&gt;</a>');
     $('section#navbar').append('<a class="button tab reports" action="reports" title="Reports">g</a>');
@@ -57,7 +57,7 @@ if ($('#mainFrameSet').length) {
 
     // Get the number of total open tickets.
     var openTicketCount = new XMLHttpRequest();
-    openTicketCount.open("GET", "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_status=1415", true);
+    openTicketCount.open("GET", "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655", true);
     openTicketCount.onreadystatechange = function() {
       if (openTicketCount.readyState == 4) {
         var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
