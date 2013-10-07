@@ -38,8 +38,8 @@ tr.hit td.sla-report {
 
 #slaBanner {
   position:fixed;
-  top:96px;
-  padding: 7px 7px 6px;
+  top: 64px;
+  padding: 7px;
   z-index:10;
   text-align:center;
 }

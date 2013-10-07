@@ -178,7 +178,7 @@ if (ticketListRegex.test(document.body.innerText)) {
 // If this is the ticket page, process accordingly.
 if (ticketDetailRegex.test(document.body.innerText)) {
     // Allow for easy copy/paste of ticket links by updating browser URL.
-    var ticketNumber = $('table.webBox td:contains("Ticket #:")+td').text().split('-')[1];
+    var ticketNumber = $('#title').text().split(':')[0].split('-')[1];
     window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
 
     // If the ticket status is any of these, it will be considered as acknowledged.
