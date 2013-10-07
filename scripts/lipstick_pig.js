@@ -10,13 +10,20 @@ if ($('#mainFrameSet').length) {
   $("#frameMenu").load(function() {
     var dept = currentDepartment();
     $('section#navbar').prepend('<div class="logo"><img src="'+chrome.extension.getURL(logo[dept])+'" id="logo" title="Switch between queues." /><span class="countbadge">!</span></div>');
+    
+    var announcementCheck = setInterval(function() {
+    var message = $("#messageContent", $('#frameMenu').contents()).text();
+      if (message != "") {
+        if (message != "No messages") {
+          $('section#navbar .logo .countbadge').addClass('activated');
+          $('section#navbar .logo .countbadge').click(function() {
+            $("#messageStart", $('#frameMenu').contents()).trigger('click');
+          });
+        }
+        clearInterval(announcementCheck);
+      }
+    }, 500);
 
-    if ($("#messageStart", $('#frameMenu').contents()).length) {
-      $('section#navbar .logo .countbadge').addClass('activated');
-      $('section#navbar .logo .countbadge').click(function() {
-        $("#messageStart", $('#frameMenu').contents()).trigger('click');
-      });
-    }
     $('section#navbar').append('<div class="mytickets"><a class="button tab mytickets" action="ticket" title="My Tickets" navurl="/ics/tt/filters.asp#mytickets">{</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp#all" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
     $('section#navbar').append('<a class="button tab customers" action="customer" title="Customers">&lt;</a>');
