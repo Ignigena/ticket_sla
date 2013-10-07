@@ -169,26 +169,36 @@ function murderFrames() {
 
 // Modifications to the Parature sidebar.
 if ($('.folderBack .dTreeNode').length) {
-  $('body').prepend('<div class="title">Tickets<div class="tools"><span class="tab actives" show="actives">Active</span><span class="tab mine" show="mine">Mine</span><span class="tab all" show="all">All</span></div>');
+  var title = $.trim($('table.title').text());
+  if (title == 'Filters') { title = 'Tickets'; }
+  $('body').prepend('<div class="title">'+$.trim($('table.title').text()));
+  if (title == 'Tickets') {
+    $('div .title').prepend('<div class="tools"><span class="tab actives" show="actives">Active</span><span class="tab mine" show="mine">Mine</span><span class="tab all" show="all">All</span></div>');
+    $('.title .tab').click(function() {
+      var action = window.event.srcElement.attributes["show"].value;
+      if (action == 'actives') {
+        $('.folderBack .dTreeNode').show();
+        $('.zeroqueue, .parent').hide();
+        $('.parent').next().hide();
+      } else if (action == 'mine') {
+        $('.folderBack .dTreeNode').hide();
+        $('#dparentTree200, #dparentTree200 div').show();
+        $('.zeroqueue, .My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
+      } else {
+        $('.folderBack .dTreeNode').show();
+      }
+      $('.title .tab').removeClass('active');
+      $('.title .tab.'+action).addClass('active');
+    });
+    $('.folderBack .dTreeNode.empty').remove();
+    $('.folderBack .dTreeNode:has(a > img)').addClass('parent');
+    $('.parent').hide();
+    $('.parent').next().hide();
+
+    $('.zeroqueue').hide();
+  }
   $('table.title').remove();
   $('table.subtitle').hide();
-  $('.title .tab').click(function() {
-    var action = window.event.srcElement.attributes["show"].value;
-    if (action == 'actives') {
-      $('.folderBack .dTreeNode').show();
-      $('.zeroqueue, .parent').hide();
-      $('.parent').next().hide();
-    } else if (action == 'mine') {
-      $('.folderBack .dTreeNode').hide();
-      $('#dparentTree200, #dparentTree200 div').show();
-      $('.zeroqueue, .My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
-    } else {
-      $('.folderBack .dTreeNode').show();
-    }
-    $('.title .tab').removeClass('active');
-    $('.title .tab.'+action).addClass('active');
-  });
-  $('.folderBack .dTreeNode.empty').remove();
   $('.folderBack .dTreeNode').each(function () {
     if ($(this).text().slice(-3) == '(0)') {
       $(this).addClass('zeroqueue');
@@ -197,7 +207,6 @@ if ($('.folderBack .dTreeNode').length) {
     }
   });
 
-  $('.folderBack .dTreeNode:has(a > img)').addClass('parent');
   $('.folderBack .parent').each(function() {
     $(this).addClass($(this).text().split('(')[0].replace(' ', '-'));
   });
@@ -207,20 +216,15 @@ if ($('.folderBack .dTreeNode').length) {
   } else {
     $('.folderBack .dTreeNode a img').attr('src', '../images/common/icon_doublechevron-up.png');
   }
-
-  $('.parent').hide();
-  $('.parent').next().hide();
-
-  $('.zeroqueue').hide();
 }
 
 // Modifications to the Parature main page.
 if ($('#winTab__title, .winTab.title').length) {
   $('body').prepend('<div class="title">'+$.trim($('#winTab__title, .winTab.title').text())+'</div>');
   $('#countDiv').appendTo('div.title');
-  $('body:has(.ticketCell) #winTab__columns').remove();
+  $('body:has(.ticketCell) #winTab__columns').hide();
   $('td.winButton:has(img[title="Mass Action"]), td.winButton:has(img[title="Mass Edit"]), td.winButton:has(img[title="Delete Ticket(s)"])').hide();
-  $('#winTab__title, .winTab.title').remove();
+  $('#winTab__title, .winTab.title').hide();
 }
 
 function setActiveNav(page) {
