@@ -310,6 +310,8 @@ body.winBack #countDiv input {
   text-align: center;
   -webkit-border-radius: 0;
   font-weight: normal;
+  display: block;
+  float: left;
 }
 
 body.winBack #countDiv input.SLAred {
