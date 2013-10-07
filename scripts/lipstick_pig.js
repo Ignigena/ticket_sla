@@ -171,9 +171,9 @@ function murderFrames() {
 if ($('.folderBack .dTreeNode').length) {
   var title = $.trim($('table.title').text());
   if (title == 'Filters') { title = 'Tickets'; }
-  $('body').prepend('<div class="title">'+$.trim($('table.title').text()));
+  $('body').prepend('<div class="title">'+title+'</div>');
   if (title == 'Tickets') {
-    $('div .title').prepend('<div class="tools"><span class="tab actives" show="actives">Active</span><span class="tab mine" show="mine">Mine</span><span class="tab all" show="all">All</span></div>');
+    $('div.title').prepend('<div class="tools"><span class="tab actives" show="actives">Active</span><span class="tab mine" show="mine">Mine</span><span class="tab all" show="all">All</span></div>');
     $('.title .tab').click(function() {
       var action = window.event.srcElement.attributes["show"].value;
       if (action == 'actives') {
@@ -195,17 +195,18 @@ if ($('.folderBack .dTreeNode').length) {
     $('.parent').hide();
     $('.parent').next().hide();
 
+    $('.folderBack .dTreeNode').each(function () {
+      if ($(this).text().slice(-3) == '(0)') {
+        $(this).addClass('zeroqueue');
+      } else {
+        $('.itemCount', this).text($('.itemCount', this).text().slice(1,-1));
+      }
+    });
+    
     $('.zeroqueue').hide();
   }
   $('table.title').remove();
   $('table.subtitle').hide();
-  $('.folderBack .dTreeNode').each(function () {
-    if ($(this).text().slice(-3) == '(0)') {
-      $(this).addClass('zeroqueue');
-    } else {
-      $('.itemCount', this).text($('.itemCount', this).text().slice(1,-1));
-    }
-  });
 
   $('.folderBack .parent').each(function() {
     $(this).addClass($(this).text().split('(')[0].replace(' ', '-'));
