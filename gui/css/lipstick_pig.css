@@ -359,7 +359,8 @@ body.winBack #tableContent {
   height: auto;
 }
 
-#winTab__columns .winTabContent .winSpace:nth-last-child(1) {
+#winTab__columns .winTabContent .winSpace:nth-last-child(1),
+#lockedHeader {
   display: none;
 }
 
@@ -377,7 +378,7 @@ div.massaction {
   left: 0;
   font-family: glyphish;
   font-size: 20px;
-  left: 17px;
+  left: 36px;
   top: 2px;
   opacity: 1.0;
   -webkit-transition: all 0.3s;

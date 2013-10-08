@@ -46,7 +46,8 @@ if ($('#mainFrameSet').length) {
       var action = window.event.srcElement.attributes["action"].value;
       if (window.event.srcElement.attributes["navurl"]) {
         var navURL = window.event.srcElement.attributes["navurl"].value;
-        var contentURL = window.event.srcElement.attributes["contenturl"].value;
+        var contentURL = window.event.srcElement.attributes["contenturl"];
+        if (contentURL) { contentURL = contentURL.value }
         menu.document.location.href="javascript:menuClick('"+action+"', '"+navURL+"', '"+contentURL+"');";
       } else {
         menu.document.location.href="javascript:menuClick('"+action+"', null, '');";
@@ -202,7 +203,7 @@ if ($('.folderBack .dTreeNode').length) {
         $('.itemCount', this).text($('.itemCount', this).text().slice(1,-1));
       }
     });
-    
+
     $('.zeroqueue').hide();
   }
   $('table.title').remove();
