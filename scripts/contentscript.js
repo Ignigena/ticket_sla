@@ -223,6 +223,20 @@ function processTicketList() {
             }
         });
     }
+
+    $('th.winColName:nth-child(2)').prepend('<div class="massaction hidden"><a href="javascript:formSubmitMass(\'mass_action\', \'/ics/tt/massAction.asp\');" title="Mass Action">!</a><a href="javascript:formSubmitMass(\'mass_edit\', \'/ics/tt/ticketBatchEdit.asp\', 100 );" title="Edit">Q</a><a href="javascript:formSubmit(\'trash\');" title="Delete">C</a></div>');
+    // "Select All" checkbox should change state if some but not all tickets are selected.
+    $('input[type=checkbox]').click(function() {
+        if ($('input[name=check]:checked').size()) {
+            $('th.slacolumn').addClass('hidden');
+            $('input[name=allCheck]').prop('indeterminate', true).prop('checked', 1);
+            $('div.massaction').removeClass('hidden');
+        } else {
+            $('th.slacolumn').removeClass('hidden');
+            $('input[name=allCheck]').prop('indeterminate', false).prop('checked', 0);
+            $('div.massaction').addClass('hidden');
+        }
+    });
 }
 
 // Ticketmine Shortcut!
