@@ -40,6 +40,15 @@ if ($('.folderBack .dTreeNode').length) {
 
 // If this is the ticket list, process it accordingly.
 if ($("#winTab__columns").length) {
+    var tableContainerCheck = setInterval(function() {
+        if ($('#tableContent').length) {
+            clearInterval(tableContainerCheck);
+            processTicketList();
+        }
+    }, 500);
+}
+
+function processTicketList() {
     chrome.storage.local.get('newWindowTickets',function(data){
         if(data.newWindowTickets){
             $("#tableContent tbody tr td a").each(function () {
@@ -47,20 +56,6 @@ if ($("#winTab__columns").length) {
             });
         }
     });
-
-    $('.lockedTableContainer').prepend('<div class="massaction hidden"><a href="javascript:formSubmitMass(\'mass_action\', \'/ics/tt/massAction.asp\');" title="Mass Action">!</a><a href="javascript:formSubmitMass(\'mass_edit\', \'/ics/tt/ticketBatchEdit.asp\', 100 );" title="Edit">Q</a><a href="javascript:formSubmit(\'trash\');" title="Delete">C</a></div>');
-    // "Select All" checkbox should change state if some but not all tickets are selected.
-    $('input[type=checkbox]').click(function() {
-        if ($('input[name=check]:checked').size()) {
-            $('th.slacolumn').addClass('hidden');
-            $('input[name=allCheck]').prop('indeterminate', true).prop('checked', 1);
-            $('div.massaction').removeClass('hidden');
-        } else {
-            $('th.slacolumn').removeClass('hidden');
-            $('input[name=allCheck]').prop('indeterminate', false).prop('checked', 0);
-            $('div.massaction').addClass('hidden');
-        }
-    })
 
     // Parse the table for all the tickets.
     var headers = [];
@@ -191,6 +186,20 @@ if ($("#winTab__columns").length) {
             }
         });
     }
+
+    $('th.winColName:nth-child(2)').prepend('<div class="massaction hidden"><a href="javascript:formSubmitMass(\'mass_action\', \'/ics/tt/massAction.asp\');" title="Mass Action">!</a><a href="javascript:formSubmitMass(\'mass_edit\', \'/ics/tt/ticketBatchEdit.asp\', 100 );" title="Edit">Q</a><a href="javascript:formSubmit(\'trash\');" title="Delete">C</a></div>');
+    // "Select All" checkbox should change state if some but not all tickets are selected.
+    $('input[type=checkbox]').click(function() {
+        if ($('input[name=check]:checked').size()) {
+            $('th.slacolumn').addClass('hidden');
+            $('input[name=allCheck]').prop('indeterminate', true).prop('checked', 1);
+            $('div.massaction').removeClass('hidden');
+        } else {
+            $('th.slacolumn').removeClass('hidden');
+            $('input[name=allCheck]').prop('indeterminate', false).prop('checked', 0);
+            $('div.massaction').addClass('hidden');
+        }
+    });
 }
 
 // If this is the ticket page, process accordingly.

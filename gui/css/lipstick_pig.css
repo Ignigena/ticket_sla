@@ -368,6 +368,10 @@ body.winBack #tableContent {
   padding: 0 5px;
 }
 
+.ticketActionTable .lockedTableContainer th.winColName:nth-child(2) {
+  position: relative;
+}
+
 div.massaction {
   position: absolute;
   background: -webkit-linear-gradient(top, #4c4c4c 0%,#000000 100%);
@@ -375,10 +379,9 @@ div.massaction {
   padding: 3px 2px 1px;
   -webkit-border-radius: 3px;
   padding-right: 25px;
-  left: 0;
   font-family: glyphish;
   font-size: 20px;
-  left: 36px;
+  left: -73px;
   top: 2px;
   opacity: 1.0;
   -webkit-transition: all 0.3s;
