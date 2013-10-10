@@ -56,7 +56,7 @@ if ($('#mainFrameSet').length) {
   });
 
   $("#nav").load(function() {
-    var myTicketLink = $("#sparentTree204", $('#nav').contents()).attr('href');
+    var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
     if (myTicketLink) {
       myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
       myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
@@ -183,8 +183,8 @@ if ($('.folderBack .dTreeNode').length) {
         $('.parent').next().hide();
       } else if (action == 'mine') {
         $('.folderBack .dTreeNode').hide();
-        $('#dparentTree200, #dparentTree200 div').show();
-        $('.zeroqueue, .My-Recent, .My-Open, #dparentTree201, #dparentTree211 div:nth-child(3)').hide();
+        $('div.My-Tickets + div, div.My-Tickets + div div').show();
+        $('.zeroqueue, .My-Recent, .My-Open, div.My-Recent + div, div.My-Resolved + div div:nth-child(3)').hide();
       } else {
         $('.folderBack .dTreeNode').show();
       }
