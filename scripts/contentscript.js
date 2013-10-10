@@ -41,8 +41,11 @@ if ($('.folderBack .dTreeNode').length) {
 // If this is the ticket list, process it accordingly.
 if ($("#winTab__columns").length) {
     var tableContainerCheck = setInterval(function() {
+        // Wait until the ticket table is loaded by Parature AJAX.
         if ($('#tableContent').length) {
+            // Stop running the interval loop.
             clearInterval(tableContainerCheck);
+            // Process the ticket list now that it exists.
             processTicketList();
         }
     }, 500);
