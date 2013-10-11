@@ -295,10 +295,8 @@ if ($('#winTab__title, .winTab.title').length) {
         
         $('#tableContent tr.gridRow').each(function(index, item) {
           var statusText = $('td.status', this).text();
-          if (statusText == "Work In Progress") {
-            $('div.queue.others').append($('tr#listRow'+index));
-          }
-          if (statusText == "Needs Reply" || statusText == "Reopened") {
+          $('div.queue.others').append($('tr#listRow'+index));
+          if (statusText == "Needs Reply" || statusText == "Reopened" || $('tr#listRow'+index+':has(.sla-report.sla0)').length) {
             $('div.queue.needsreply').append($('tr#listRow'+index));
           }
           $('tr#listRow'+index+' .summary').html('<a href="'+$('tr#listRow'+index+' .ticket-no a').attr('href')+'">'+$('tr#listRow'+index+' .summary').text()+'</a>');
@@ -314,6 +312,11 @@ if ($('#winTab__title, .winTab.title').length) {
         chrome.storage.local.get('customQueue1',function(data){
           for (i = 0; i < data.customQueue1.length; i++) {
             $('div.queue.user1').append($('tr.gridRow:has(td[value="'+data.customQueue1[i]+'"])'));
+          }
+        });
+        chrome.storage.local.get('customQueue2',function(data){
+          for (i = 0; i < data.customQueue2.length; i++) {
+            $('div.queue.user2').append($('tr.gridRow:has(td[value="'+data.customQueue2[i]+'"])'));
           }
         });
       }
