@@ -63,7 +63,6 @@ if ($('#mainFrameSet').length) {
             clearInterval(ticketLinkCheck);
             // Process the ticket link now that it exists.
             var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
-            console.log(ticketLinkCheck);
             if (myTicketLink) {
               myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
               myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
@@ -236,6 +235,90 @@ if ($('#winTab__title, .winTab.title').length) {
   $('body:has(.ticketCell) #winTab__columns').hide();
   $('td.winButton:has(img[title="Mass Action"]), td.winButton:has(img[title="Mass Edit"]), td.winButton:has(img[title="Delete Ticket(s)"])').hide();
   $('#winTab__title, .winTab.title').hide();
+
+  var pageTitle = $('div.title').text().split('-')[1].split('(')[0].trim();
+  if (pageTitle == "My Active Tickets") {
+    $('div.title').after('<div class="queues"></div>');
+    $('div.queues').append('<div class="wrapper"><h2 class="user title1">Important</h2><div class="queue user1"></div></div>');
+    $('div.queues').append('<div class="wrapper"><h2>Needs Reply</h2><div class="queue needsreply"></div></div>');
+    $('div.queues').append('<div class="wrapper"><h2 class="user title2">Waiting</h2><div class="queue user2"></div></div>');
+    $('div.queues').append('<div class="wrapper"><h2>In Progress</h2><div class="queue others"></div></div><div style="clear:both"></div>');
+    $('h2.user').editable({
+      event: 'click',
+      callback: function(data) {
+        if (data.content) {
+          chrome.storage.local.set({
+            customQueue1Name: $('h2.user.title1').text(),
+            customQueue2Name: $('h2.user.title2').text()
+          });
+        }
+      }
+    });
+    $('div.queues div.queue').droppable({
+      accept: '.gridRow',
+      drop: function(event, ui) {
+        $('.ui-draggable-dragging').hide();
+        var draggable = $(ui.draggable[0]);
+        $(this).append(draggable);
+        var saveValue1 = [];
+        var saveValue2 = [];
+        $('.user1 tr.gridRow td.ticket-no').each(function(){
+          saveValue1.push($(this).attr('value'));
+        });
+        $('.user2 tr.gridRow td.ticket-no').each(function(){
+          saveValue2.push($(this).attr('value'));
+        });
+        chrome.storage.local.set({
+          customQueue1: saveValue1,
+          customQueue2: saveValue2
+        });
+      }
+    });
+    chrome.storage.local.get('customQueue1Name',function(data){
+      if (data.customQueue1Name) {
+        $('h2.user.title1').text(data.customQueue1Name);
+      }
+    });
+    chrome.storage.local.get('customQueue2Name',function(data){
+      if (data.customQueue2Name) {
+        $('h2.user.title2').text(data.customQueue2Name);
+      }
+    });
+    var ticketListCheck = setInterval(function() {
+      // Wait until the ticket table is loaded by Parature AJAX.
+      if ($('td.status').length) {
+        // Stop running the interval loop.
+        clearInterval(ticketListCheck);
+
+        $('td:has(input), td.assigned-to, td.urgency, td.sla').remove();
+        $('td.status, td.date-created, td.date-updated, #winTab__columns, td.ticket-no').hide();
+        
+        $('#tableContent tr.gridRow').each(function(index, item) {
+          var statusText = $('td.status', this).text();
+          if (statusText == "Work In Progress") {
+            $('div.queue.others').append($('tr#listRow'+index));
+          }
+          if (statusText == "Needs Reply" || statusText == "Reopened") {
+            $('div.queue.needsreply').append($('tr#listRow'+index));
+          }
+          $('tr#listRow'+index+' .summary').html('<a href="'+$('tr#listRow'+index+' .ticket-no a').attr('href')+'">'+$('tr#listRow'+index+' .summary').text()+'</a>');
+        });
+
+        $('tr.gridRow').draggable({
+          appendTo: 'body',
+          revert: 'valid',
+          cursor: 'move',
+          helper: 'clone'
+        });
+
+        chrome.storage.local.get('customQueue1',function(data){
+          for (i = 0; i < data.customQueue1.length; i++) {
+            $('div.queue.user1').append($('tr.gridRow:has(td[value="'+data.customQueue1[i]+'"])'));
+          }
+        });
+      }
+    }, 500);
+  }
 }
 
 function setActiveNav(page) {
