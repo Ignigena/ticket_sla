@@ -102,6 +102,7 @@ function processTicketList() {
     $('#tableContent tr.gridRow').has('td').each(function() {
         var arrayItem = {};
         $('td', $(this)).each(function(index, item) {
+            $(item).addClass(headers[index].toLowerCase().replace(' ','-').replace('#','no'));
             if (index == 1) {
                 // If this is the "Ticket #" column parse it for the Parature ticket ID URL.
                 // We will use this later to parse the actual contents at the ticket page:
@@ -511,7 +512,7 @@ function ticketListUITidy(slaSort) {
 // Will update the color, language, and filter buttons at the top.
 function changeTicketStatus(rowNumber, newStatus, minutes) {
     var currentStatus = $('#listRow'+rowNumber).attr('class');
-    currentStatus = currentStatus.replace(/\s/g, "").replace(/gridRow/g, "");
+    currentStatus = currentStatus.replace(/\s/g, "").replace(/gridRow/g, "").replace(/ui-draggable/g, "");
 
     $('#listRow'+rowNumber).removeClass(currentStatus);
     $('#listRow'+rowNumber).addClass(newStatus);
