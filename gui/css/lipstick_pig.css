@@ -447,6 +447,12 @@ div.queue .sla-report {
 div.queue .summary {
   width: 100%;
 }
+div.queue tr {
+  display: block;
+}
+div.queue.ui-state-hover {
+  border: 2px solid #0666a0;
+}
 
 div.queues h2 {
   font-size: 19px;
