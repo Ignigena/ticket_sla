@@ -41,8 +41,8 @@
         });
 
         $('div.queues div.queue').sortable({
-          connectWith: "div.queues div.queue",
-          items: "> tr",
+          connectWith: 'div.queues div.queue',
+          items: '> tr',
           appendTo: 'body',
           revert: 'valid',
           cursor: 'move',
@@ -74,6 +74,9 @@
             $('div.queue.user2').append($('tr.gridRow:has(td[value="'+data.customQueue2[i]+'"])'));
           }
         });
+      });
+      $('div.queues div.queue').droppable({
+        hoverClass: "ui-state-hover",
       });
 
       return this;
