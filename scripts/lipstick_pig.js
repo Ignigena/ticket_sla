@@ -56,50 +56,45 @@ if ($('#mainFrameSet').length) {
   });
 
   $("#nav").load(function() {
-    var ticketLinkCheck = setInterval(function() {
-        // Wait until the navigation table is loaded by Parature AJAX.
-        if ($('div.My-Open a.node', $('#nav').contents()).length) {
-            // Stop running the interval loop.
-            clearInterval(ticketLinkCheck);
-            // Process the ticket link now that it exists.
-            var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
-            if (myTicketLink) {
-              myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
-              myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
-              $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+myTicketLink);
-            }
+    $('div.My-Open a.node', $('#nav').contents()).waitFor(function() {
+      // Process the ticket link now that it exists.
+      var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
+      if (myTicketLink) {
+        myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
+        myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
+        $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+myTicketLink);
+      }
 
-            // Get the number of total open tickets.
-            var openTicketCount = new XMLHttpRequest();
-            openTicketCount.open("GET", "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655", true);
-            openTicketCount.onreadystatechange = function() {
-              if (openTicketCount.readyState == 4) {
-                var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-                var openTicketsMatch = openTicketsRegex.exec(openTicketCount.responseText);
-                if (openTicketsMatch) {
-                    $(".alltickets .countbadge").text(openTicketsMatch[2]);
-                    $(".alltickets .countbadge").addClass('activated');
-                }
-              }
-            }
-            openTicketCount.send();
-
-            if (myTicketLink) {
-              // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
-              var myTicketCount = new XMLHttpRequest();
-              myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
-              myTicketCount.onreadystatechange = function() {
-                if (myTicketCount.readyState == 4) {
-                  var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-                  var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
-                  $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
-                  $(".mytickets .countbadge").addClass('activated');
-                }
-              }
-              myTicketCount.send();
-            }
+      // Get the number of total open tickets.
+      var openTicketCount = new XMLHttpRequest();
+      openTicketCount.open("GET", "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655", true);
+      openTicketCount.onreadystatechange = function() {
+        if (openTicketCount.readyState == 4) {
+          var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+          var openTicketsMatch = openTicketsRegex.exec(openTicketCount.responseText);
+          if (openTicketsMatch) {
+              $(".alltickets .countbadge").text(openTicketsMatch[2]);
+              $(".alltickets .countbadge").addClass('activated');
+          }
         }
-    }, 500);
+      }
+      openTicketCount.send();
+
+      if (myTicketLink) {
+        // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
+        var myTicketCount = new XMLHttpRequest();
+        myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
+        myTicketCount.onreadystatechange = function() {
+          if (myTicketCount.readyState == 4) {
+            var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+            var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
+            $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
+            $(".mytickets .countbadge").addClass('activated');
+          }
+        }
+        myTicketCount.send();
+      }
+    });
   });
 
   $("iframe[name='content']").load(function() {
