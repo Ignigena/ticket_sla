@@ -15,8 +15,9 @@
           }
         }
       });
-      $('div.queues div.queue').droppable({
-        accept: '.gridRow',
+      /*$('div.queues div.queue').droppable({
+        accept: 'tr',
+        hoverClass: "ui-state-hover",
         drop: function(event, ui) {
           $('.ui-draggable-dragging').hide();
           var draggable = $(ui.draggable[0]);
@@ -34,7 +35,7 @@
             customQueue2: saveValue2
           });
         }
-      });
+      });*/
       chrome.storage.local.get('customQueue1Name',function(data){
         if (data.customQueue1Name) {
           $('h2.user.title1').text(data.customQueue1Name);
@@ -65,11 +66,28 @@
             $('tr#listRow'+index+' .summary').after($('tr#listRow'+index+' .account'));
           });
 
-          $('tr.gridRow').draggable({
+          $('div.queues div.queue').sortable({
+            connectWith: "div.queues div.queue",
+            items: "> tr",
             appendTo: 'body',
             revert: 'valid',
             cursor: 'move',
-            helper: 'clone'
+            helper: 'clone',
+            update: function(event, ui) {
+              console.log('change');
+              var saveValue1 = [];
+              var saveValue2 = [];
+              $('.user1 tr.gridRow td.ticket-no').each(function(){
+                saveValue1.push($(this).attr('value'));
+              });
+              $('.user2 tr.gridRow td.ticket-no').each(function(){
+                saveValue2.push($(this).attr('value'));
+              });
+              chrome.storage.local.set({
+                customQueue1: saveValue1,
+                customQueue2: saveValue2
+              });
+            }
           });
 
           chrome.storage.local.get('customQueue1',function(data){
