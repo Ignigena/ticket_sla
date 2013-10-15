@@ -30,7 +30,7 @@
       ],
       "js" : [
         "scripts/external/jquery-2.0.3.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js", "scripts/external/spin.min.js",
-        "scripts/date_utilities.js", "scripts/contentscript.js"
+        "scripts/jquery.waitfor.js", "scripts/date_utilities.js", "scripts/contentscript.js"
       ],
       "css" : ["contentstyle.css"],
       "run_at" : "document_idle",
