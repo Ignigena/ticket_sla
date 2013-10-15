@@ -441,10 +441,55 @@ div.queue {
 }
 div.queue .sla-report {
   cursor: move;
+  height: 30px;
+}
+
+div.queue .summary {
+  width: 100%;
 }
 
 div.queues h2 {
   font-size: 19px;
   color: rgba(0,0,0,0.5);
   line-height: 25px;
+}
+
+td.account.processed span {
+  font-family: glyphish;
+  font-size: 30px;
+  color: rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+
+td.account.processed {
+  position: relative;
+  width: 30px;
+  vertical-align: middle;
+}
+td.account.processed div.cust-info {
+  white-space: nowrap;
+  position: absolute;
+  background: rgba(71, 83, 89, 0.952941);
+  padding: 5px 8px;
+  -webkit-border-radius: 4px;
+  top: 5px;
+  right: -100px;
+  opacity: 0.0;
+  color: white;
+  line-height: 12px;
+  -webkit-transition: all 0.5s;
+  text-align: right;
+}
+td.account.processed div.cust-info a {
+  color: white;
+  font-size: 11px;
+}
+td.account.processed div.cust-info a:nth-child(1) {
+  font-size: 12px;
+}
+
+td.account.processed:hover div.cust-info,
+td.account.processed div.cust-info:hover {
+  opacity: 1.0;
+  right: 5px;
 }
