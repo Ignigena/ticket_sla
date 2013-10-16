@@ -48,7 +48,6 @@
           cursor: 'move',
           helper: 'clone',
           update: function(event, ui) {
-            console.log('change');
             var saveValue1 = [];
             var saveValue2 = [];
             $('.user1 tr.gridRow td.ticket-no').each(function(){

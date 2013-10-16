@@ -3,8 +3,6 @@
  * Matt Lucasiewicz
  */
 
-var ticketListRegex = /Ticket\ List.*\(.*\)/;
-var ticketDetailRegex = /Ticket\ Description/;
 var outOfScopeRegex = /Out\ of\ Scope\?\:\&nbsp\;\<\/td\>\<td\>Yes/;
 
 var ticketsMissed = 0;
@@ -355,12 +353,14 @@ if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Sum
         var expiryTimestamp = expiryTimestampRegex.exec(document.body.innerText)[1];
 
         if (expiryTimestamp) {
-            // Grab the session key so we can look at the ticket history.
+            // Grab the session key and ticket ID so we can look at the ticket history.
             var sessionKeyRegex = /SessionId\ =\ \'(.*)\'/;
             var sessionKey = sessionKeyRegex.exec(document.body.innerHTML)[1];
+            var ticketIDRegex = /\{\ ticketId\ \:\ (.+)\ \}/;
+            var ticketID = ticketIDRegex.exec(document.body.innerHTML)[1];
 
             var sla = formatSLATimestamp(expiryTimestamp);
-            var slaStatus = checkForSLA(window.location.search.slice(11), sessionKey, sla);
+            var slaStatus = checkForSLA(ticketID, sessionKey, sla);
             var textColor = "white";
 
             // Once we determine if a response is required, add the banner if necessary.

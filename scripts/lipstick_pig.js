@@ -237,6 +237,11 @@ if ($('#winTab__title, .winTab.title').length) {
   }
 }
 
+// Modifications to the Parature ticket page.
+if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Summary") {
+  console.log('ticket page');
+}
+
 function setActiveNav(page) {
   var pageMatching = {
     'My+Active+Tickets' : 'mytickets',
