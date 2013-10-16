@@ -52,6 +52,18 @@ function processTicketList() {
         }
     });
 
+    // If this is the "All Tickets" view make sure that Escalated Advocacy tickets get prime treatment.
+    if (ticketListSLARegex.test(document.body.innerText)) {
+        $('#tableContent').before('<table class="escalated-advocacy" width="100%"></table>');
+        $.ajax("https://s5.parature.com/ics/tt/ticketlist.asp?filter_queue=3439").done(function(data) {
+            $('table.escalated-advocacy').append($("tr.gridRow", data));
+            $('table.escalated-advocacy td:not(:nth-child(2), :nth-child(7), :nth-child(8), :nth-child(9), :nth-child(12), :nth-child(13))').hide();
+            $('table.escalated-advocacy tr').addClass('yellow').prepend('<td class="sla-report">Escalated Advocacy</td>');
+            // Temporary fix for annoying locked header bug.
+            $("#lockedHeader").remove();
+        });
+    }
+
     // Parse the table for all the tickets.
     var headers = [];
     $('#tableContent thead td').each(function(index, item) {
@@ -337,6 +349,11 @@ function ticketListSLAButtons() {
 function ticketListUITidy(slaSort) {
     // Remove columns that are redundant or uneccessary.
     hideColumnByColumnName('Expiry Timestamp', 'Ticket Origin', 'Onboarding Account', 'Remote Administration');
+    
+    // Hide these columns as they are unnecessary to the All Tickets view.
+    if (slaSort) {
+        hideColumnByColumnName('Assigned To', 'Status');
+    }
 
     // Remove the Attachments column.
     $('form div > table tr td:nth-child(4)').hide();
