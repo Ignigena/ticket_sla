@@ -53,7 +53,7 @@ function processTicketList() {
     });
 
     // If this is the "All Tickets" view make sure that Escalated Advocacy tickets get prime treatment.
-    if (ticketListSLARegex.test(document.body.innerText)) {
+    if (document.location.href.split('&title=')[1] == 'All+Tickets+By+SLA') {
         $('#tableContent').before('<table class="escalated-advocacy" width="100%"></table>');
         $.ajax("https://s5.parature.com/ics/tt/ticketlist.asp?filter_queue=3439").done(function(data) {
             $('table.escalated-advocacy').append($("tr.gridRow", data));
