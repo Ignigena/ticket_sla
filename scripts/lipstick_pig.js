@@ -24,14 +24,6 @@ if ($('#mainFrameSet').length) {
       }
     }, 500);
 
-    $('section#navbar').append('<div class="mytickets"><a class="button tab mytickets" action="ticket" title="My Tickets" navurl="/ics/tt/filters.asp#mytickets">{</a><span class="countbadge">0</span></div>');
-    $('section#navbar').append('<div class="alltickets"><a class="button tab tickets" action="ticket" target="content" title="Tickets" navurl="/ics/tt/filters.asp#all" contenturl="/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655&title=All+Tickets+By+SLA">n</a><span class="countbadge">0</span></div>');
-    $('section#navbar').append('<a class="button tab customers" action="customer" title="Customers">&lt;</a>');
-    $('section#navbar').append('<a class="button tab subs" action="asset" title="Subscriptions">&gt;</a>');
-    $('section#navbar').append('<a class="button tab reports" action="reports" title="Reports">g</a>');
-
-    $('section#navbar').append('<a class="button settings" href="https://s5.parature.com/ics/setup/user.asp?userID=5299&task=mod&actionUrl=../service/service.asp" target="content">q</a>');
-
     $('section#navbar #logo').click(function() {
       if (dept == '15171') {
         menu.document.location.href="javascript:switchDept(15079); void 0";
@@ -56,44 +48,41 @@ if ($('#mainFrameSet').length) {
   });
 
   $("#nav").load(function() {
-    $('div.My-Open a.node', $('#nav').contents()).waitFor(function() {
-      // Process the ticket link now that it exists.
-      var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
-      if (myTicketLink) {
-        myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
-        myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
-        $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+myTicketLink);
-      }
-
+    $('section#navbar', $('#nav').contents()).waitFor(function() {
       // Get the number of total open tickets.
-      var openTicketCount = new XMLHttpRequest();
-      openTicketCount.open("GET", "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655", true);
-      openTicketCount.onreadystatechange = function() {
-        if (openTicketCount.readyState == 4) {
-          var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-          var openTicketsMatch = openTicketsRegex.exec(openTicketCount.responseText);
-          if (openTicketsMatch) {
-              $(".alltickets .countbadge").text(openTicketsMatch[2]);
-              $(".alltickets .countbadge").addClass('activated');
-          }
+      $.get('https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue=2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655', function(data){
+        var openTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+        var openTicketsMatch = openTicketsRegex.exec(data);
+        if (openTicketsMatch) {
+            $(".alltickets .countbadge").text(openTicketsMatch[2]);
+            $(".alltickets .countbadge").addClass('activated');
         }
-      }
-      openTicketCount.send();
+      });
 
-      if (myTicketLink) {
-        // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
-        var myTicketCount = new XMLHttpRequest();
-        myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
-        myTicketCount.onreadystatechange = function() {
-          if (myTicketCount.readyState == 4) {
-            var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-            var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
-            $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
-            $(".mytickets .countbadge").addClass('activated');
-          }
+      $('div.My-Open a.node', $('#nav').contents()).waitFor(function() {
+        // Process the ticket link now that it exists.
+        var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
+        if (myTicketLink) {
+          myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
+          myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
+          $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+myTicketLink);
         }
-        myTicketCount.send();
-      }
+
+        if (myTicketLink) {
+          // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
+          var myTicketCount = new XMLHttpRequest();
+          myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
+          myTicketCount.onreadystatechange = function() {
+            if (myTicketCount.readyState == 4) {
+              var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+              var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
+              $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
+              $(".mytickets .countbadge").addClass('activated');
+            }
+          }
+          myTicketCount.send();
+        }
+      });
     });
   });
 
@@ -165,10 +154,12 @@ function murderFrames() {
   $("frameset#mainFrameSet").wrap('<body>');
   $("iframe").unwrap();
 
-  $('body').prepend('<section id="navbar"></section><section id="canvas"></section>');
-  $("#nav").appendTo("#canvas");
-  $("iframe[name='content']").appendTo("#canvas");
-  $("#frameMenu").hide();
+  $('body').paratureUI('../gui/parature.html');
+  $('section#canvas').waitFor(function() {
+    $("#nav").appendTo("#canvas");
+    $("iframe[name='content']").appendTo("#canvas");
+    $("#frameMenu").hide();
+  });
 }
 
 // Modifications to the Parature sidebar.
@@ -210,7 +201,7 @@ if ($('.folderBack .dTreeNode').length) {
     $('.zeroqueue').hide();
   }
   $('table.title').remove();
-  $('table.subtitle').hide();
+  //$('table.subtitle').hide();
 
   $('.folderBack .parent').each(function() {
     $(this).addClass($(this).text().split('(')[0].replace(' ', '-'));
@@ -233,7 +224,7 @@ if ($('#winTab__title, .winTab.title').length) {
 
   var pageTitle = $('div.title').text().split('-')[1].split('(')[0].trim();
   if (pageTitle == "My Active Tickets") {
-    $('div.title').ticketbuckets('../gui/ticketbuckets.html');
+    $('div.title').ticketBuckets('../gui/ticketbuckets.html');
   }
 }
 

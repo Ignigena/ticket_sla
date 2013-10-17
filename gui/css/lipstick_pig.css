@@ -160,6 +160,10 @@ section#navbar .button.reports.active:before {
   background: rgb(26, 139, 31);
 }
 
+section#navbar .button.search {
+  font-size: 40px;
+}
+
 section#navbar .button.settings {
   bottom: 0;
   font-size: 40px;
@@ -231,6 +235,10 @@ body.winBack {
 body.leftBack table.title,
 body.winBack #winTab__title {
   display: none;
+}
+
+table.subtitle {
+  margin-top: -3px;
 }
 
 body.leftBack div.title,

@@ -26,7 +26,7 @@
       "matches" : ["*://s5.parature.com/*"],
       "js" : [
         "scripts/external/jquery-2.0.3.min.js", "scripts/external/jquery-ui-1.10.3.min.js", "scripts/external/jquery.editable.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js", "scripts/external/spin.min.js",
-        "scripts/jquery.waitfor.js", "scripts/date_utilities.js", "scripts/sla_utilities.js", "scripts/contentscript.js", "scripts/jquery.ticketbucket.js", "scripts/lipstick_pig.js"
+        "scripts/jquery.waitfor.js", "scripts/date_utilities.js", "scripts/sla_utilities.js", "scripts/contentscript.js", "scripts/jquery.paratureui.js", "scripts/lipstick_pig.js"
       ],
       "css" : ["contentstyle.css", "gui/css/lipstick_pig.css"],
       "run_at" : "document_idle",
