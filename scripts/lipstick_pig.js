@@ -158,7 +158,7 @@ function murderFrames() {
     $("#nav").appendTo("#canvas");
     $("iframe[name='content']").appendTo("#canvas");
     $("#frameMenu").hide();
-  });
+  },50);
 }
 
 // Modifications to the Parature sidebar.
