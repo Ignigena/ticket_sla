@@ -59,24 +59,28 @@ if ($('#mainFrameSet').length) {
         }
       });
 
-      $('div.My-Open a.node', $('#nav').contents()).waitFor(function() {
+      callFunctionWithSettings(function(){
         // Process the ticket link now that it exists.
-        var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
-        if (myTicketLink) {
-          myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
-          myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
-          $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+myTicketLink);
-        }
+        $('section#navbar a.mytickets').attr('contenturl', '/ics/tt/'+this);
 
-        if (myTicketLink) {
-          // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
-          $.get('https://s5.parature.com/ics/tt/'+myTicketLink, function(data){
-            var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-            var myOpenTicketsMatch = myOpenTicketsRegex.exec(data);
-            $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
-            $(".mytickets .countbadge").addClass('activated');
-          });
-        }
+        // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
+        $.get('https://s5.parature.com/ics/tt/'+this, function(data){
+          var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+          var myOpenTicketsMatch = myOpenTicketsRegex.exec(data);
+          $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
+          $(".mytickets .countbadge").addClass('activated');
+        });
+      }, 'myTicketLink', function() {
+        var defer = new $.Deferred();
+        $('div.My-Open a.node', $('#nav').contents()).waitFor(function() {
+          var myTicketLink = $("div.My-Open a.node", $('#nav').contents()).attr('href');
+          if (myTicketLink) {
+            myTicketLink = myTicketLink.replace('filter_status=GroupOpen', 'filter_status=1411,1418,1413,1416');
+            myTicketLink = myTicketLink.replace('title=My_Open_Tickets', 'title=My+Active+Tickets');
+            defer.resolve(myTicketLink);
+          }
+        });
+        return defer.promise();
       });
     });
   });
@@ -257,4 +261,20 @@ function setActiveNav(page) {
 
 function currentDepartment() {
   return $("select[name='deptID']", $('#frameMenu').contents())[0].value;
+}
+
+function callFunctionWithSettings(fn, settings, fallback) {
+  chrome.storage.local.get(settings,function(data){
+    var returnedSetting = data[settings];
+    if(!returnedSetting) {
+      fallback.call().done(function(results){
+        var save = {}
+        save[settings]=results;
+        chrome.storage.local.set(save);
+        fn.call(results);
+      });
+    } else {
+      fn.call(returnedSetting);
+    }
+  });
 }
