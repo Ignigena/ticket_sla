@@ -1,5 +1,6 @@
 (function ($) {
-  $.fn.ticketbuckets = function(template) {
+  // Ticket bucket functionality.
+  $.fn.ticketBuckets = function(template) {
     var insertTo = this;
     $.get(chrome.extension.getURL(template), function(data){
       $(insertTo).after(data);
@@ -77,8 +78,14 @@
       $('div.queues div.queue').droppable({
         hoverClass: "ui-state-hover",
       });
+    });
+  };
 
-      return this;
+  // Parature UI improvements.
+  $.fn.paratureUI = function(template) {
+    var insertTo = this;
+    $.get(chrome.extension.getURL(template), function(data){
+      $(insertTo).prepend(data);
     });
   };
 }(jQuery));
