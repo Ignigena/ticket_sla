@@ -70,17 +70,12 @@ if ($('#mainFrameSet').length) {
 
         if (myTicketLink) {
           // Get the number of active CSR tickets.  Ignore those in Needs Reply state.
-          var myTicketCount = new XMLHttpRequest();
-          myTicketCount.open("GET", "https://s5.parature.com/ics/tt/"+myTicketLink, true);
-          myTicketCount.onreadystatechange = function() {
-            if (myTicketCount.readyState == 4) {
-              var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
-              var myOpenTicketsMatch = myOpenTicketsRegex.exec(myTicketCount.responseText);
-              $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
-              $(".mytickets .countbadge").addClass('activated');
-            }
-          }
-          myTicketCount.send();
+          $.get('https://s5.parature.com/ics/tt/'+myTicketLink, function(data){
+            var myOpenTicketsRegex = /countDiv\.innerHTML\ =\ "\((\d+-\d+\ of\ )?(\d+)\)";/
+            var myOpenTicketsMatch = myOpenTicketsRegex.exec(data);
+            $(".mytickets .countbadge").text(myOpenTicketsMatch[2]);
+            $(".mytickets .countbadge").addClass('activated');
+          });
         }
       });
     });
@@ -201,7 +196,6 @@ if ($('.folderBack .dTreeNode').length) {
     $('.zeroqueue').hide();
   }
   $('table.title').remove();
-  //$('table.subtitle').hide();
 
   $('.folderBack .parent').each(function() {
     $(this).addClass($(this).text().split('(')[0].replace(' ', '-'));
