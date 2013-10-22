@@ -67,7 +67,7 @@ function processTicketList() {
     // Parse the table for all the tickets.
     var headers = [];
     $('#tableContent thead td').each(function(index, item) {
-        headers[index] = $(item).text();
+        headers[index] = $(item).text().trim();
     });
     $('#tableContent tr.gridRow').has('td').each(function() {
         var arrayItem = {};
