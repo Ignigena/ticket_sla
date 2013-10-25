@@ -1,6 +1,6 @@
 {
   "name" : "Acquia Support",
-  "version" : "1.5.5",
+  "version" : "1.1.1+1",
   "description" : "Support tools extension for Chrome.",
   "icons" :
   {
@@ -35,6 +35,6 @@
   ],
   "web_accessible_resources" : ["*"],
   "options_page": "options.html",
-  "update_url": "https://raw.github.com/Ignigena/ticket_sla/master/updates.xml",
+  "update_url": "https://raw.github.com/Ignigena/ticket_sla/experimental-ui/updates.xml",
   "manifest_version": 2
 }
