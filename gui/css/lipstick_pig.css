@@ -507,3 +507,12 @@ td.account.processed div.cust-info:hover {
   opacity: 1.0;
   right: 5px;
 }
+
+#ticketLeftCol {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#comments_tbl {
+  width: 100% !important;
+}
