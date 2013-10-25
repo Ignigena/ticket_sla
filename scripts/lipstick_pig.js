@@ -10,7 +10,10 @@ if ($('#mainFrameSet').length) {
   $("#frameMenu").load(function() {
     var dept = currentDepartment();
     $('section#navbar').prepend('<div class="logo"><img src="'+chrome.extension.getURL(logo[dept])+'" id="logo" title="Switch between queues." /><span class="countbadge">!</span></div>');
-    
+    $('a.util.settings', $('#frameMenu').contents()).waitFor(function() {
+      $('#navbar a.settings').prop('href', '/ics' + $('a.util.settings', $('#frameMenu').contents()).attr('href').slice('2'));
+    })
+
     var announcementCheck = setInterval(function() {
     var message = $("#messageContent", $('#frameMenu').contents()).text();
       if (message != "") {
