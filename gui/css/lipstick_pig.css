@@ -154,6 +154,7 @@ section#navbar .button.subs.active:before {
 }
 
 section#navbar .button.accounts {
+  font-size: 45px;
   color: rgb(139, 26, 90);
 }
 section#navbar .button.accounts.active:before {
