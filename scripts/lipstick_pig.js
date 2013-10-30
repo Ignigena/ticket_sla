@@ -244,6 +244,8 @@ function setActiveNav(page) {
     'admin' : 'customers',
     'custList.asp' : 'customers',
     'assetsplash.asp' : 'subs',
+    'amSplash.asp' : 'accounts',
+    'amDetail.asp' : 'accounts',
     'metricsCSR.asp' : 'reports',
     'metricsTicket.asp' : 'reports',
     'metricsTicketActions.asp' : 'reports',
