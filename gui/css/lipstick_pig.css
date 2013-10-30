@@ -513,6 +513,7 @@ td.account.processed div.cust-info:hover {
   box-sizing: border-box;
 }
 
-#comments_tbl {
+#comments_tbl,
+#paratureIFrameContainer iframe {
   width: 100% !important;
 }
