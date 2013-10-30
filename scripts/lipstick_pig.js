@@ -236,32 +236,28 @@ if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Sum
 
 function setActiveNav(page) {
   var pageMatching = {
-    'My+Active+Tickets' : 'mytickets',
-    'My+Work+In+Progress+Tickets' : 'mytickets',
-    'My+Need+More+Info+Tickets' : 'mytickets',
-    'My+Needs+Reply+Tickets' : 'mytickets',
-    'My+Reopened+Tickets' : 'mytickets',
-    'admin' : 'customers',
-    'custList.asp' : 'customers',
+    'My\\+(.*)\\+Tickets' : 'mytickets',
+    'admin|custList.asp' : 'customers',
     'assetsplash.asp' : 'subs',
-    'amSplash.asp' : 'accounts',
-    'amDetail.asp' : 'accounts',
-    'metricsCSR.asp' : 'reports',
-    'metricsTicket.asp' : 'reports',
-    'metricsTicketActions.asp' : 'reports',
+    'am(Splash|Detail).asp' : 'accounts',
+    'metrics(.*).asp' : 'reports',
     'service.asp' : 'settings',
   }
 
-  $('section#navbar a').removeClass('active');
-  if (pageMatching[page]) {
-    $('section#navbar a.'+pageMatching[page]).addClass('active');
-    if (pageMatching[page] == 'mytickets') {
-      ticketqueue = 'mine';
+  $.each(pageMatching, function(index, value) {
+    var regex = new RegExp(index);
+    if (regex.test(page)) {
+      $('section#navbar a').removeClass('active');
+      $('section#navbar a.'+value).addClass('active');
+      if (value == 'mytickets') {
+        ticketqueue = 'mine';
+      }
+      return false;
+    } else {
+      $('section#navbar a.tickets').addClass('active');
+      ticketqueue = 'all';
     }
-  } else {
-    $('section#navbar a.tickets').addClass('active');
-    ticketqueue = 'all';
-  }
+  })
 }
 
 function currentDepartment() {
