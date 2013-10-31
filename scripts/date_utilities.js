@@ -178,9 +178,16 @@ function ticketListRelativeDates(count) {
     $.when(dateFormat).done(function(status) {
         while (i < count) {
             if (dateCreatedColumn >= 1)
-                $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, status['format']); });
+                $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')[value]').html(function(index, oldhtml) {
+                    $('#listRow'+i+' td:nth-child('+dateCreatedColumn+')').attr('data-sort-value', generateProperDate(oldhtml, status['format']));
+                    return makeExistingDateRelative(oldhtml, status['format']);
+                });
+
             if (dateUpdatedColumn >= 1)
-                $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) { return makeExistingDateRelative(oldhtml, status['format']); });
+                $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')[value]').html(function(index, oldhtml) {
+                    $('#listRow'+i+' td:nth-child('+dateUpdatedColumn+')').attr('data-sort-value', generateProperDate(oldhtml, status['format']));
+                    return makeExistingDateRelative(oldhtml, status['format']);
+                });
 
             i++;
         }
