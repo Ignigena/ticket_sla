@@ -246,8 +246,8 @@ function setActiveNav(page) {
 
   $.each(pageMatching, function(index, value) {
     var regex = new RegExp(index);
+    $('section#navbar a').removeClass('active');
     if (regex.test(page)) {
-      $('section#navbar a').removeClass('active');
       $('section#navbar a.'+value).addClass('active');
       if (value == 'mytickets') {
         ticketqueue = 'mine';
