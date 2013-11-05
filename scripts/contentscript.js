@@ -193,6 +193,16 @@ if (ticketDetailRegex.test(document.body.innerText)) {
     var ticketNumber = $('#title').text().split(':')[0].split('-')[1];
     window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
 
+    // Grab status from Jira tickets that are linked in the "Bug Tracker URL" field.
+    $('td:contains("Bug Tracker URL:")').waitFor(function() {
+        var jiraTicket = $('td:contains("Bug Tracker URL:")').next().text();
+        var jiraTicketNumber = jiraTicket.split('/').pop();
+        $('td:contains("Bug Tracker URL:")').next().html('<a href="'+jiraTicket+'" target="_blank">'+jiraTicketNumber+'</a>');
+        $.ajax('https://backlog.acquia.com/si/jira.issueviews:issue-xml/'+jiraTicketNumber+'/'+jiraTicketNumber+'.xml').done(function(data) {
+            $('td:contains("Bug Tracker URL:")').next().append(' ('+$(data).find('status').text()+')');
+        });
+    });
+
     // If the ticket status is any of these, it will be considered as acknowledged.
     // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
     var ticketStatusRegex = /Status:.*(Need\ More\ Info|Solution\ Suggested|Reopened|Closed)/;
