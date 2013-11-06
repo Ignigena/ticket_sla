@@ -194,13 +194,13 @@ function processTicketList() {
 }
 
 // If this is the ticket page, process accordingly.
-if (ticketDetailRegex.test(document.body.innerText)) {
-    // Allow for easy copy/paste of ticket links by updating browser URL.
-    var ticketNumber = $('#title').text().split(':')[0].split('-')[1];
-    window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
-
-    // Grab status from Jira tickets that are linked in the "Bug Tracker URL" field.
+if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Summary") {
     if ($('#title').text() != "Edit Ticket") {
+        // Allow for easy copy/paste of ticket links by updating browser URL.
+        var ticketNumber = $('#title').text().split(':')[0].split('-')[1];
+        window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
+
+        // Grab status from Jira tickets that are linked in the "Bug Tracker URL" field.
         $('td:contains("Bug Tracker URL:")').waitFor(function() {
             var jiraTicket = $('td:contains("Bug Tracker URL:")').next().text();
             var jiraTicketNumber = new String(jiraTicket.split('/').pop());
