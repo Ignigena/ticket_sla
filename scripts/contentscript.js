@@ -200,14 +200,18 @@ if (ticketDetailRegex.test(document.body.innerText)) {
     window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
 
     // Grab status from Jira tickets that are linked in the "Bug Tracker URL" field.
-    $('td:contains("Bug Tracker URL:")').waitFor(function() {
-        var jiraTicket = $('td:contains("Bug Tracker URL:")').next().text();
-        var jiraTicketNumber = jiraTicket.split('/').pop();
-        $('td:contains("Bug Tracker URL:")').next().html('<a href="'+jiraTicket+'" target="_blank">'+jiraTicketNumber+'</a>');
-        $.ajax('https://backlog.acquia.com/si/jira.issueviews:issue-xml/'+jiraTicketNumber+'/'+jiraTicketNumber+'.xml').done(function(data) {
-            $('td:contains("Bug Tracker URL:")').next().append(' ('+$(data).find('status').text()+')');
+    if ($('#title').text() != "Edit Ticket") {
+        $('td:contains("Bug Tracker URL:")').waitFor(function() {
+            var jiraTicket = $('td:contains("Bug Tracker URL:")').next().text();
+            var jiraTicketNumber = new String(jiraTicket.split('/').pop());
+            if (jiraTicketNumber.length >= 3) {
+                $('td:contains("Bug Tracker URL:")').next().html('<a href="'+jiraTicket+'" target="_blank">'+jiraTicketNumber+'</a>');
+                $.ajax('https://backlog.acquia.com/si/jira.issueviews:issue-xml/'+jiraTicketNumber+'/'+jiraTicketNumber+'.xml').done(function(data) {
+                    $('td:contains("Bug Tracker URL:")').next().append(' ('+$(data).find('status').text()+')');
+                });
+            }
         });
-    });
+    }
 
     // If the ticket status is any of these, it will be considered as acknowledged.
     // @todo Need to be smarter with "Needs Reply" since this can sometimes be the status even though no ack.
