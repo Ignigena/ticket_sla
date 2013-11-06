@@ -80,11 +80,58 @@ section#navbar .countbadge {
   box-shadow: 0px 1px 1px #fff, 0px -1px 0px rgba(0,0,0,0.2);
 }
 
+section#navbar .logo {
+  height: 69px;
+  overflow: hidden;
+}
 section#navbar .logo .countbadge {
   cursor: pointer;
   background-color: rgb(192, 152, 83);
   top: 5px;
   min-width: 12px;
+}
+section#navbar .logo .action {
+  position: absolute;
+  top: 0;
+  margin: 4px;
+  text-align: center;
+  margin-top: -69px;
+  -webkit-border-radius: 5px;
+  -webkit-transition: all 0.3s;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(100%,#4daee2), color-stop(0%,#035b90));
+}
+
+
+section#navbar .logo:hover .action {
+  margin-top: 10px;
+}
+
+section#navbar .logo .action a {
+  width: 55px;
+  display: inline-block;
+  background: white;
+  -webkit-border-radius: 3px;
+  font-size: 10px;
+  color: #035b90;
+  text-decoration: none;
+  font-family: sans-serif;
+  padding: 3px;
+  margin: 2px;
+  -webkit-box-sizing: border-box;
+  text-transform: uppercase;
+  font-weight: bold;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.3);
+}
+section#navbar .logo .action a:hover {
+  text-decoration: underline;
+}
+section#navbar .logo .action a.switch {
+  background: transparent;
+  color: white;
+  margin-bottom: 3px;
+  font-weight: normal;
+  -webkit-box-shadow: 0 0 0 transparent;
+  text-shadow: 1px 2px rgba(0,0,0,.15);
 }
 
 section#navbar .countbadge.activated {
@@ -95,7 +142,6 @@ section#navbar .countbadge.activated {
 section#navbar #logo {
   width: 45px;
   margin: 10px 9px;
-  cursor: pointer;
 }
 
 section#navbar .button {

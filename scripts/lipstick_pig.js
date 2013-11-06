@@ -9,7 +9,10 @@ if ($('#mainFrameSet').length) {
 
   $("#frameMenu").load(function() {
     var dept = currentDepartment();
-    $('section#navbar').prepend('<div class="logo"><img src="'+chrome.extension.getURL(logo[dept])+'" id="logo" title="Switch between queues." /><span class="countbadge">!</span></div>');
+    $('section#navbar .logo').prepend('<img src="'+chrome.extension.getURL(logo[dept])+'" id="logo" />');
+    $('section#navbar .logo .action a.current').attr('dept', dept).text((dept == '15171') ? 'Support' : 'Gardens');
+    $('section#navbar .logo .action a.switch').attr('dept', (dept == '15171') ? '15079' : '15171').text((dept == '15171') ? 'Gardens' : 'Support');
+
     $('a.util.settings', $('#frameMenu').contents()).waitFor(function() {
       $('#navbar a.settings').prop('href', '/ics' + $('a.util.settings', $('#frameMenu').contents()).attr('href').slice('2'));
     })
@@ -27,12 +30,8 @@ if ($('#mainFrameSet').length) {
       }
     }, 500);
 
-    $('section#navbar #logo').click(function() {
-      if (dept == '15171') {
-        menu.document.location.href="javascript:switchDept(15079); void 0";
-      } else {
-        menu.document.location.href="javascript:switchDept(15171); void 0";
-      }
+    $('section#navbar .logo .action a').click(function() {
+        menu.document.location.href="javascript:switchDept(" + $(this).attr('dept') + "); void 0";
     });
     $('section#navbar .tab').click(function() {
       $("#nav").removeClass('washidden');
