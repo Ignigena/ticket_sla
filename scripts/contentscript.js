@@ -203,12 +203,14 @@ if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Sum
         // Grab status from Jira tickets that are linked in the "Bug Tracker URL" field.
         $('td:contains("Bug Tracker URL:")').waitFor(function() {
             var jiraTicket = $('td:contains("Bug Tracker URL:")').next().text();
-            var jiraTicketNumber = new String(jiraTicket.split('/').pop());
-            if (jiraTicketNumber.length >= 3) {
-                $('td:contains("Bug Tracker URL:")').next().html('<a href="'+jiraTicket+'" target="_blank">'+jiraTicketNumber+'</a>');
-                $.ajax('https://backlog.acquia.com/si/jira.issueviews:issue-xml/'+jiraTicketNumber+'/'+jiraTicketNumber+'.xml').done(function(data) {
-                    $('td:contains("Bug Tracker URL:")').next().append(' ('+$(data).find('status').text()+')');
-                });
+            if (jiraTicket.toLowerCase().indexOf("http") >= 0) {
+                var jiraTicketNumber = new String(jiraTicket.split('/').pop());
+                if (jiraTicketNumber.length >= 3) {
+                    $('td:contains("Bug Tracker URL:")').next().html('<a href="'+jiraTicket+'" target="_blank">'+jiraTicketNumber+'</a>');
+                    $.ajax('https://backlog.acquia.com/si/jira.issueviews:issue-xml/'+jiraTicketNumber+'/'+jiraTicketNumber+'.xml').done(function(data) {
+                        $('td:contains("Bug Tracker URL:")').next().append(' ('+$(data).find('status').text()+')');
+                    });
+                }
             }
         });
     }
