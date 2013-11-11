@@ -18,7 +18,7 @@ var tickets = [];
 // DOM manipulation on the ticket queues list.
 if (ticketQueuesRegex.test(document.body.innerText)) {
     var allTicketQueues = "2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655";
-    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue="+allTicketQueues+"&title=All+Tickets+By+SLA";
+    var ticketViewURL = "https://s5.parature.com/ics/tt/ticketlist.asp?artr=0&filter_queue="+allTicketQueues+"&title=All+Tickets+By+SLA&pageSize=100";
     // Add a link to the "New and Unsassigned" queue at the top of the list.
     $("#mainDiv > div").prepend('<div class="dTreeNode p0 toptier"><img src="../images/ftv2blank.gif" alt=""><img class="nodeIcon" id="iparentTree2" src="/ics/images/ticket/ticketQueueClosed.gif" alt=""><a id="sparentTree2" href="'+ticketViewURL+'" target="content" class="node">All New Tickets</a></div>');
 
