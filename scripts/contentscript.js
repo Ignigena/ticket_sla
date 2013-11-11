@@ -195,7 +195,7 @@ function processTicketList() {
 
 // If this is the ticket page, process accordingly.
 if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Summary") {
-    if ($('#title').text() != "Edit Ticket") {
+    if ($('#title').text() != "Edit Ticket" && $('#title').text() != "New Ticket") {
         // Allow for easy copy/paste of ticket links by updating browser URL.
         var ticketNumber = $('#title').text().split(':')[0].split('-')[1];
         window.parent.history.replaceState(null, "Parature", "/link/desk/15066/15171/Ticket/"+ticketNumber);
