@@ -5,7 +5,9 @@ if ($('#mainFrameSet').length) {
     '15079' : 'slatoolbar-gardens.png'
   }
 
-  murderFrames();
+  // Initialize the new Parature UI.
+  $("frameset#mainFrameSet").wrap('<body>');
+  $('body').paratureUI('../gui/parature.html');
 
   $("#frameMenu").load(function() {
     var dept = currentDepartment();
@@ -128,39 +130,6 @@ if ($('#mainFrameSet').length) {
       $('.title .tab.actives', $('#nav').contents()).addClass('active');
     }
   });
-}
-
-// Frames are evil!
-function murderFrames() {
-  $("frame[name='bottom']").remove();
-  $("frame[name='shady']").remove();
-
-  // New type of the tag
-  var replacementTag = 'iframe';
-
-  // Replace all a tags with the type of replacementTag
-  $('frame').each(function() {
-      var outer = this.outerHTML;
-
-      // Replace opening tag
-      var regex = new RegExp('<' + this.tagName, 'i');
-      var newTag = outer.replace(regex, '<' + replacementTag);
-
-      // Replace closing tag
-      regex = new RegExp('</' + this.tagName, 'i');
-      newTag = newTag.replace(regex, '</' + replacementTag);
-
-      $(this).replaceWith(newTag);
-  });
-  $("frameset#mainFrameSet").wrap('<body>');
-  $("iframe").unwrap();
-
-  $('body').paratureUI('../gui/parature.html');
-  $('section#canvas').waitFor(function() {
-    $("#nav").appendTo("#canvas");
-    $("iframe[name='content']").appendTo("#canvas");
-    $("#frameMenu").hide();
-  },50);
 }
 
 // Modifications to the Parature sidebar.

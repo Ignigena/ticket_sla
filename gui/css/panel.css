@@ -34,7 +34,6 @@ section {
   padding: 10px 10px 0;
   -webkit-transition: opacity 0.25s;
   transition: opacity 0.25s;
-  background: #fafafa url(../images/noise.png);
   border-bottom-right-radius: 4px;
   box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.2), 0 -1px 0 hsla(0, 0%, 0%, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 hsl(0, 0%, 100%);
   overflow: scroll;

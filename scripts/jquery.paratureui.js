@@ -33,7 +33,7 @@
         $('#tableContent tr.gridRow').each(function(index, item) {
           var statusText = $('td.status', this).text();
           $('div.queue.others').append($('tr#listRow'+index));
-          if (statusText == "Needs Reply" || statusText == "Reopened" || $('tr#listRow'+index+':has(.sla-report.sla0)').length) {
+          if (statusText == "Needs Reply" || statusText == "Reopened" || statusText == "New") {
             $('div.queue.needsreply').append($('tr#listRow'+index));
           }
           $('tr#listRow'+index+' .summary').html('<a href="'+$('tr#listRow'+index+' .ticket-no a').attr('href')+'">'+$('tr#listRow'+index+' .summary').text()+'</a>');
@@ -83,9 +83,34 @@
 
   // Parature UI improvements.
   $.fn.paratureUI = function(template) {
-    var insertTo = this;
-    $.get(chrome.extension.getURL(template), function(data){
-      $(insertTo).prepend(data);
+    var parature = this;
+
+    $("frame[name='bottom']", parature).remove();
+    $("frame[name='shady']", parature).remove();
+
+    // Replace all frames with an iFrame.
+    $('frame').each(function() {
+        // Replace opening tag.
+        var regex = new RegExp('<' + this.tagName, 'i');
+        var newTag = this.outerHTML.replace(regex, '<iframe');
+
+        // Replace closing tag.
+        regex = new RegExp('</' + this.tagName, 'i');
+        newTag = newTag.replace(regex, '</iframe');
+
+        $(this, parature).replaceWith(newTag);
     });
+
+    $.get(chrome.extension.getURL(template), function(data){
+      $(parature).prepend(data);
+    });
+
+    $("iframe", parature).unwrap();
+
+    $('section#canvas', parature).waitFor(function() {
+      $("#nav", parature).appendTo("#canvas", parature);
+      $("iframe[name='content']", parature).appendTo("#canvas", parature);
+      $("#frameMenu", parature).hide();
+    }, 50);
   };
 }(jQuery));

@@ -443,7 +443,7 @@ function formatRowBasedOnSLAStatus(status) {
 function toggleBySLA() {
     var toggleTarget = window.event.srcElement.attributes["name"].value;
     $(".toggleBySLA").removeClass('inactive');
-    
+
     if ($('tr.gridRow:not(.'+toggleTarget+')').is(":hidden")) {
         $('tr.gridRow').show();
     } else {
@@ -467,7 +467,7 @@ function ticketListSLAButtons() {
     $('#countDiv').append('<input class="toggleBySLA SLAyellow" name="yellow" type="button" value="Warning SLA">');
     $('#countDiv').append('<input class="toggleBySLA SLAgreen" name="green" type="button" value="Good SLA">');
     $('#countDiv').append('<input class="toggleBySLA SLAnone" name="no-scope" type="button" value="Out of Scope">');
-    
+
     // Hide the "Show All" since on page load we are already showing all.
     $('input.toggleBySLA.SLAall').hide();
     // Bind the toggleBySLA() function to the filter buttons.
@@ -520,9 +520,9 @@ function changeTicketStatus(rowNumber, newStatus, minutes) {
     $('#listRow'+rowNumber).addClass(newStatus);
 
     if (newStatus == "hit") {
-        $('.sla'+rowNumber).html("SLA Hit");
+        $('.sla'+rowNumber).html("Hit");
     } else if (newStatus == "ackd") {
-        $('.sla'+rowNumber).html("SLA Missed");
+        $('.sla'+rowNumber).html("Missed");
     }
 
     // Only display an alert if the ticket turns yellow after the page loads or has less than 5 minutes left.

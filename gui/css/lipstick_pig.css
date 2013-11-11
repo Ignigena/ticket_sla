@@ -506,6 +506,12 @@ div.queue .sla-report {
   height: 30px;
 }
 
+div.queue tr:hover .sla-report {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  background-repeat: no-repeat;
+  background-position: 2px 6px;
+}
+
 div.queue .summary {
   width: 100%;
 }
@@ -527,6 +533,7 @@ td.account.processed span {
   font-size: 30px;
   color: rgba(0,0,0,0.3);
   cursor: pointer;
+  line-height: 25px;
 }
 
 td.account.processed {
