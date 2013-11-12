@@ -209,6 +209,7 @@ if ($('#toolbar td.tabs').next().text().trim() == "New Ticket") {
                 if (search) {
                     $.ajax("http://ticketmine.network.acquia-sites.com/search/site/"+search, {
                       error: function() {
+                        $('.ticketminePager').hide();
                         $('p.placeholder', top.frames["content"].document).show();
                         $('p.placeholder', top.frames["content"].document).text('You are not logged into Ticketmine and so I cannot search.')
                       }
@@ -221,6 +222,8 @@ if ($('#toolbar td.tabs').next().text().trim() == "New Ticket") {
                             var created = $('.search-info', this).text().split(' - ')[1];
                             $('#tableContent tbody', top.frames["content"].document).append('<tr class="gridRow grey"><td class="sla-report">Unknown</td><td>15066-000000</td><td>'+title+'</td><td>'+created+'</td><td></td><td></td><td><b>System Default</b></td></tr><tr><td colspan="7" class="ticketmineSnippet">'+snippet+'</td></tr>')
                         });
+                        $('form.ticketminePager', top.frames["content"].document).show();
+                        $('span.ticketmineCount', top.frames["content"].document).text(' of ' + $('.pager-last a', data).attr('href').split('?page=')[1]);
                     });
                 }
                 return false;
