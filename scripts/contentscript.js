@@ -217,6 +217,14 @@ if ($('#toolbar td.tabs').next().text().trim() == "New Ticket") {
 
 function ticketmineExecute(search, page) {
     var ticketmineBody = top.frames["content"].document;
+
+    var spinnerOptions = {
+        lines: 13,
+        length: 10,
+        width: 5,
+        radius: 15
+    };
+    var spinner = new Spinner(spinnerOptions).spin(ticketmineBody.body);
     if (!page) page = 1;
 
     $.ajax("http://ticketmine.network.acquia-sites.com/search/site/"+search+"?page="+page, {
@@ -257,6 +265,7 @@ function ticketmineExecute(search, page) {
             return false;
         })
 
+        spinner.stop();
     });
 }
 
