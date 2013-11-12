@@ -207,29 +207,57 @@ if ($('#toolbar td.tabs').next().text().trim() == "New Ticket") {
             $('.ticketmineSearch', top.frames["content"].document).submit(function() {
                 var search = $('input.ticketmineTerms', top.frames["content"].document).val();
                 if (search) {
-                    $.ajax("http://ticketmine.network.acquia-sites.com/search/site/"+search, {
-                      error: function() {
-                        $('.ticketminePager').hide();
-                        $('p.placeholder', top.frames["content"].document).show();
-                        $('p.placeholder', top.frames["content"].document).text('You are not logged into Ticketmine and so I cannot search.')
-                      }
-                    }).done(function(data) {
-                        $('p.placeholder', top.frames["content"].document).hide();
-                        $('#tableContent tbody tr', top.frames["content"].document).remove();
-                        $('li.search-result', data).each(function() {
-                            var title = $('.title', this).html();
-                            var snippet = $('.search-snippet', this).html();
-                            var created = $('.search-info', this).text().split(' - ')[1];
-                            $('#tableContent tbody', top.frames["content"].document).append('<tr class="gridRow grey"><td class="sla-report">Unknown</td><td>15066-000000</td><td>'+title+'</td><td>'+created+'</td><td></td><td></td><td><b>System Default</b></td></tr><tr><td colspan="7" class="ticketmineSnippet">'+snippet+'</td></tr>')
-                        });
-                        $('form.ticketminePager', top.frames["content"].document).show();
-                        $('span.ticketmineCount', top.frames["content"].document).text(' of ' + $('.pager-last a', data).attr('href').split('?page=')[1]);
-                    });
+                    ticketmineExecute(search);
                 }
                 return false;
             })
         });
     })
+}
+
+function ticketmineExecute(search, page) {
+    var ticketmineBody = top.frames["content"].document;
+    if (!page) page = 1;
+
+    $.ajax("http://ticketmine.network.acquia-sites.com/search/site/"+search+"?page="+page, {
+      error: function() {
+        $('.ticketminePager').hide();
+        $('p.placeholder', ticketmineBody).show();
+        $('p.placeholder', ticketmineBody).text('You are not logged into Ticketmine and so I cannot search.')
+      }
+    }).done(function(data) {
+        $('p.placeholder', ticketmineBody).hide();
+        $('#tableContent tbody tr', ticketmineBody).remove();
+        $('li.search-result', data).each(function() {
+            var title = $('.title', this).html();
+            var snippet = $('.search-snippet', this).html();
+            var created = $('.search-info', this).text().split(' - ')[1];
+            $('#tableContent tbody', ticketmineBody).append('<tr class="gridRow grey"><td class="sla-report">Unknown</td><td>15066-000000</td><td>'+title+'</td><td>'+created+'</td><td></td><td></td><td><b>System Default</b></td></tr><tr><td colspan="7" class="ticketmineSnippet">'+snippet+'</td></tr>')
+        });
+
+        // Pager controls.
+        var maxPage = $('.pager-last a', data).attr('href').split('?page=')[1];
+        $('input.ticketminePrev', ticketmineBody).prop('disabled', (page == 1));
+        $('input.ticketmineNext', ticketmineBody).prop('disabled', (page == maxPage));
+
+        $('form.ticketminePager', ticketmineBody).show();
+        $('span.ticketmineCount', ticketmineBody).text(' of ' + maxPage);
+        $('input.ticketminePage', ticketmineBody).val(page);
+        $('form.ticketminePager', ticketmineBody).submit(function() {
+            ticketmineExecute(search, $('input.ticketminePage', top.frames["content"].document).val());
+            return false;
+        })
+
+        $('input.ticketminePrev', ticketmineBody).click(function() {
+            ticketmineExecute(search, page-1);
+            return false;
+        })
+        $('input.ticketmineNext', ticketmineBody).click(function() {
+            ticketmineExecute(search, page+1);
+            return false;
+        })
+
+    });
 }
 
 // If this is the ticket page, process accordingly.
