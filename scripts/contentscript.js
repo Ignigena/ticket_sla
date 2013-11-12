@@ -344,6 +344,9 @@ function ticketListSLAButtons() {
 function ticketListUITidy(slaSort) {
     // Remove columns that are redundant or uneccessary.
     hideColumnByColumnName('Expiry Timestamp', 'Ticket Origin', 'Onboarding Account', 'Remote Administration');
+
+    // Remove extra images causing wrapping issues in header.
+    $('#tableContent td img').remove();
     
     // Hide these columns as they are unnecessary to the All Tickets view.
     if (slaSort) {
