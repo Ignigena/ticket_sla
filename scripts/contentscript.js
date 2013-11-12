@@ -280,8 +280,6 @@ if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Sum
         });
       }
     }
-} else {
-    window.parent.history.replaceState(null, "Parature", "/");
 }
 
 function formatRowBasedOnSLAStatus(status) {
