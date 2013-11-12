@@ -201,6 +201,7 @@ if ($('#toolbar td.tabs').next().text().trim() == "New Ticket") {
         $.get(chrome.extension.getURL('gui/ticketmine.html'), function(data) {
             $('body', top.frames["content"].document).html(data);
             $('body', top.frames["content"].document).removeClass('winBackOH').removeClass('winBack');
+            $('body', top.frames["content"].document).attr('style','');
 
             // Initialize the search capabilities.
             $('.ticketmineSearch', top.frames["content"].document).submit(function() {
