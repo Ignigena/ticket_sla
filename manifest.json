@@ -24,9 +24,7 @@
   "content_scripts" : [
     {
       "matches" : [
-        "*://s5.parature.com/ics/service/main.asp*",
-        "*://s5.parature.com/ics/tt/ticket*",
-        "*://s5.parature.com/ics/tt/filters.asp"
+        "*://s5.parature.com/*"
       ],
       "js" : [
         "scripts/external/jquery-2.0.3.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js", "scripts/external/spin.min.js",
@@ -37,7 +35,7 @@
       "all_frames" : true
     }
   ],
-  "web_accessible_resources" : ["scripts/external/jquery-2.0.3.min.map"],
+  "web_accessible_resources" : ["*"],
   "options_page": "options.html",
   "update_url": "https://raw.github.com/Ignigena/ticket_sla/master/updates.xml",
   "manifest_version": 2

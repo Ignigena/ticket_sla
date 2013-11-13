@@ -1,0 +1,36 @@
+<table id="winTab__title" width="100%" class="winTab title">
+    <tbody>
+        <tr>
+            <td class="winHeader" width="200"><span id="title">Ticketmine Search</span></td>
+            <td>
+                <form class="ticketmineSearch">
+                    <input name="ticketNum" class="winText ticketmineTerms" style="width:45%" />
+                    <input type="submit" class="formButton" value="Search" />
+                </form>
+            </td>
+            <td width="225">
+                <form class="ticketminePager" style="display: none;">
+                    <input type="button" class="formButton ticketminePrev" value="< Previous" />
+                    <input name="ticketNum" class="winText ticketminePage" style="width:30px;text-align:center;" value="1" /><span class="ticketmineCount">of -</span>
+                    <input type="button" class="formButton ticketmineNext" value="Next >" />
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table id="tableContent" width="100%" cellspacing="0" cellpadding="0" restyleaftersort="true">
+    <thead>
+        <tr style="height:23px;">
+            <th class="winColName slacolumn sorting-asc" nowrap="" style="width:90px" data-sort="int">Time to SLA</th>
+            <th width="90" class="winColName cursorPointer" data-sort="string">Ticket #</th>
+            <th style="" class="winColName cursorPointer" data-sort="string">Summary</th>
+            <th width="90" class="winColName cursorPointer" data-sort="string">Date Created</th>
+            <th style="" class="winColName cursorPointer" data-sort="string">Contact</th>
+            <th style="" class="winColName cursorPointer" data-sort="string">Account</th>
+            <th style="" class="winColName cursorPointer" data-sort="string">SLA</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<p class="placeholder" style="text-align: center;">Enter search terms above to search tickets.</p>

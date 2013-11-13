@@ -193,6 +193,82 @@ function processTicketList() {
     }
 }
 
+// Ticketmine Shortcut!
+if ($('#toolbar td.tabs').next().text().trim() == "New Ticket") {
+    $('td#folderTabDivider', $('#toolbar td.tabs').next()).after('<td class="winButton ticketmine" nowrap="" style="cursor:pointer; cursor:hand;" onmouseover="this.className=\'winButtonActive\';" onmouseout="this.className=\'winButton\';"><img src="http://ticketmine.network.acquia-sites.com/sites/default/files/manatee.png" border="0" style="HEIGHT:16px; WIDTH:16px;" align="absmiddle">&nbsp;Ticketmine&nbsp;</td>');
+    $('td.ticketmine').click(function() {
+        // Initialize the GUI.
+        $.get(chrome.extension.getURL('gui/ticketmine.html'), function(data) {
+            $('body', top.frames["content"].document).html(data);
+            $('body', top.frames["content"].document).removeClass('winBackOH').removeClass('winBack');
+            $('body', top.frames["content"].document).attr('style','');
+
+            // Initialize the search capabilities.
+            $('.ticketmineSearch', top.frames["content"].document).submit(function() {
+                var search = $('input.ticketmineTerms', top.frames["content"].document).val();
+                if (search) {
+                    ticketmineExecute(search);
+                }
+                return false;
+            })
+        });
+    })
+}
+
+function ticketmineExecute(search, page) {
+    var ticketmineBody = top.frames["content"].document;
+
+    var spinnerOptions = {
+        lines: 13,
+        length: 10,
+        width: 5,
+        radius: 15
+    };
+    var spinner = new Spinner(spinnerOptions).spin(ticketmineBody.body);
+    if (!page) page = 1;
+
+    $.ajax("http://ticketmine.network.acquia-sites.com/search/site/"+search+"?page="+page, {
+      error: function() {
+        $('.ticketminePager').hide();
+        $('p.placeholder', ticketmineBody).show();
+        $('p.placeholder', ticketmineBody).text('You are not logged into Ticketmine and so I cannot search.')
+      }
+    }).done(function(data) {
+        $('p.placeholder', ticketmineBody).hide();
+        $('#tableContent tbody tr', ticketmineBody).remove();
+        $('li.search-result', data).each(function() {
+            var title = $('.title', this).html();
+            var snippet = $('.search-snippet', this).html();
+            var created = $('.search-info', this).text().split(' - ')[1];
+            $('#tableContent tbody', ticketmineBody).append('<tr class="gridRow grey"><td class="sla-report">Unknown</td><td>15066-000000</td><td>'+title+'</td><td>'+created+'</td><td></td><td></td><td><b>System Default</b></td></tr><tr><td colspan="7" class="ticketmineSnippet">'+snippet+'</td></tr>')
+        });
+
+        // Pager controls.
+        var maxPage = $('.pager-last a', data).attr('href').split('?page=')[1];
+        $('input.ticketminePrev', ticketmineBody).prop('disabled', (page == 1));
+        $('input.ticketmineNext', ticketmineBody).prop('disabled', (page == maxPage));
+
+        $('form.ticketminePager', ticketmineBody).show();
+        $('span.ticketmineCount', ticketmineBody).text(' of ' + maxPage);
+        $('input.ticketminePage', ticketmineBody).val(page);
+        $('form.ticketminePager', ticketmineBody).submit(function() {
+            ticketmineExecute(search, $('input.ticketminePage', top.frames["content"].document).val());
+            return false;
+        })
+
+        $('input.ticketminePrev', ticketmineBody).click(function() {
+            ticketmineExecute(search, page-1);
+            return false;
+        })
+        $('input.ticketmineNext', ticketmineBody).click(function() {
+            ticketmineExecute(search, page+1);
+            return false;
+        })
+
+        spinner.stop();
+    });
+}
+
 // If this is the ticket page, process accordingly.
 if ($('div.ticketCell table:nth-child(1) td.head2').text().trim() == "Ticket Summary") {
     if ($('#title').text() != "Edit Ticket" && $('#title').text() != "New Ticket") {
