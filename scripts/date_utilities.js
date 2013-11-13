@@ -58,7 +58,7 @@ function convertTimezone(oldtimezone) {
  */
 function formatSLATimestamp(timestamp) {
     var color = 'grey';
-    var expire = moment(timestamp.slice(0,-3)+"-0400", 'YYYY-MM-DD HH:mm ZZ');
+    var expire = generateProperDate(timestamp, 'YYYY-MM-DD HH:mm ZZ');
 
     // Colour the cell based on whether or not SLA was missed
     var diff = expire.diff(moment(), "minutes");
