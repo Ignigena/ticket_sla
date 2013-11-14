@@ -64,7 +64,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
   $.when(toolFunction).done(function(response){ sendResponse(response); });
 });
 
-// Check the Escalated Advocacy ticket list every minute for new tickets.
+// Check the Escalated Advocacy ticket list every 5 minutes for outstanding tickets.
 setInterval(function() {
   $.ajax('https://s5.parature.com/ics/tt/ticketlist.asp?filter_queue=3439').done(function(data) {
     $('tbody tr.gridRow', data).each(function() {
@@ -81,4 +81,4 @@ setInterval(function() {
       setTimeout(function(){ notify.cancel(); }, 10000);
     });
   });
-}, 60000);
+}, 300000);
