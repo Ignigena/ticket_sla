@@ -22,7 +22,7 @@ if (document.location.href.split('?')[0]) {
     if (urlElements[urlElements.length-1] == "ticketDetail.asp") {
         var ticketIDNumberRegex = /ticketTasks\.asp\?ticketID=(\d+)/
         var ticketIDNumberMatch = ticketIDNumberRegex.exec(document.body.innerHTML);
-        if (ticketIDNumberMatch[1]) {
+        if (ticketIDNumberMatch[1] && parent.frames.name != "root") {
             window.location.replace("https://s5.parature.com/ics/service/main.asp?ticket_id=" + ticketIDNumberMatch[1]);
         }
     }
