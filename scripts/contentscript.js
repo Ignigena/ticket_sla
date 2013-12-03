@@ -15,6 +15,19 @@ var ticketsGood = 0;
 
 var tickets = [];
 
+// Fix for ticket detail pages not loading full Parature frameset.
+// Change introduced by Parature in a silent release that inconveniences some of our tools integration.
+if (document.location.href.split('?')[0]) {
+    var urlElements = document.location.href.split('?')[0].split('/');
+    if (urlElements[urlElements.length-1] == "ticketDetail.asp") {
+        var ticketIDNumberRegex = /ticketTasks\.asp\?ticketID=(\d+)/
+        var ticketIDNumberMatch = ticketIDNumberRegex.exec(document.body.innerHTML);
+        if (ticketIDNumberMatch[1]) {
+            window.location.replace("https://s5.parature.com/ics/service/main.asp?ticket_id=" + ticketIDNumberMatch[1]);
+        }
+    }
+}
+
 // DOM manipulation on the ticket queues list.
 if (ticketQueuesRegex.test(document.body.innerText)) {
     var allTicketQueues = "2687,3227,1664,3173,3338,3439,3139,1545,1546,1547,2190,2528,3252,1200,1655";
