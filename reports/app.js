@@ -131,9 +131,7 @@ function wrapup() {
         return;
       }
       if (ticketsProcessed[row-1]['status'] != 'n/a') {
-        csvFileData[row][23] = ticketsProcessed[row-1]['status'] ? '1' : '0';
-      } else {
-        csvFileData[row][23] = '';
+        csvFileData[row][21] = ticketsProcessed[row-1]['status'] ? '1' : '0';
       }
     }
   }
