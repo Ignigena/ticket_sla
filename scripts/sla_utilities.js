@@ -28,7 +28,6 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
         }
         // All actions performed on the ticket.
         var ticketActions = data[0]['ReturnData']['Dtos'];
-        console.log(ticketActions);
 
         // For each action, determine whether external communication has been made and whether or not SLA was hit.
         for (i = 0; i < ticketActions.length; i++) {
