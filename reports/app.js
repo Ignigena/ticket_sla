@@ -4,6 +4,7 @@ var csvFileData;
 var ticketsHit = 0;
 var ticketsMissed = 0;
 var ticketsUnknown = 0;
+var ticketRow = 0;
 
 $(document).ready(function() {
   $('#files').bind('change', handleFileSelect);
@@ -41,62 +42,82 @@ function processFile(file) {
 }
 
 function checkSLA() {
-  ticketCheck = ticketNumbers[1];
-  if (ticketCheck) {
-    $.ajax('https://s5.parature.com/link/desk/15066/15171/Ticket/' + ticketCheck.split('-')[1]).done(function(data) {
-      // Grab the expiry timestamp field to calculate SLA status.
-      var expiryTimestampRegex = /Expiry\ Timestamp\:\&nbsp\;\<\/td\>\<td.*\>(.*)\<\/td\>/;
-      var expiryTimestamp = expiryTimestampRegex.exec(data);
-      expiryTimestamp = moment(generateProperDate(expiryTimestamp[1], 'YYYY-MM-DD HH:mm ZZ'));
+  // Ensure all tickets have responded.
+  if (ticketRow != ticketsProcessed.length)
+    return;
 
-      // Get the internal Parature ticket ID to fetch ticket history.
-      var ticketIDNumberRegex = /ticketTasks\.asp\?ticketID=(\d+)/
-      var ticketIDNumber = ticketIDNumberRegex.exec(data)[1];
-
-      if (expiryTimestamp.unix() >= 0) {
-        // Grab the session key so we can look at the ticket history.
-        var sessionKeyRegex = /SessionId\ =\ \'(.*)\'/;
-        var sessionKey = sessionKeyRegex.exec(data)[1];
-        var slaStatus = checkForSLA(ticketIDNumber, sessionKey, {timestamp:expiryTimestamp.format()});
-
-        // This happens asynchronously so we must wait for it to finish before proceeding.
-        $.when(slaStatus).done(function(status) {
-          ticketsProcessed.push({
-            ticket: ticketCheck,
-            sla: expiryTimestamp.format(),
-            status: status['hit'],
-          });
-
-          if (status['hit']) {
-            ticketsHit++;
-          } else {
-            ticketsMissed++;
-          }
-
-          ticketNumbers.shift();
-          $('.status').html('Fetching SLA status for <b>' + ticketNumbers.length + '</b> tickets...');
-
-          checkSLA();
-        });
-      } else {
-        ticketsUnknown++;
-
-        ticketsProcessed.push({
-          ticket: ticketCheck,
-          sla: 'n/a',
-          status: 'n/a',
-        });
-
-        ticketNumbers.shift();
-        $('.status').html('Fetching SLA status for <b>' + ticketNumbers.length + '</b> tickets...');
-
-        checkSLA();
-      }
+  ticketCheck = batchTicketSelect(5);
+  if (ticketCheck.length) {
+    $.each(ticketCheck, function(index, value) {
+      ticketProcessCheck(value, ticketRow);
+      ticketRow++;
     });
   } else {
     $('.status').text('Wrapping up!');
     wrapup();
   }
+}
+
+function batchTicketSelect(count) {
+  var batchTickets = [];
+  for (var i=0; i < count; i++) {
+    if (ticketNumbers[1]) {
+      batchTickets[i] = ticketNumbers[1];
+      ticketNumbers.shift();
+    }
+  }
+  return batchTickets;
+}
+
+function ticketProcessCheck(ticketNumber, rowNumber) {
+  $.ajax('https://s5.parature.com/link/desk/15066/15171/Ticket/' + ticketNumber.split('-')[1]).done(function(data) {
+    // Grab the expiry timestamp field to calculate SLA status.
+    var expiryTimestampRegex = /Expiry\ Timestamp\:\&nbsp\;\<\/td\>\<td.*\>(.*)\<\/td\>/;
+    var expiryTimestamp = expiryTimestampRegex.exec(data);
+    expiryTimestamp = moment(generateProperDate(expiryTimestamp[1], 'YYYY-MM-DD HH:mm ZZ'));
+
+    // Get the internal Parature ticket ID to fetch ticket history.
+    var ticketIDNumberRegex = /ticketTasks\.asp\?ticketID=(\d+)/
+    var ticketIDNumber = ticketIDNumberRegex.exec(data)[1];
+
+    if (expiryTimestamp.unix() >= 0) {
+      // Grab the session key so we can look at the ticket history.
+      var sessionKeyRegex = /SessionId\ =\ \'(.*)\'/;
+      var sessionKey = sessionKeyRegex.exec(data)[1];
+      var slaStatus = checkForSLA(ticketIDNumber, sessionKey, {timestamp:expiryTimestamp.format()});
+
+      // This happens asynchronously so we must wait for it to finish before proceeding.
+      $.when(slaStatus).done(function(status) {
+        ticketsProcessed[rowNumber] = {
+          ticket: ticketNumber,
+          sla: expiryTimestamp.format(),
+          status: status['hit'],
+        };
+
+        if (status['hit']) {
+          ticketsHit++;
+        } else {
+          ticketsMissed++;
+        }
+
+        $('.status').html('Fetching SLA status for <b>' + ticketNumbers.length + '</b> tickets...');
+
+        checkSLA();
+      });
+    } else {
+      ticketsUnknown++;
+
+      ticketsProcessed[rowNumber] = {
+        ticket: ticketNumber,
+        sla: 'n/a',
+        status: 'n/a',
+      };
+
+      $('.status').html('Fetching SLA status for <b>' + ticketNumbers.length + '</b> tickets...');
+
+      checkSLA();
+    }
+  });
 }
 
 function wrapup() {
@@ -105,6 +126,10 @@ function wrapup() {
   for(var row in csvFileData) {
     // Skip the header row.
     if (csvFileData[row][16] != "Ticket Number") {
+      // If a ticket row has not been processed hold off for now.
+      if (!ticketsProcessed[row-1]) {
+        return;
+      }
       if (ticketsProcessed[row-1]['status'] != 'n/a') {
         csvFileData[row][23] = ticketsProcessed[row-1]['status'] ? '1' : '0';
       } else {
