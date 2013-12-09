@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="style.css" rel="stylesheet" />
+    <script src="../scripts/external/jquery-2.0.3.min.js"></script>
+    <script src="../scripts/external/Chart.min.js"></script>
+    <script src="../scripts/external/moment.min.js"></script>
+    <script src="../scripts/external/jquery.csv.js"></script>
+    <script src="../scripts/date_utilities.js"></script>
+    <script src="../scripts/sla_utilities.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <img src="../slatoolbar.png" />
+      <div>
+        <p id="instructions">Upload a Parature report CSV to insert SLA hit/missed value.<br />
+          Currently requires ticket number on column 16 and outputs SLA results on column 23.</p>
+        <input type="file" id="files" name="files[]" multiple accept="text/csv" />
+        <p class="status"></p>
+        <canvas id="chart" width="200" height="200"></canvas>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

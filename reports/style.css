@@ -1,0 +1,31 @@
+html, body {
+  height: 100%;
+  font-family: 'Helvetica Neue';
+  font-weight: 100;
+  font-size: 26px;
+}
+
+body {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: -webkit-radial-gradient(center, ellipse cover,#FFFFFF 0%,#FAFAFA 50%,#F5F5F5 60%,#BEBEBE 100%);
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  text-align: center;
+}
+
+#main img {
+  margin-top: 50px;
+}
+
+b {
+  font-weight: 200;
+}
+
+#instructions {
+  font-size: 12px;
+  font-family: Helvetica;
+}
