@@ -12,7 +12,7 @@ function checkForSLA(ticketNumber, sessionKey, slaFormattedTime, row) {
         "OperationName" : "FindTicketActionHistory",
         "SessionId" : sessionKey,
         "Arguments" : {
-            "search" : "{\"Id\" : "+ticketNumber+",\"PageSize\" : 25,\"PageNumber\" : 1}"
+            "search" : "{\"Id\" : "+ticketNumber+",\"PageSize\" : 50,\"PageNumber\" : 1}"
         }
     }];
     
