@@ -17,7 +17,7 @@
 
 	var pluses = /\+/g;
 
-	function decode(s) {
+  function decode(s) {
 		if (config.raw) {
 			return s;
 		}
@@ -27,7 +27,7 @@
 		} catch(e) {}
 	}
 
-	function decodeAndParse(s) {
+  function decodeAndParse(s) {
 		if (s.indexOf('"') === 0) {
 			// This is a quoted cookie as according to RFC2068, unescape...
 			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');

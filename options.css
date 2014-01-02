@@ -175,10 +175,8 @@ body.uber-frame section > div:only-of-type {
 .page-banner-text {
   -webkit-padding-end: 8px;
   -webkit-padding-start: 26px;
-  background-image: -webkit-image-set(url('chrome://theme/IDR_MANAGED') 1x, url('chrome://theme/IDR_MANAGED@2x') 2x);
-  background-position: 5px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
+    background: -webkit-image-set(url('chrome://theme/IDR_MANAGED') 1x, url('chrome://theme/IDR_MANAGED@2x') 2x) no-repeat 5px center;
+    background-size: 16px;
   display: block;
   padding-bottom: 8px;
   padding-top: 8px;

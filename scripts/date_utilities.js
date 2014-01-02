@@ -16,7 +16,7 @@ function convertTimezone(oldtimezone) {
     oldtimezone = oldtimezone.replace(" ", "");
 
     // All valid timezones as defined by Parature and their UTC equivelants.
-    validTimezones = {
+    var validTimezones = {
         "HST" : "-1000",
         "AKST" : "-0900", "AKDT" : "-0800",
         "PST" : "-0800", "PDT" : "-0700",
@@ -72,7 +72,7 @@ function formatSLATimestamp(timestamp) {
 
     return {
         "color" : color,
-        "timestamp" : expire.format(),
+        "timestamp" : expire.format()
     }
 }
 
@@ -90,7 +90,7 @@ function formatSLATimestamp(timestamp) {
  */
 function makeExistingDateRelative(oldhtml, dateFormat) {
     // Convert into a proper date format.
-    var properDate = generateProperDate(oldhtml, dateFormat)
+    var properDate = generateProperDate(oldhtml, dateFormat);
     properDate = properDate.format();
     // Return HTML to enable conversion into a relative date format.
     return '<abbr class="timeago" title="'+properDate+'">'+properDate+'</abbr>';
@@ -112,48 +112,47 @@ function getSelectedDateFormat(row) {
     var defer = new $.Deferred();
 
     chrome.storage.local.get('paratureUserID',function(data){
-        userID = data.paratureUserID;
+        var userID = data.paratureUserID;
+        var xhr = new XMLHttpRequest();
 
         if (userID) {
             // If the user ID is stored in Chrome, fetch the date format settings.
-            var xhr = new XMLHttpRequest();
             xhr.open("GET", "https://s5.parature.com/ics/setup/user.asp?userID="+userID+"&task=mod", true);
-            xhr.onreadystatechange = function() {
-              if (xhr.readyState == 4) {
-                var possibleFormats = {
-                    'mm/dd/yyyy' : 'M/D/YYYY h:mm A ZZ',
-                    'mm/dd/yy' : 'M/D/YY h:mm A ZZ',
-                    'dd/mm/yyyy' : 'D/M/YYYY h:mm A ZZ',
-                    'dd/mm/yy' : 'D/M/YY h:mm A ZZ',
-                    'month dd, yyyy' : 'MMMM D, YYYY h:mm A ZZ',
-                    'month dd, yy' : 'MMMM D, YYYY h:mm A ZZ',
-                };
-                var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    var possibleFormats = {
+                        'mm/dd/yyyy': 'M/D/YYYY h:mm A ZZ',
+                        'mm/dd/yy': 'M/D/YY h:mm A ZZ',
+                        'dd/mm/yyyy': 'D/M/YYYY h:mm A ZZ',
+                        'dd/mm/yy': 'D/M/YY h:mm A ZZ',
+                        'month dd, yyyy': 'MMMM D, YYYY h:mm A ZZ',
+                        'month dd, yy': 'MMMM D, YYYY h:mm A ZZ'
+                    };
+                    var selectedFormat = $('select[name="dateFormat"]', $.parseHTML(xhr.responseText)).val();
 
-                defer.resolve({
-                    'format' : possibleFormats[selectedFormat],
-                    'row' : row
-                });
-              }
-            }
+                    defer.resolve({
+                        'format': possibleFormats[selectedFormat],
+                        'row': row
+                    });
+                }
+            };
             xhr.send();
         } else {
             // If the user ID is not stored in Chrome we need to fetch it and store it before we can format the date.
-            var xhr = new XMLHttpRequest();
             xhr.open("GET", "https://s5.parature.com/ics/service/top.asp", true);
-            xhr.onreadystatechange = function() {
-              if (xhr.readyState == 4) {
-                var userIDRegex = /.*\?userID=(\d+)/;
-                var userIDMatches = userIDRegex.exec(xhr.responseText);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    var userIDRegex = /.*\?userID=(\d+)/;
+                    var userIDMatches = userIDRegex.exec(xhr.responseText);
 
-                chrome.storage.local.set({
-                    paratureUserID: userIDMatches[1]
-                });
+                    chrome.storage.local.set({
+                        paratureUserID: userIDMatches[1]
+                    });
 
-                // Now that it's stored, let's try this again.
-                ticketListRelativeDates(count);
-              }
-            }
+                    // Now that it's stored, let's try this again.
+                    ticketListRelativeDates(count);
+                }
+            };
             xhr.send();
         }
     });

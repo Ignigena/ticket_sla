@@ -17,12 +17,8 @@ body {
   -webkit-user-select: none;
   -moz-user-select: -moz-none;
   position: absolute;
-  bottom: 0;
-  left: 0;
   border-radius: 5px;
   font: 13px "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
-  right: 0;
-  top: 0;
   background-color: transparent;
   overflow: hidden;
   box-shadow: 0 0 0;
@@ -363,16 +359,6 @@ button {
   .content button.details {
     text-align: left;
   }
-  
-  .content button.details:after {
-    content: url(../images/content/rightChevron.png);
-    content: -webkit-image-set(url(../images/content/rightChevron.png) 1x, url(../images/content/rightChevron@2x.png) 2x);
-    width: 9px;
-    height: 14px;
-    position: absolute;
-    right: 10px;
-    margin-top: 1px;
-  }
 
 
   /* @group Settings */
@@ -496,21 +482,6 @@ button {
     .settingsList li:active .detail {
       color: hsl(0, 0%, 100%);
       text-shadow: 0 -1px 0 hsl(0, 0%, 0%);
-    }
-    
-    .settingsList ul.details li::after {
-      content: url(../images/details-indicator.png);
-      content: -webkit-image-set(url(../images/details-indicator.png) 1x, url(../images/details-indicator@2x.png) 2x);
-      width: 9px;
-      height: 17px;
-      float: right;
-      opacity: 0.75;
-      margin-right: -2px;
-    }
-    
-    .settingsList ul.details li:active::after {
-      content: url(../images/details-indicator-active.png);
-      content: -webkit-image-set(url(../images/details-indicator-active.png) 1x, url(../images/details-indicator-active@2x.png) 2x);
     }
     
     .settingsDetails h2 {

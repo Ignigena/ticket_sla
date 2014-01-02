@@ -32,7 +32,7 @@ RegExp.escape= function(s) {
 };
 
 (function( $ ) {
-  'use strict'
+  'use strict';
   /**
    * jQuery.csv.defaults
    * Encapsulates the method paramater defaults for the CSV plugin module.
@@ -83,7 +83,7 @@ RegExp.escape= function(s) {
         var data = [];
         var entry = [];
         var state = 0;
-        var value = ''
+        var value = '';
         var exit = false;
 
         function endOfEntry() {
@@ -153,7 +153,7 @@ RegExp.escape= function(s) {
         var matchSrc = match.source;
         matchSrc = matchSrc.replace(/S/g, escSeparator);
         matchSrc = matchSrc.replace(/D/g, escDelimiter);
-        match = RegExp(matchSrc, 'gm');
+        match = new RegExp(matchSrc, 'gm');
 
         // put on your fancy pants...
         // process control chars individually, use look-ahead on non-control chars
@@ -329,7 +329,7 @@ RegExp.escape= function(s) {
         var matchSrc = match.source;
         matchSrc = matchSrc.replace(/S/g, escSeparator);
         matchSrc = matchSrc.replace(/D/g, escDelimiter);
-        match = RegExp(matchSrc, 'gm');
+        match = new RegExp(matchSrc, 'gm');
         
         // put on your fancy pants...
         // process control chars individually, use look-ahead on non-control chars
@@ -493,7 +493,7 @@ RegExp.escape= function(s) {
           var matchSrc = match.source;
           matchSrc = matchSrc.replace(/S/g, escSeparator);
           matchSrc = matchSrc.replace(/D/g, escDelimiter);
-          options.match = RegExp(matchSrc, 'gm');
+          options.match = new RegExp(matchSrc, 'gm');
         }
 
         // put on your fancy pants...
@@ -607,13 +607,13 @@ RegExp.escape= function(s) {
       var state = (options.state !== undefined ? options.state : {});
 
       // setup
-      var options = {
-        delimiter: config.delimiter,
-        separator: config.separator,
-        onParseEntry: options.onParseEntry,
-        onParseValue: options.onParseValue,
-        state: state
-      }
+      options = {
+          delimiter: config.delimiter,
+          separator: config.separator,
+          onParseEntry: options.onParseEntry,
+          onParseValue: options.onParseValue,
+          state: state
+      };
 
       var entry = $.csv.parsers.parseEntry(csv, options);
 
@@ -646,8 +646,7 @@ RegExp.escape= function(s) {
       config.delimiter = 'delimiter' in options ? options.delimiter : $.csv.defaults.delimiter;
       
       // setup
-      var data = [];
-      var options = {
+      options = {
         delimiter: config.delimiter,
         separator: config.separator,
         onParseEntry: options.onParseEntry,
@@ -661,7 +660,7 @@ RegExp.escape= function(s) {
       };
 
       // break the data down to lines
-      data = $.csv.parsers.parse(csv, options);
+      var data = $.csv.parsers.parse(csv, options);
 
       // push the value to a callback if one is defined
       if(!config.callback) {
@@ -701,10 +700,9 @@ RegExp.escape= function(s) {
       }
       
       // setup
-      var lines = [];
       var data = [];
       
-      var options = {
+      options = {
         delimiter: config.delimiter,
         separator: config.separator,
         onParseEntry: options.onParseEntry,
@@ -720,15 +718,15 @@ RegExp.escape= function(s) {
 
       // fetch the headers
       var headerOptions = {
-        delimiter: config.delimiter,
-        separator: config.separator,
-        start: 1,
-        end: 1,
-        state: {
-          rowNum:1,
-          colNum:1
-        }
-      }
+          delimiter: config.delimiter,
+          separator: config.separator,
+          start: 1,
+          end: 1,
+          state: {
+              rowNum: 1,
+              colNum: 1
+          }
+      };
       var headerLine = $.csv.parsers.splitLines(csv, headerOptions);
       var headers = $.csv.toArray(headerLine[0], options);
 
@@ -748,7 +746,8 @@ RegExp.escape= function(s) {
         var entry = $.csv.toArray(lines[i], options);
         var object = {};
         for(var j in headers) {
-          object[headers[j]] = entry[j];
+            if (!headers.hasOwnProperty(j)) continue;
+            object[headers[j]] = entry[j];
         }
         data.push(object);
         
@@ -789,8 +788,9 @@ RegExp.escape= function(s) {
       }
 
       var output = [];
-      for(i in arrays) {
-        output.push(arrays[i]);
+      for(var i in arrays) {
+          if (!arrays.hasOwnProperty(i)) continue;
+          output.push(arrays[i]);
       }
 
       // push the value to a callback if one is defined
@@ -826,8 +826,9 @@ RegExp.escape= function(s) {
       }
 
       var output = [];
-      for(i in objects) {
-        output.push(arrays[i]);
+      for(var i in objects) {
+          if (!objects.hasOwnProperty(i)) continue;
+          output.push(arrays[i]);
       }
 
       // push the value to a callback if one is defined
