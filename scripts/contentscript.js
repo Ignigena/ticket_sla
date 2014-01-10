@@ -240,7 +240,7 @@ function ticketmineExecute(search, page) {
     var spinner = new Spinner(spinnerOptions).spin(ticketmineBody.body);
     if (!page) page = 1;
 
-    $.ajax("http://ticketmine.network.acquia-sites.com/search/site/"+search+"?page="+page, {
+    $.ajax("http://ticketmine.network.acquia-sites.com/search/node/"+search+"?page="+page, {
       error: function() {
         $('.ticketminePager').hide();
         $('p.placeholder', ticketmineBody).show();
@@ -250,10 +250,13 @@ function ticketmineExecute(search, page) {
         $('p.placeholder', ticketmineBody).hide();
         $('#tableContent tbody tr', ticketmineBody).remove();
         $('li.search-result', data).each(function() {
-            var title = $('.title', this).html();
             var snippet = $('.search-snippet', this).html();
             var created = $('.search-info', this).text().split(' - ')[1];
-            $('#tableContent tbody', ticketmineBody).append('<tr class="gridRow grey"><td class="sla-report">Unknown</td><td>15066-000000</td><td>'+title+'</td><td>'+created+'</td><td></td><td></td><td><b>System Default</b></td></tr><tr><td colspan="7" class="ticketmineSnippet">'+snippet+'</td></tr>')
+            var ticketLink = $('.title a', this).attr('href').split('/');
+            var ticketNumber = ticketLink[ticketLink.length-1];
+            $('.title a', this).attr('href', 'https://s5.parature.com/link/desk/15066/15171/Ticket/' + ticketNumber);
+            var title = $('.title', this).html();
+            $('#tableContent tbody', ticketmineBody).append('<tr class="gridRow grey"><td class="sla-report">Unknown</td><td>15066-'+ticketNumber+'</td><td>'+title+'</td><td>'+created+'</td><td></td><td></td><td><b>System Default</b></td></tr><tr><td colspan="7" class="ticketmineSnippet">'+snippet+'</td></tr>')
         });
 
         // Pager controls.
