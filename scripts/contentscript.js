@@ -260,11 +260,14 @@ function ticketmineExecute(search, page) {
         });
 
         // Pager controls.
-        var maxPage = $('.pager-last a', data).attr('href').split('?page=')[1];
-        $('input.ticketminePrev', ticketmineBody).prop('disabled', (page == 1));
-        $('input.ticketmineNext', ticketmineBody).prop('disabled', (page == maxPage));
+        if ($('.pager-last a', data).attr('href')) {
+            var maxPage = $('.pager-last a', data).attr('href').split('?page=')[1];
+            $('input.ticketminePrev', ticketmineBody).prop('disabled', (page == 1));
+            $('input.ticketmineNext', ticketmineBody).prop('disabled', (page == maxPage));
 
-        $('form.ticketminePager', ticketmineBody).show();
+            $('form.ticketminePager', ticketmineBody).show();
+        }
+
         $('span.ticketmineCount', ticketmineBody).text(' of ' + maxPage);
         $('input.ticketminePage', ticketmineBody).val(page);
         $('form.ticketminePager', ticketmineBody).submit(function() {
