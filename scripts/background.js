@@ -58,6 +58,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 });
 
+chrome.tabs.onCreated.addListener(function(newTab) {
+  if (newTab.url && newTab.url.indexOf('https://acquia.zendesk.com/agent/#') == 0) {
+    chrome.tabs.query({ url: 'https://acquia.zendesk.com/*' }, function (tabs) {
+      if (tabs && tabs[0]) {
+        chrome.tabs.update(tabs[0].id, { url: tab.url, highlighted: true });
+        chrome.tabs.remove(newTab.id);
+      }
+    });
+  }
+});
+
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
   var toolFunction = toolActions[request.execute](request);
   $.when(toolFunction).done(function(response){ sendResponse(response); });
