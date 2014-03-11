@@ -27,7 +27,7 @@
     ]
   },
   "web_accessible_resources" : ["*"],
-  "options_page": "options.html",
+  "options_page": "gui/options.html",
   "update_url": "https://raw.github.com/Ignigena/ticket_sla/master/updates.xml",
   "manifest_version": 2
 }

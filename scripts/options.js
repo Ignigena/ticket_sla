@@ -1,7 +1,6 @@
 // Saves options to localStorage.
 function saveOptions() {
     chrome.storage.local.set({
-        newWindowTickets: document.getElementById("newWindowTickets").checked,
         chromeNotifications: document.getElementById("chromeNotifications").checked
     });
 
@@ -15,9 +14,6 @@ function saveOptions() {
 
 // Restores select box state to saved value from localStorage.
 function restoreOptions() {
-    chrome.storage.local.get('newWindowTickets',function(data){
-        document.getElementById("newWindowTickets").checked=data.newWindowTickets;
-    });
     chrome.storage.local.get('chromeNotifications',function(data){
         document.getElementById("chromeNotifications").checked=data.chromeNotifications;
     });
