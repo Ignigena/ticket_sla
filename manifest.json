@@ -19,22 +19,13 @@
     "notifications"
   ],
   "background" : {
-    "scripts": ["scripts/external/jquery-2.0.3.min.js", "scripts/external/jquery.cookie.js", "scripts/background.js", "scripts/tool_actions.js"]
+    "scripts": [
+      "scripts/external/jquery-2.0.3.min.js",
+      "scripts/external/jquery.cookie.js",
+      "scripts/background.js",
+      "scripts/tool_actions.js"
+    ]
   },
-  "content_scripts" : [
-    {
-      "matches" : [
-        "*://s5.parature.com/*"
-      ],
-      "js" : [
-        "scripts/external/jquery-2.0.3.min.js", "scripts/external/moment.min.js", "scripts/external/jquery.timeago.js", "scripts/external/stupidtable.min.js", "scripts/external/spin.min.js",
-        "scripts/jquery.waitfor.js", "scripts/date_utilities.js", "scripts/sla_utilities.js", "scripts/contentscript.js"
-      ],
-      "css" : ["contentstyle.css"],
-      "run_at" : "document_idle",
-      "all_frames" : true
-    }
-  ],
   "web_accessible_resources" : ["*"],
   "options_page": "options.html",
   "update_url": "https://raw.github.com/Ignigena/ticket_sla/master/updates.xml",
