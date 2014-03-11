@@ -59,15 +59,27 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 chrome.tabs.onCreated.addListener(function(newTab) {
-  if (newTab.url && newTab.url.indexOf('https://acquia.zendesk.com/agent/#') == 0) {
+  if (newTab.url) {
+    checkZendeskTicketTab(newTab, newTab.url);
+  }
+});
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  if (changeInfo.url) {
+    checkZendeskTicketTab(tab, changeInfo.url);
+  }
+});
+
+function checkZendeskTicketTab(tab, tabUrl) {
+  if (tabUrl.indexOf('https://acquia.zendesk.com/agent/#') == 0) {
     chrome.tabs.query({ url: 'https://acquia.zendesk.com/*' }, function (tabs) {
-      if (tabs && tabs[0]) {
+      if (tabs && tabs[0] && tabs[0].id != tab.id) {
         chrome.tabs.update(tabs[0].id, { url: tab.url, highlighted: true });
-        chrome.tabs.remove(newTab.id);
+        chrome.tabs.remove(tab.id);
       }
     });
   }
-});
+}
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
   var toolFunction = toolActions[request.execute](request);
