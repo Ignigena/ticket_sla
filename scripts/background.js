@@ -73,9 +73,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 function checkZendeskTicketTab(tab, tabUrl) {
   if (tabUrl.indexOf('https://acquia.zendesk.com/agent/#') == 0) {
     chrome.tabs.query({ url: 'https://acquia.zendesk.com/*' }, function (tabs) {
-      if (tabs && tabs[0] && tabs[0].id != tab.id) {
-        chrome.tabs.update(tabs[0].id, { url: tab.url, highlighted: true });
-        chrome.tabs.remove(tab.id);
+      if (tabs && tabs[0]) {
+        if (tabs[0].id != tab.id) {
+          // Only merge tabs if the current tab and the first matched tab aren't the same.
+          chrome.tabs.update(tabs[0].id, { url: tab.url, highlighted: true });
+          chrome.tabs.remove(tab.id);
+        }
+        else if (tabs.length >= 2) {
+          // Allow for merging if the current tab is the first matched tab but another exists.
+          chrome.tabs.update(tabs[1].id, { url: tab.url, highlighted: true });
+          chrome.tabs.remove(tab.id);
+        }
       }
     });
   }
