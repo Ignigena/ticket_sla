@@ -66,7 +66,7 @@ function updateBrowserAction(hostedStatus, tab) {
 
 function checkZendeskTicketTab(tab, tabUrl) {
     if (tabUrl.indexOf('https://acquia.zendesk.com/agent/#') == 0) {
-        chrome.tabs.query({ url: 'https://acquia.zendesk.com/*' }, function (tabs) {
+        chrome.tabs.query({ url: 'https://acquia.zendesk.com/agent/*' }, function (tabs) {
             if (tabs && tabs[0]) {
                 if (tabs[0].id != tab.id) {
                     // Only merge tabs if the current tab and the first matched tab aren't the same.
@@ -89,7 +89,12 @@ function mergeNewTabWithOriginal(originalTab, newTab) {
     }
 
     if (originalTab.id != newTab.id) {
-        chrome.tabs.remove(newTab.id);
+        // Since everything happens asynchronously we need to ensure we're not closing the last open tab.
+        chrome.tabs.query({ url: 'https://acquia.zendesk.com/agent/*' }, function (tabs) {
+            if (tabs.length > 1) {
+                chrome.tabs.remove(newTab.id);
+            }
+        });
     }
 }
 
