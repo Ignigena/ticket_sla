@@ -6,13 +6,13 @@ var trustedHosts = [
 chrome.browserAction.setBadgeBackgroundColor({ color: "#468847" });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    if (changeInfo.url && changeInfo.url.indexOf("chrome://") != 0) {
-        checkZendeskTicketTab(tab, changeInfo.url);
-    }
-
     var pageURL = tab.url;
 
     if (pageURL !== undefined && changeInfo.status == "complete") {
+        if (pageURL && pageURL.indexOf("chrome://") != 0) {
+            checkZendeskTicketTab(tab, pageURL);
+        }
+
         var host = pageURL.split('/')[2];
 
         if (trustedHosts.indexOf(host) == '-1') {
