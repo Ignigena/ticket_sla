@@ -3,6 +3,8 @@ var trustedHosts = [
     'extensions'
 ];
 
+var ignoreNextUpdate = false;
+
 chrome.browserAction.setBadgeBackgroundColor({ color: "#468847" });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -49,12 +51,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     }
 });
 
-chrome.tabs.onCreated.addListener(function (newTab) {
-    if (newTab.url) {
-        checkZendeskTicketTab(newTab, newTab.url);
-    }
-});
-
 function updateBrowserAction(hostedStatus, tab) {
     if (hostedStatus) {
         chrome.browserAction.setIcon({ path: 'toolbar-acquia.png', tabId: tab.id });
@@ -65,6 +61,11 @@ function updateBrowserAction(hostedStatus, tab) {
 }
 
 function checkZendeskTicketTab(tab, tabUrl) {
+    if (ignoreNextUpdate) {
+        ignoreNextUpdate = false;
+        return;
+    }
+
     if (tabUrl.indexOf('https://acquia.zendesk.com/agent/#') == 0) {
         chrome.tabs.query({ url: 'https://acquia.zendesk.com/agent/*' }, function (tabs) {
             if (tabs && tabs[0]) {
@@ -82,19 +83,17 @@ function checkZendeskTicketTab(tab, tabUrl) {
 }
 
 function mergeNewTabWithOriginal(originalTab, newTab) {
-    if (originalTab.url != newTab.url) {
-        chrome.tabs.update(originalTab.id, { url: newTab.url, highlighted: true });
-    } else {
-        chrome.tabs.update(originalTab.id, { highlighted: true });
-    }
-
     if (originalTab.id != newTab.id) {
-        // Since everything happens asynchronously we need to ensure we're not closing the last open tab.
-        chrome.tabs.query({ url: 'https://acquia.zendesk.com/agent/*' }, function (tabs) {
-            if (tabs.length > 1) {
-                chrome.tabs.remove(newTab.id);
+        chrome.tabs.remove(newTab.id, function() {
+            if (originalTab.url != newTab.url) {
+                ignoreNextUpdate = true;
+                chrome.tabs.update(originalTab.id, { url: newTab.url, highlighted: true });
+            } else {
+                chrome.tabs.update(originalTab.id, { highlighted: true });
             }
         });
+    } else {
+        ignoreNextUpdate = false;
     }
 }
 
