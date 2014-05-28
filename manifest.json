@@ -26,6 +26,16 @@
       "scripts/tool_actions.js"
     ]
   },
+  "content_scripts" : [
+    {
+      "matches" : [ "*://acquia.zendesk.com/*" ],
+      "js" : [
+        "scripts/external/jquery-2.0.3.min.js",
+        "scripts/content.js"
+      ],
+      "all_frames" : true
+    }
+  ],
   "web_accessible_resources" : ["*"],
   "options_page": "gui/options.html",
   "update_url": "https://raw.github.com/Ignigena/ticket_sla/master/updates.xml",
